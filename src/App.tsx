@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import './App.css'
 import { Gallery } from './components/Gallery'
+import PlatformGuideModal from './components/PlatformGuideModal'
 
 const loadingMessages = [
   "Creating magic... ✨",
@@ -28,6 +29,7 @@ function App() {
   const [isLoaded, setIsLoaded] = useState(false)
   const [loadingMessage, setLoadingMessage] = useState(loadingMessages[0])
   const [imagesGenerated, setImagesGenerated] = useState(0)
+  const [isGuideOpen, setIsGuideOpen] = useState(false)
 
   useEffect(() => {
     // Mark as loaded after initial render
@@ -269,6 +271,13 @@ function App() {
                 <span>🔗</span> Copy URL
               </button>
             </div>
+            
+            <button 
+              className="platform-guide-button"
+              onClick={() => setIsGuideOpen(true)}
+            >
+              📱 How to Use on Social Platforms
+            </button>
           </div>
         )}
 
@@ -279,6 +288,11 @@ function App() {
           </p>
         </footer>
       </div>
+      
+      <PlatformGuideModal 
+        isOpen={isGuideOpen} 
+        onClose={() => setIsGuideOpen(false)} 
+      />
     </div>
   )
 }
