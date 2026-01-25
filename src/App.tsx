@@ -52,18 +52,18 @@ function App() {
     if (!generatedImage) return
 
     try {
-      const response = await fetch(generatedImage)
-      const blob = await response.blob()
-      const url = window.URL.createObjectURL(blob)
+      // Use our API proxy to download the image
+      const proxyUrl = `/api/download?url=${encodeURIComponent(generatedImage)}`
+      
       const link = document.createElement('a')
-      link.href = url
+      link.href = proxyUrl
       link.download = `emoticon-${Date.now()}.png`
       document.body.appendChild(link)
       link.click()
       document.body.removeChild(link)
-      window.URL.revokeObjectURL(url)
     } catch (err) {
-      alert('Failed to download image')
+      console.error('Download error:', err)
+      alert('Failed to download image. Please try right-clicking and "Save Image As..."')
     }
   }
 
