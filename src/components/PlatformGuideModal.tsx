@@ -83,9 +83,9 @@ const PLATFORMS: Platforms = {
     icon: '📱',
     name: 'WhatsApp',
     steps: [
-      'Download a sticker maker app:',
-      '  - iOS: "Sticker Maker Studio"',
-      '  - Android: "Sticker.ly" or "Personal Stickers"',
+      'Download a sticker maker app',
+      'iOS: "Sticker Maker Studio"',
+      'Android: "Sticker.ly" or "Personal Stickers"',
       'Open the app and create a new sticker pack',
       'Add your downloaded emojis to the pack',
       'Name your pack',
