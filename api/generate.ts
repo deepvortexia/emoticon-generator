@@ -1,8 +1,11 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node'
 
 
-// fofr/sdxl-emoji - Specialized emoji model (actually works on Replicate!)
+// fofr/sdxl-emoji - Specialized model for emoji/icon generation on Replicate
 const EMOJI_MODEL_VERSION = 'dee76b5afde21b0f01ed7925f0665b7e879c50ee718c5f78a9d38e04d523cc5e'
+
+// Negative prompt to ensure simple, flat emoji style
+const NEGATIVE_PROMPT = "gradient, shading, 3D, realistic, photograph, complex background"
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' })
@@ -38,7 +41,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
           width: 1024,
           height: 1024,
           apply_watermark: false,
-          negative_prompt: "gradient, shading, 3D, realistic, photograph, complex background"
+          negative_prompt: NEGATIVE_PROMPT
         },
       }),
     })
