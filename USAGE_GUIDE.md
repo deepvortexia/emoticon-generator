@@ -609,7 +609,7 @@ company logo as flat icon
 
 ### Resources
 
-- **Deep Vortex GitHub**: [Issues & Discussions](https://github.com/deepvortexia/emoticon-generator)
+- **Deep Vortex GitHub**: [Repository](https://github.com/deepvortexia/emoticon-generator)
 - **Discord Help**: [Discord Emoji Guide](https://support.discord.com/hc/en-us/articles/360036479811)
 - **Slack Help**: [Slack Emoji Guide](https://slack.com/help/articles/206870177)
 - **Twitch Help**: [Twitch Emote Guidelines](https://help.twitch.tv/s/article/emote-guidelines)
