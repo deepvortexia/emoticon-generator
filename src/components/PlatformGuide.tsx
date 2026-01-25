@@ -15,6 +15,108 @@ interface PlatformGuideContent {
   tip: string;
 }
 
+export function PlatformGuide() {
+  const [isOpen, setIsOpen] = useState(false);
+  const [selectedPlatform, setSelectedPlatform] = useState('discord');
+
+  if (!isOpen) {
+    return (
+      <button className="platform-guide-toggle" onClick={() => setIsOpen(true)}>
+        📱 Platform Guide
+      </button>
+    );
+  }
+
+  const guide = PLATFORM_GUIDES[selectedPlatform];
+
+  return (
+    <div className="platform-modal-overlay" onClick={() => setIsOpen(false)}>
+      <div className="platform-modal" onClick={(e) => e.stopPropagation()}>
+        {/* Header */}
+        <div className="platform-modal-header">
+          <div className="platform-header-content">
+            <div>
+              <h2 className="platform-title">📱 How to Use Your Emojis</h2>
+              <p className="platform-subtitle">Choose your platform for step-by-step instructions</p>
+            </div>
+            <button onClick={() => setIsOpen(false)} className="platform-close" aria-label="Close">
+              ✕
+            </button>
+          </div>
+        </div>
+
+        {/* Platform Tabs */}
+        <div className="platform-tabs">
+          {PLATFORMS.map(platform => (
+            <button
+              key={platform.id}
+              className={`platform-tab ${selectedPlatform === platform.id ? 'active' : ''}`}
+              onClick={() => setSelectedPlatform(platform.id)}
+              aria-label={`View ${platform.name} guide`}
+            >
+              <span className="tab-icon">{platform.icon}</span>
+              <span className="tab-name">{platform.name}</span>
+            </button>
+          ))}
+        </div>
+
+        {/* Content */}
+        <div className="platform-content">
+          <h3 className="platform-guide-title">{guide.title}</h3>
+
+          {/* Requirements */}
+          <div className="platform-section">
+            <h4 className="section-heading">Requirements:</h4>
+            <ul className="section-list">
+              {guide.requirements.map((req, i) => (
+                <li key={i}>{req}</li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Steps */}
+          <div className="platform-section">
+            <h4 className="section-heading">Steps:</h4>
+            <ol className="section-list section-list-ordered">
+              {guide.steps.map((step, i) => (
+                <li key={i}>{step}</li>
+              ))}
+            </ol>
+          </div>
+
+          {/* Limits */}
+          <div className="platform-section">
+            <h4 className="section-heading">Limits:</h4>
+            <ul className="section-list">
+              {guide.limits.map((limit, i) => (
+                <li key={i}>{limit}</li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Tip */}
+          <div className="tip-box">
+            <span className="tip-icon">💡</span>
+            <span className="tip-text">{guide.tip}</span>
+          </div>
+
+          {/* Link to full guide */}
+          <div className="full-guide-container">
+            <a 
+              href="https://github.com/deepvortexia/emoticon-generator/blob/main/USAGE_GUIDE.md" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="full-guide-link"
+            >
+              📖 View Complete Platform Guide
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 const PLATFORMS: Platform[] = [
   { id: 'discord', name: 'Discord', icon: '💬' },
   { id: 'slack', name: 'Slack', icon: '💼' },
@@ -202,109 +304,3 @@ const PLATFORM_GUIDES: Record<string, PlatformGuideContent> = {
     tip: 'Third-party apps are easier than building from scratch'
   }
 };
-
-interface PlatformGuideProps {
-  isOpen: boolean;
-  onClose: () => void;
-}
-
-export function PlatformGuide({ isOpen, onClose }: PlatformGuideProps) {
-  const [selectedPlatform, setSelectedPlatform] = useState('discord');
-
-  if (!isOpen) {
-    return (
-      <button className="platform-guide-toggle" onClick={onClose}>
-        📱 Platform Guide
-      </button>
-    );
-  }
-
-  const guide = PLATFORM_GUIDES[selectedPlatform];
-
-  return (
-    <div className="platform-modal-overlay" onClick={onClose}>
-      <div className="platform-modal" onClick={(e) => e.stopPropagation()}>
-        {/* Header */}
-        <div className="platform-modal-header">
-          <div className="platform-header-content">
-            <div>
-              <h2 className="platform-title">📱 How to Use Your Emojis</h2>
-              <p className="platform-subtitle">Choose your platform for step-by-step instructions</p>
-            </div>
-            <button onClick={onClose} className="platform-close" aria-label="Close">
-              ✕
-            </button>
-          </div>
-        </div>
-
-        {/* Platform Tabs */}
-        <div className="platform-tabs">
-          {PLATFORMS.map(platform => (
-            <button
-              key={platform.id}
-              className={`platform-tab ${selectedPlatform === platform.id ? 'active' : ''}`}
-              onClick={() => setSelectedPlatform(platform.id)}
-              aria-label={`View ${platform.name} guide`}
-            >
-              <span className="tab-icon">{platform.icon}</span>
-              <span className="tab-name">{platform.name}</span>
-            </button>
-          ))}
-        </div>
-
-        {/* Content */}
-        <div className="platform-content">
-          <h3 className="platform-guide-title">{guide.title}</h3>
-
-          {/* Requirements */}
-          <div className="platform-section">
-            <h4 className="section-heading">Requirements:</h4>
-            <ul className="section-list">
-              {guide.requirements.map((req, i) => (
-                <li key={i}>{req}</li>
-              ))}
-            </ul>
-          </div>
-
-          {/* Steps */}
-          <div className="platform-section">
-            <h4 className="section-heading">Steps:</h4>
-            <ol className="section-list section-list-ordered">
-              {guide.steps.map((step, i) => (
-                <li key={i}>{step}</li>
-              ))}
-            </ol>
-          </div>
-
-          {/* Limits */}
-          <div className="platform-section">
-            <h4 className="section-heading">Limits:</h4>
-            <ul className="section-list">
-              {guide.limits.map((limit, i) => (
-                <li key={i}>{limit}</li>
-              ))}
-            </ul>
-          </div>
-
-          {/* Tip */}
-          <div className="tip-box">
-            <span className="tip-icon">💡</span>
-            <span className="tip-text">{guide.tip}</span>
-          </div>
-
-          {/* Link to full guide */}
-          <div className="full-guide-container">
-            <a 
-              href="https://github.com/deepvortexia/emoticon-generator/blob/main/USAGE_GUIDE.md" 
-              target="_blank" 
-              rel="noopener noreferrer"
-              className="full-guide-link"
-            >
-              📖 View Complete Platform Guide
-            </a>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}
