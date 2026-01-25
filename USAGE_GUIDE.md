@@ -287,14 +287,14 @@ Your AI-generated emojis are ready to use! Here's how to add them to your favori
 
 ### Platform-Specific Sizes:
 
-| Platform | Size | Format |
-|----------|------|--------|
-| Discord | 128x128px | PNG |
-| Slack | 128x128px | PNG |
-| Twitch | 28x28, 56x56, 112x112px | PNG |
-| Telegram | 512x512px | PNG |
-| WhatsApp | 512x512px (max 100 KB) | PNG |
-| Reddit | 128x128px | PNG |
+| Platform | Format | Size | File Limit |
+|----------|--------|------|------------|
+| Discord | PNG | 128x128px | 256 KB |
+| Slack | PNG | 128x128px | 128 KB |
+| Twitch | PNG | 28x28, 56x56, 112x112px | - |
+| Telegram | PNG | 512x512px | 512 KB |
+| WhatsApp | PNG | 512x512px | 100 KB |
+| Reddit | PNG | 128x128px | - |
 
 ### How to Resize in Photopea:
 
