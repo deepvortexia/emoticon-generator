@@ -51,6 +51,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
     // Poll for completion (Replicate is async)
     let result = prediction
+    const pollStartTime = Date.now()
     while (result.status !== 'succeeded' && result.status !== 'failed') {
       await new Promise(resolve => setTimeout(resolve, 1000)) // Wait 1 second
       
@@ -63,10 +64,14 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         }
       )
       
+      if (!pollResponse.ok) {
+        throw new Error('Failed to poll prediction status')
+      }
+      
       result = await pollResponse.json()
       
       // Timeout after 30 seconds
-      if (Date.now() - new Date(prediction.created_at).getTime() > 30000) {
+      if (Date.now() - pollStartTime > 30000) {
         throw new Error('Generation timeout')
       }
     }
