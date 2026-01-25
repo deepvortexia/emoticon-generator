@@ -135,6 +135,44 @@ body {
   color: var(--border-color);
 }
 
+/* Platform Guide Button */
+.platform-guide-button-container {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 30px;
+  margin-top: 30px;
+}
+
+.platform-guide-button {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 32px;
+  background: linear-gradient(135deg, var(--vortex-primary) 0%, var(--vortex-secondary) 100%);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 20px var(--vortex-glow);
+}
+
+.platform-guide-button:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 30px var(--vortex-glow);
+  background: linear-gradient(135deg, var(--vortex-secondary) 0%, var(--vortex-primary) 100%);
+}
+
+.platform-guide-button:active {
+  transform: translateY(-1px);
+}
+
+.platform-guide-icon {
+  font-size: 20px;
+}
+
 /* Examples Section */
 .examples-section {
   margin-bottom: 30px;
@@ -652,6 +690,13 @@ body {
 
   .credit-separator {
     display: none;
+  }
+
+  .platform-guide-button {
+    width: 100%;
+    justify-content: center;
+    font-size: 15px;
+    padding: 12px 24px;
   }
 
   .examples-section {

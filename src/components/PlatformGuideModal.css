@@ -1,0 +1,427 @@
+/* Modal Overlay */
+.platform-guide-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 20px;
+  animation: fadeIn 0.3s ease;
+}
+
+/* Modal Content Container */
+.platform-guide-content {
+  background: var(--bg-secondary);
+  border-radius: 16px;
+  border: 1px solid var(--border-color);
+  max-width: 1000px;
+  width: 100%;
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+  overflow: hidden;
+}
+
+/* Header */
+.platform-guide-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 24px 30px;
+  border-bottom: 1px solid var(--border-color);
+  background: var(--bg-secondary);
+}
+
+.platform-guide-header h2 {
+  font-size: 28px;
+  color: var(--text-primary);
+  margin: 0 0 5px 0;
+  font-weight: 700;
+}
+
+.platform-guide-subtitle {
+  font-size: 14px;
+  color: var(--text-secondary);
+  margin: 0;
+}
+
+.platform-guide-close {
+  width: 40px;
+  height: 40px;
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-color);
+  border-radius: 50%;
+  color: var(--text-primary);
+  font-size: 24px;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.platform-guide-close:hover {
+  background: var(--error);
+  border-color: var(--error);
+  transform: rotate(90deg);
+}
+
+/* Tabs Wrapper */
+.platform-tabs-wrapper {
+  border-bottom: 1px solid var(--border-color);
+  background: var(--bg-tertiary);
+  overflow-x: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--vortex-primary) var(--bg-tertiary);
+}
+
+.platform-tabs-wrapper::-webkit-scrollbar {
+  height: 6px;
+}
+
+.platform-tabs-wrapper::-webkit-scrollbar-track {
+  background: var(--bg-tertiary);
+}
+
+.platform-tabs-wrapper::-webkit-scrollbar-thumb {
+  background: var(--vortex-primary);
+  border-radius: 3px;
+}
+
+/* Tabs Container */
+.platform-tabs {
+  display: flex;
+  padding: 0 30px;
+}
+
+/* Individual Tab */
+.platform-tab {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 14px 18px;
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid transparent;
+  color: var(--text-secondary);
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.platform-tab:hover {
+  color: var(--text-primary);
+  background: rgba(139, 92, 246, 0.1);
+}
+
+.platform-tab.active {
+  color: var(--text-primary);
+  border-bottom-color: var(--vortex-primary);
+}
+
+.platform-icon {
+  font-size: 18px;
+}
+
+.platform-name {
+  font-size: 15px;
+}
+
+/* Body Content */
+.platform-guide-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 30px;
+  scrollbar-width: thin;
+  scrollbar-color: var(--vortex-primary) var(--bg-secondary);
+}
+
+.platform-guide-body::-webkit-scrollbar {
+  width: 8px;
+}
+
+.platform-guide-body::-webkit-scrollbar-track {
+  background: var(--bg-secondary);
+}
+
+.platform-guide-body::-webkit-scrollbar-thumb {
+  background: var(--vortex-primary);
+  border-radius: 4px;
+}
+
+/* Guide Content */
+.guide-content {
+  color: var(--text-secondary);
+  animation: fadeIn 0.3s ease;
+}
+
+.guide-header-section {
+  margin-bottom: 24px;
+}
+
+.guide-header-section h3 {
+  font-size: 24px;
+  color: var(--text-primary);
+  margin: 0 0 12px 0;
+  font-weight: 700;
+}
+
+.guide-specs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+
+.guide-specs span {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+/* Steps */
+.guide-steps {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.guide-step {
+  background: rgba(42, 42, 42, 0.5);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 20px;
+  transition: all 0.2s;
+}
+
+.guide-step:hover {
+  border-color: var(--vortex-primary);
+  box-shadow: 0 4px 12px rgba(139, 92, 246, 0.2);
+}
+
+.step-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+
+.step-number {
+  width: 28px;
+  height: 28px;
+  background: var(--vortex-primary);
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.step-header h4 {
+  font-size: 16px;
+  color: var(--text-primary);
+  margin: 0;
+  font-weight: 600;
+}
+
+.step-content {
+  font-size: 14px;
+  color: var(--text-secondary);
+  line-height: 1.6;
+  margin: 0 0 0 40px;
+}
+
+.step-content code {
+  background: var(--bg-primary);
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-family: 'Courier New', monospace;
+  font-size: 13px;
+  color: var(--vortex-secondary);
+}
+
+.step-content a {
+  color: var(--vortex-secondary);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.step-content a:hover {
+  color: var(--vortex-primary);
+  text-decoration: underline;
+}
+
+/* Tips and Warnings */
+.guide-tip {
+  background: rgba(16, 185, 129, 0.1);
+  border: 1px solid rgba(16, 185, 129, 0.3);
+  border-radius: 10px;
+  padding: 16px;
+  margin-top: 20px;
+}
+
+.guide-tip p {
+  margin: 0;
+  font-size: 14px;
+  color: #6ee7b7;
+  line-height: 1.6;
+}
+
+.guide-tip a {
+  color: var(--vortex-secondary);
+  text-decoration: none;
+}
+
+.guide-tip a:hover {
+  color: var(--vortex-primary);
+  text-decoration: underline;
+}
+
+.guide-warning {
+  background: rgba(245, 158, 11, 0.1);
+  border: 1px solid rgba(245, 158, 11, 0.3);
+  border-radius: 10px;
+  padding: 16px;
+  margin-bottom: 20px;
+}
+
+.guide-warning p {
+  margin: 0;
+  font-size: 14px;
+  color: #fcd34d;
+  line-height: 1.6;
+}
+
+/* Footer */
+.platform-guide-footer {
+  padding: 16px 30px;
+  border-top: 1px solid var(--border-color);
+  background: rgba(42, 42, 42, 0.5);
+  text-align: center;
+}
+
+.platform-guide-link {
+  color: var(--vortex-secondary);
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: color 0.2s;
+}
+
+.platform-guide-link:hover {
+  color: var(--vortex-primary);
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+  .platform-guide-modal {
+    padding: 10px;
+  }
+
+  .platform-guide-content {
+    max-height: 95vh;
+    border-radius: 12px;
+  }
+
+  .platform-guide-header {
+    padding: 20px;
+  }
+
+  .platform-guide-header h2 {
+    font-size: 22px;
+  }
+
+  .platform-guide-subtitle {
+    font-size: 12px;
+  }
+
+  .platform-guide-close {
+    width: 36px;
+    height: 36px;
+    font-size: 20px;
+  }
+
+  .platform-tabs {
+    padding: 0 20px;
+  }
+
+  .platform-tab {
+    padding: 12px 14px;
+    font-size: 14px;
+  }
+
+  .platform-icon {
+    font-size: 16px;
+  }
+
+  .platform-name {
+    font-size: 14px;
+  }
+
+  .platform-guide-body {
+    padding: 20px;
+  }
+
+  .guide-header-section h3 {
+    font-size: 20px;
+  }
+
+  .guide-specs {
+    gap: 12px;
+    font-size: 12px;
+  }
+
+  .guide-steps {
+    gap: 12px;
+  }
+
+  .guide-step {
+    padding: 16px;
+  }
+
+  .step-header h4 {
+    font-size: 15px;
+  }
+
+  .step-content {
+    font-size: 13px;
+    margin-left: 36px;
+  }
+
+  .platform-guide-footer {
+    padding: 14px 20px;
+  }
+
+  .platform-guide-link {
+    font-size: 13px;
+  }
+}
