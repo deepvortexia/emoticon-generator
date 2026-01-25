@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import './App.css'
 import { Gallery } from './components/Gallery'
+import { PlatformGuide } from './components/PlatformGuide'
 
 const loadingMessages = [
   "Creating magic... ✨",
@@ -28,6 +29,7 @@ function App() {
   const [isLoaded, setIsLoaded] = useState(false)
   const [loadingMessage, setLoadingMessage] = useState(loadingMessages[0])
   const [imagesGenerated, setImagesGenerated] = useState(0)
+  const [isPlatformGuideOpen, setIsPlatformGuideOpen] = useState(false)
 
   useEffect(() => {
     // Mark as loaded after initial render
@@ -139,6 +141,10 @@ function App() {
   return (
     <div className={`app ${isLoaded ? 'fade-in' : ''}`}>
       <Gallery />
+      <PlatformGuide 
+        isOpen={isPlatformGuideOpen}
+        onClose={() => setIsPlatformGuideOpen(!isPlatformGuideOpen)}
+      />
       
       <div className="container">
         <div className="header">
