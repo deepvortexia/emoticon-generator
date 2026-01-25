@@ -135,6 +135,33 @@ body {
   color: var(--border-color);
 }
 
+/* Platform Guide Button */
+.platform-guide-button {
+  margin-top: 16px;
+  background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+  border: none;
+  border-radius: 8px;
+  padding: 10px 20px;
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.2s;
+  box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
+  font-size: 14px;
+}
+
+.platform-guide-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(139, 92, 246, 0.4);
+}
+
+.platform-guide-button:active {
+  transform: translateY(0);
+}
+
 /* Examples Section */
 .examples-section {
   margin-bottom: 30px;

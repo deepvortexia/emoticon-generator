@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import './App.css'
 import { Gallery } from './components/Gallery'
+import PlatformGuideModal from './components/PlatformGuideModal'
 
 const loadingMessages = [
   "Creating magic... ✨",
@@ -28,6 +29,7 @@ function App() {
   const [isLoaded, setIsLoaded] = useState(false)
   const [loadingMessage, setLoadingMessage] = useState(loadingMessages[0])
   const [imagesGenerated, setImagesGenerated] = useState(0)
+  const [isGuideOpen, setIsGuideOpen] = useState(false)
 
   useEffect(() => {
     // Mark as loaded after initial render
@@ -140,6 +142,11 @@ function App() {
     <div className={`app ${isLoaded ? 'fade-in' : ''}`}>
       <Gallery />
       
+      <PlatformGuideModal 
+        isOpen={isGuideOpen}
+        onClose={() => setIsGuideOpen(false)}
+      />
+      
       <div className="container">
         <div className="header">
           <div className="logo">🌀</div>
@@ -153,6 +160,13 @@ function App() {
             <span className="credit-separator">•</span>
             <span>💰 Remaining: ~{MAX_IMAGES_WITH_CREDIT - imagesGenerated} images</span>
           </div>
+          
+          <button 
+            className="platform-guide-button"
+            onClick={() => setIsGuideOpen(true)}
+          >
+            📱 How to Use
+          </button>
         </div>
 
         <div className="examples-section">
