@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import './PlatformGuideModal.css';
 
 interface Platform {
@@ -26,23 +26,52 @@ interface PlatformGuideModalProps {
 export default function PlatformGuideModal({ isOpen, onClose }: PlatformGuideModalProps) {
   const [activePlatform, setActivePlatform] = useState('discord');
 
+  useEffect(() => {
+    if (!isOpen) return;
+
+    // Handle Escape key to close modal
+    const handleEscape = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        onClose();
+      }
+    };
+
+    document.addEventListener('keydown', handleEscape);
+    return () => document.removeEventListener('keydown', handleEscape);
+  }, [isOpen, onClose]);
+
   if (!isOpen) return null;
 
   return (
     <div className="modal-overlay" onClick={onClose}>
-      <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+      <div 
+        className="modal-content" 
+        onClick={(e) => e.stopPropagation()}
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="modal-title"
+      >
         <div className="modal-header">
-          <h2>📱 How to Use Your Emojis</h2>
+          <h2 id="modal-title">📱 How to Use Your Emojis</h2>
           <p>Choose your platform for step-by-step instructions</p>
-          <button className="close-btn" onClick={onClose}>✕</button>
+          <button 
+            className="close-btn" 
+            onClick={onClose}
+            aria-label="Close modal"
+          >
+            ✕
+          </button>
         </div>
 
-        <div className="platform-tabs">
+        <div className="platform-tabs" role="tablist">
           {platforms.map((platform) => (
             <button
               key={platform.id}
               className={`platform-tab ${activePlatform === platform.id ? 'active' : ''}`}
               onClick={() => setActivePlatform(platform.id)}
+              role="tab"
+              aria-selected={activePlatform === platform.id}
+              aria-controls={`${platform.id}-panel`}
             >
               <span className="platform-icon">{platform.icon}</span>
               <span className="platform-name">{platform.name}</span>
@@ -50,7 +79,11 @@ export default function PlatformGuideModal({ isOpen, onClose }: PlatformGuideMod
           ))}
         </div>
 
-        <div className="platform-content">
+        <div 
+          className="platform-content"
+          role="tabpanel"
+          id={`${activePlatform}-panel`}
+        >
           <PlatformContent platform={activePlatform} />
         </div>
 
