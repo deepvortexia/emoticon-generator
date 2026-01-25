@@ -1,8 +1,9 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node'
 
 
-// Ideogram v2 Turbo model identifier for emoji/icon generation
-const IDEOGRAM_V2_MODEL = 'ideogram-ai/ideogram-v2-turbo'
+// fofr/sdxl-emoji - Specialized emoji model (SDXL fine-tuned for emoji/stickers)
+// Confirmed working on Replicate, optimized for simple flat icon generation
+const EMOJI_MODEL_VERSION = 'dee76b5afde21b0f01ed7925f0665b7e879c50ee718c5f78a9d38e04d523cc5e'
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' })
@@ -21,10 +22,10 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   }
 
   try {
-    // Simplified prompt optimized for Ideogram v2 (specialized for icons/emojis)
-    const enhancedPrompt = `${prompt.trim()} emoji icon, simple flat design, minimalist, clean, suitable for discord or slack`
+    // Optimized prompt for emoji generation (simple, flat, icon style)
+    const enhancedPrompt = `${prompt} emoji, simple flat design, minimalist, clean icon style, white background`
 
-    // Create prediction with Ideogram v2
+    // Create prediction with sdxl-emoji model
     const response = await fetch('https://api.replicate.com/v1/predictions', {
       method: 'POST',
       headers: {
@@ -32,12 +33,14 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        model: IDEOGRAM_V2_MODEL,
+        version: EMOJI_MODEL_VERSION,
         input: {
           prompt: enhancedPrompt,
-          aspect_ratio: '1:1',
-          magic_prompt_option: 'OFF', // Don't auto-enhance, we control the style
-        },
+          width: 1024,
+          height: 1024,
+          apply_watermark: false,
+          negative_prompt: 'gradient, shading, 3D, realistic, photograph, complex details, text, watermark, blurry, low quality'
+        }
       }),
     })
 
@@ -51,7 +54,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     let result = prediction
     const pollStartTime = Date.now()
     while (result.status !== 'succeeded' && result.status !== 'failed') {
-      await new Promise(resolve => setTimeout(resolve, 1000)) // Wait 1 second
+      await new Promise(resolve => setTimeout(resolve, 500)) // Wait 0.5 seconds
       
       const pollResponse = await fetch(
         `https://api.replicate.com/v1/predictions/${result.id}`,
@@ -85,7 +88,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
     // Return the first output image
     return res.status(200).json({
-      image: result.output[0],
+      imageUrl: result.output[0],
+      id: result.id
     })
   } catch (error: any) {
     console.error('Error generating image:', error)

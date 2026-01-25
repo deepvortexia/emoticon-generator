@@ -40,7 +40,7 @@ function App() {
         throw new Error(data.error || 'Failed to generate emoticon')
       }
 
-      setGeneratedImage(data.image)
+      setGeneratedImage(data.imageUrl || data.image)
     } catch (err: any) {
       setError(err.message || 'Something went wrong. Please try again.')
     } finally {
@@ -179,7 +179,7 @@ function App() {
         <footer className="footer">
           <p className="footer-text">
             Powered by <span className="gradient-text">Deep Vortex</span> ×{' '}
-            <span className="gradient-text">Ideogram v2</span>
+            <span className="gradient-text">SDXL Emoji</span>
           </p>
         </footer>
       </div>
