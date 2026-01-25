@@ -65,7 +65,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       )
       
       if (!pollResponse.ok) {
-        throw new Error('Failed to poll prediction status')
+        throw new Error(`Failed to poll prediction status: ${pollResponse.status} ${pollResponse.statusText}`)
       }
       
       result = await pollResponse.json()
@@ -78,6 +78,11 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
     if (result.status === 'failed') {
       throw new Error(result.error || 'Generation failed')
+    }
+
+    // Validate output exists
+    if (!result.output || !Array.isArray(result.output) || result.output.length === 0) {
+      throw new Error('No image generated')
     }
 
     // Return the first output image
