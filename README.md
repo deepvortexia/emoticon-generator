@@ -43,6 +43,7 @@ Once you've generated your perfect emoji, you can use it across all major platfo
 | Twitch | PNG | 28/56/112px | - |
 | Telegram | PNG | 512x512px | 512 KB |
 | WhatsApp | PNG | 512x512px | 100 KB |
+| Reddit | PNG | 128x128px | - |
 
 💡 **Tip**: Our emojis generate at 1024x1024px (~50-150 KB) - perfect for all platforms!
 
