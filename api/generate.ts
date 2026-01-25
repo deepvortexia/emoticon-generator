@@ -1,8 +1,9 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node'
 
 
-// Ideogram v2 Turbo model identifier for emoji/icon generation
-const IDEOGRAM_V2_MODEL = 'ideogram-ai/ideogram-v2-turbo'
+// fofr/sdxl-emoji - Specialized emoji generator on Replicate
+// Optimized for iOS-style emojis, flat design, perfect for Discord/Slack
+const SDXL_EMOJI_VERSION = 'dee76b5afde21b0f01ed7925f0665b7e879c50ee718c5f78a9d38e04d523cc5e'
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' })
@@ -21,10 +22,10 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   }
 
   try {
-    // Simplified prompt optimized for Ideogram v2 (specialized for icons/emojis)
-    const enhancedPrompt = `${prompt.trim()} emoji icon, simple flat design, minimalist, clean, suitable for discord or slack`
+    // Enhanced prompt optimized for sdxl-emoji model
+    const enhancedPrompt = `${prompt.trim()} emoji, simple flat design, minimalist style, iOS emoji aesthetic, clean lines, white background, vector style, single object, suitable for discord or slack`
 
-    // Create prediction with Ideogram v2
+    // Create prediction with fofr/sdxl-emoji
     const response = await fetch('https://api.replicate.com/v1/predictions', {
       method: 'POST',
       headers: {
@@ -32,11 +33,16 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        model: IDEOGRAM_V2_MODEL,
+        version: SDXL_EMOJI_VERSION,
         input: {
           prompt: enhancedPrompt,
-          aspect_ratio: '1:1',
-          magic_prompt_option: 'OFF', // Don't auto-enhance, we control the style
+          width: 1024,
+          height: 1024,
+          num_outputs: 1,
+          num_inference_steps: 50,
+          guidance_scale: 7.5,
+          apply_watermark: false,
+          negative_prompt: 'gradient, shading, 3D effect, realistic, photograph, shadow, complex details, text, letters, words'
         },
       }),
     })
