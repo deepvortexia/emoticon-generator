@@ -1,8 +1,8 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node'
 
-// Ideogram v2 Turbo model version for emoji/icon generation (faster & cheaper)
-const IDEOGRAM_V2_VERSION = '42b5a15c49a487c6f327c806f7d87a8f5f7bd119feb2e975c70fc7c039d0e134'
 
+// Ideogram v2 Turbo model identifier for emoji/icon generation
+const IDEOGRAM_V2_MODEL = 'ideogram-ai/ideogram-v2-turbo'
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' })
@@ -32,7 +32,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        version: IDEOGRAM_V2_VERSION,
+        model: IDEOGRAM_V2_MODEL,
         input: {
           prompt: enhancedPrompt,
           aspect_ratio: '1:1',
