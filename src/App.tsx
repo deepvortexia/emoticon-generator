@@ -1,5 +1,21 @@
 import { useState, useEffect } from 'react'
 import './App.css'
+import { Gallery } from './components/Gallery'
+
+const loadingMessages = [
+  "Creating magic... ✨",
+  "Brewing pixels... 🎨",
+  "Summoning AI spirits... 🌀",
+  "Crafting your emoji... 🔮",
+  "Mixing colors... 🎭",
+  "Generating awesomeness... 🚀"
+];
+
+const surprisePrompts = [
+  "happy cat", "pizza", "rocket", "rainbow", "unicorn",
+  "robot dancing", "dragon with crown", "astronaut dog",
+  "ninja turtle", "wizard hat", "magic wand", "crystal ball"
+];
 
 function App() {
   const [prompt, setPrompt] = useState('')
@@ -7,10 +23,16 @@ function App() {
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState('')
   const [isLoaded, setIsLoaded] = useState(false)
+  const [loadingMessage, setLoadingMessage] = useState(loadingMessages[0])
+  const [imagesGenerated, setImagesGenerated] = useState(0)
 
   useEffect(() => {
     // Mark as loaded after initial render
     setIsLoaded(true)
+    
+    // Load images generated counter
+    const count = parseInt(localStorage.getItem('images-generated') || '0')
+    setImagesGenerated(count)
   }, [])
 
   const generateEmoticon = async () => {
@@ -22,6 +44,7 @@ function App() {
     setIsLoading(true)
     setError('')
     setGeneratedImage('')
+    setLoadingMessage(loadingMessages[Math.floor(Math.random() * loadingMessages.length)])
 
     try {
       const response = await fetch('/api/generate', {
@@ -41,6 +64,14 @@ function App() {
       }
 
       setGeneratedImage(data.image)
+      
+      // Save to history
+      saveToHistory(prompt, data.image)
+      
+      // Update counter
+      const newCount = imagesGenerated + 1
+      setImagesGenerated(newCount)
+      localStorage.setItem('images-generated', newCount.toString())
     } catch (err: any) {
       setError(err.message || 'Something went wrong. Please try again.')
     } finally {
@@ -52,6 +83,30 @@ function App() {
     if (e.key === 'Enter' && !isLoading) {
       generateEmoticon()
     }
+  }
+
+  const saveToHistory = (prompt: string, imageUrl: string) => {
+    const history = JSON.parse(localStorage.getItem('emoji-history') || '[]')
+    const newItem = {
+      id: Date.now().toString(),
+      prompt,
+      imageUrl,
+      timestamp: Date.now()
+    }
+    
+    // Keep only last 20 items
+    const updated = [newItem, ...history].slice(0, 20)
+    localStorage.setItem('emoji-history', JSON.stringify(updated))
+  }
+
+  const regenerate = async () => {
+    if (!prompt) return
+    await generateEmoticon()
+  }
+
+  const surpriseMe = () => {
+    const random = surprisePrompts[Math.floor(Math.random() * surprisePrompts.length)]
+    setPrompt(random)
   }
 
   const downloadImage = async () => {
@@ -75,6 +130,8 @@ function App() {
 
   return (
     <div className={`app ${isLoaded ? 'fade-in' : ''}`}>
+      <Gallery />
+      
       <div className="container">
         <div className="header">
           <div className="logo">🌀</div>
@@ -82,6 +139,38 @@ function App() {
             <span className="gradient-text">Deep Vortex</span>
           </h1>
           <p className="subtitle">AI-Powered Emoticon Generator</p>
+          
+          <div className="credit-counter">
+            <span>🎨 Generated: {imagesGenerated}</span>
+            <span className="credit-separator">•</span>
+            <span>💰 Remaining: ~{660 - imagesGenerated} images</span>
+          </div>
+        </div>
+
+        <div className="examples-section">
+          <h3>✨ Try these prompts:</h3>
+          
+          <div className="example-category">
+            <span className="category-label">Simple Emojis (Flat):</span>
+            <div className="example-buttons">
+              <button onClick={() => setPrompt("pizza")}>🍕 pizza</button>
+              <button onClick={() => setPrompt("rocket")}>🚀 rocket</button>
+              <button onClick={() => setPrompt("heart")}>❤️ heart</button>
+              <button onClick={() => setPrompt("happy face")}>😊 happy face</button>
+              <button onClick={() => setPrompt("star")}>⭐ star</button>
+              <button onClick={() => setPrompt("coffee cup")}>☕ coffee cup</button>
+            </div>
+          </div>
+          
+          <div className="example-category">
+            <span className="category-label">Creative Stickers:</span>
+            <div className="example-buttons">
+              <button onClick={() => setPrompt("astronaut cat in space")}>🐱 astronaut cat</button>
+              <button onClick={() => setPrompt("robot dancing with headphones")}>🤖 robot dancing</button>
+              <button onClick={() => setPrompt("dragon wearing sunglasses")}>🐉 dragon with sunglasses</button>
+              <button onClick={() => setPrompt("cat playing guitar")}>🎸 cat musician</button>
+            </div>
+          </div>
         </div>
 
         <div className="input-section">
@@ -114,6 +203,14 @@ function App() {
               </>
             )}
           </button>
+          
+          <button
+            onClick={surpriseMe}
+            disabled={isLoading}
+            className="surprise-btn"
+          >
+            🎲 Surprise Me!
+          </button>
         </div>
 
         {error && (
@@ -124,32 +221,35 @@ function App() {
         )}
 
         {isLoading && (
-          <div className="loading-container">
-            <div className="cosmic-loader">
-              <div className="planet"></div>
-              <div className="orbit"></div>
-            </div>
-            <p className="loading-text">Creating your magical emoticon...</p>
+          <div className="loading-section">
+            <div className="loading-spinner-large"></div>
+            <p className="loading-message">{loadingMessage}</p>
+            <p className="loading-hint">This usually takes 3-5 seconds</p>
           </div>
         )}
 
         {generatedImage && !isLoading && (
           <div className="result-section slide-up">
-            <h3 className="result-title">Your Emoticon ✨</h3>
-            <div className="emoticon-card">
+            <h2 className="result-title">
+              Your Emoticon ✨
+              <span className="generation-time">Generated in ~4s</span>
+            </h2>
+            
+            <div className="image-container">
               <img
                 src={generatedImage}
-                alt={prompt}
-                className="emoticon-image generated-image"
+                alt="Generated emoticon"
+                className="generated-image fade-in-image"
                 loading="lazy"
               />
             </div>
-            <p className="prompt-display">"{prompt}"</p>
-
+            
             <div className="action-buttons">
-              <button className="action-btn download-btn" onClick={downloadImage}>
-                <span className="btn-icon">⬇️</span>
-                Download
+              <button onClick={downloadImage} className="action-btn download-btn">
+                <span>📥</span> Download
+              </button>
+              <button onClick={regenerate} className="action-btn regenerate-btn">
+                <span>🔄</span> Regenerate
               </button>
               <button
                 className="action-btn copy-btn"
@@ -158,19 +258,7 @@ function App() {
                   alert('Image URL copied!')
                 }}
               >
-                <span className="btn-icon">🔗</span>
-                Copy URL
-              </button>
-              <button
-                className="action-btn new-btn"
-                onClick={() => {
-                  setPrompt('')
-                  setGeneratedImage('')
-                  setError('')
-                }}
-              >
-                <span className="btn-icon">🔄</span>
-                Generate New
+                <span>🔗</span> Copy URL
               </button>
             </div>
           </div>
