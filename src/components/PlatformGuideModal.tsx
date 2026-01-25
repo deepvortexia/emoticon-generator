@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
 import './PlatformGuideModal.css';
 
+const GITHUB_GUIDE_URL = 'https://github.com/deepvortexia/emoticon-generator/blob/main/USAGE_GUIDE.md';
+
 interface Platform {
   id: string;
   name: string;
@@ -67,11 +69,12 @@ export default function PlatformGuideModal({ isOpen, onClose }: PlatformGuideMod
           {platforms.map((platform) => (
             <button
               key={platform.id}
+              id={`tab-${platform.id}`}
               className={`platform-tab ${activePlatform === platform.id ? 'active' : ''}`}
               onClick={() => setActivePlatform(platform.id)}
               role="tab"
               aria-selected={activePlatform === platform.id}
-              aria-controls={`${platform.id}-panel`}
+              aria-controls={`panel-${platform.id}`}
             >
               <span className="platform-icon">{platform.icon}</span>
               <span className="platform-name">{platform.name}</span>
@@ -82,14 +85,15 @@ export default function PlatformGuideModal({ isOpen, onClose }: PlatformGuideMod
         <div 
           className="platform-content"
           role="tabpanel"
-          id={`${activePlatform}-panel`}
+          id={`panel-${activePlatform}`}
+          aria-labelledby={`tab-${activePlatform}`}
         >
           <PlatformContent platform={activePlatform} />
         </div>
 
         <div className="modal-footer">
           <a 
-            href="https://github.com/deepvortexia/emoticon-generator/blob/main/USAGE_GUIDE.md" 
+            href={GITHUB_GUIDE_URL} 
             target="_blank" 
             rel="noopener noreferrer"
             className="full-guide-link"
