@@ -205,7 +205,6 @@ body {
   border-top-color: white;
   border-radius: 50%;
   animation: spin 0.8s linear infinite;
-  margin-right: 0.5rem;
   display: inline-block;
 }
 
@@ -339,10 +338,6 @@ body {
   gap: 15px;
   justify-content: center;
   flex-wrap: wrap;
-}
-
-.button-group button {
-  margin: 0.5rem;
 }
 
 .action-btn {
