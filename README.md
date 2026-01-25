@@ -18,6 +18,39 @@ Generate custom emojis and stickers using AI! Perfect for Discord, Slack, and so
 - 🎲 **Surprise Me**: Random prompt generator
 - 📊 **Usage Counter**: Track how many images you've generated
 
+## 📱 Using Your Emojis
+
+Your generated emojis work great on all major platforms!
+
+### Quick Platform Guide
+
+- **💬 Discord**: Server custom emojis (128x128px, max 256KB)
+- **💼 Slack**: Workspace reactions (128x128px, max 128KB)
+- **🎮 Twitch**: Subscriber emotes (112x112px, requires Affiliate)
+- **✈️ Telegram**: Sticker packs (512x512px, max 512KB)
+- **📱 WhatsApp**: Personal stickers (512x512px, max 100KB)
+- **🤖 Reddit**: Community emojis (128x128px, mods only)
+
+**📖 [Complete Platform Usage Guide →](USAGE_GUIDE.md)**
+
+Detailed instructions for uploading, resizing, and optimizing your emojis for every platform!
+
+### Quick Tips
+
+**For flat emojis** (Discord, Slack, Reddit):
+- Use simple 1-2 word prompts
+- Examples: `pizza`, `rocket`, `happy face`
+- Perfect for reactions and quick communication
+
+**For detailed stickers** (Telegram, WhatsApp):
+- Use descriptive phrases with actions
+- Examples: `astronaut cat in space`, `robot dancing`
+- Great for creative expression
+
+**Need to resize?** Use free tools like [Photopea](https://photopea.com) or [Squoosh](https://squoosh.app)
+
+**Background too busy?** Remove it with [remove.bg](https://remove.bg)
+
 ## 🚀 Live Demo
 
 Visit: [https://emoticon-generator-7cvg.vercel.app](https://emoticon-generator-7cvg.vercel.app)
