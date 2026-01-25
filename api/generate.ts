@@ -1,8 +1,8 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node'
 
+
 // Ideogram v2 Turbo model identifier for emoji/icon generation
 const IDEOGRAM_V2_MODEL = 'ideogram-ai/ideogram-v2-turbo'
-
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' })
