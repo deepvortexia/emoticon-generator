@@ -18,6 +18,34 @@ Generate custom emojis and stickers using AI! Perfect for Discord, Slack, and so
 - 🎲 **Surprise Me**: Random prompt generator
 - 📊 **Usage Counter**: Track how many images you've generated
 
+## 📱 How to Use Your Emojis
+
+Once you've generated your perfect emoji, you can use it across all major platforms!
+
+### Quick Platform Guide:
+
+- **💬 Discord** - Upload to server emojis (max 256 KB)
+- **💼 Slack** - Add to workspace emojis (max 128 KB)
+- **🎮 Twitch** - Create channel emotes (requires Affiliate/Partner)
+- **✈️ Telegram** - Build sticker packs with @Stickers bot
+- **📱 WhatsApp** - Use sticker maker apps
+- **🐦 Twitter/X** - Attach as images in tweets
+- **🤖 Reddit** - Upload as subreddit emojis (mods only)
+
+**👉 [Complete Platform Usage Guide](USAGE_GUIDE.md)** - Detailed step-by-step instructions for every platform!
+
+### Platform Requirements at a Glance:
+
+| Platform | Format | Size | File Limit |
+|----------|--------|------|------------|
+| Discord | PNG | 128x128px | 256 KB |
+| Slack | PNG | 128x128px | 128 KB |
+| Twitch | PNG | 28/56/112px | - |
+| Telegram | PNG | 512x512px | 512 KB |
+| WhatsApp | PNG | 512x512px | 100 KB |
+
+💡 **Tip**: Our emojis generate at 1024x1024px (~50-150 KB) - perfect for all platforms!
+
 ## 🚀 Live Demo
 
 Visit: [https://emoticon-generator-7cvg.vercel.app](https://emoticon-generator-7cvg.vercel.app)
@@ -147,6 +175,32 @@ npm run build
   "id": "prediction-id"
 }
 ```
+
+## 💡 Pro Tips for Best Results
+
+### Writing Prompts:
+
+**For Simple Flat Emojis (iOS-style):**
+```
+✅ Good: "pizza", "rocket", "happy face"
+❌ Avoid: "a beautiful photorealistic pizza with toppings"
+```
+
+**For Creative Stickers:**
+```
+✅ Good: "astronaut cat in space", "robot dancing with headphones"
+❌ Avoid: "cat" (too simple for sticker style)
+```
+
+### Using Across Platforms:
+
+1. **Download as PNG** - Best compatibility
+2. **Check file size** - Use [Squoosh](https://squoosh.app) if too large
+3. **Remove background** - Use [remove.bg](https://remove.bg) if needed
+4. **Resize if needed** - Use [Photopea](https://photopea.com) for free editing
+5. **Test on dark/light modes** - Ensure visibility
+
+📖 **[Full Platform Guide](USAGE_GUIDE.md)** - Complete instructions for Discord, Slack, Twitch, Telegram, WhatsApp, and more!
 
 ## 🤝 Contributing
 
