@@ -1,5 +1,8 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node'
 
+// Ideogram v2 model version for emoji/icon generation
+const IDEOGRAM_V2_VERSION = '4c3c75ab66ee968a77b0101adb086e9ae6f8906b909477ea0df46e3f6c64f5a8'
+
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' })
@@ -19,7 +22,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
   try {
     // Simplified prompt optimized for Ideogram v2 (specialized for icons/emojis)
-    const enhancedPrompt = `${prompt} emoji icon, simple flat design, minimalist, clean, suitable for discord or slack`
+    const enhancedPrompt = `${prompt.trim()} emoji icon, simple flat design, minimalist, clean, suitable for discord or slack`
 
     // Create prediction with Ideogram v2
     const response = await fetch('https://api.replicate.com/v1/predictions', {
@@ -29,7 +32,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        version: '4c3c75ab66ee968a77b0101adb086e9ae6f8906b909477ea0df46e3f6c64f5a8', // Ideogram v2
+        version: IDEOGRAM_V2_VERSION,
         input: {
           prompt: enhancedPrompt,
           aspect_ratio: '1:1',
