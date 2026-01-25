@@ -11,36 +11,73 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     return res.status(400).json({ error: 'Prompt is required' })
   }
 
-  const apiKey = process.env.OPENAI_API_KEY
+  const apiKey = process.env.REPLICATE_API_TOKEN
 
   if (!apiKey) {
-    return res.status(500).json({ error: 'OpenAI API key not configured' })
+    return res.status(500).json({ error: 'Replicate API key not configured' })
   }
 
   try {
-    const response = await fetch('https://api.openai.com/v1/images/generations', {
+    // Enhanced prompt for emoticon style
+    const enhancedPrompt = `Create a cute emoticon illustration of: ${prompt}. Style: bold outlines, vibrant colors, simple shapes, cartoon style, flat design, centered composition, white background, emoji-like, icon style, professional emoticon design`
+
+    // Create prediction with Stable Diffusion XL
+    const response = await fetch('https://api.replicate.com/v1/predictions', {
       method: 'POST',
       headers: {
+        'Authorization': `Token ${apiKey}`,
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${apiKey}`,
       },
       body: JSON.stringify({
-        model: 'dall-e-3',
-        prompt: prompt,
-        n: 1,
-        size: '1024x1024',
-        quality: 'standard',
+        version: '39ed52f2a78e934b3ba6e2a89f5b1c712de7dfea535525255b1aa35c5565e08b', // SDXL 1.0
+        input: {
+          prompt: enhancedPrompt,
+          width: 512,
+          height: 512,
+          num_outputs: 1,
+          scheduler: 'K_EULER',
+          num_inference_steps: 25,
+          guidance_scale: 7.5,
+          negative_prompt: 'blurry, bad quality, distorted, ugly, watermark, text, signature, realistic photo, 3d render',
+        },
       }),
     })
 
-    const data = await response.json()
+    const prediction = await response.json()
 
     if (!response.ok) {
-      throw new Error(data.error?.message || 'Failed to generate image')
+      throw new Error(prediction.detail || 'Failed to create prediction')
     }
 
+    // Poll for completion (Replicate is async)
+    let result = prediction
+    while (result.status !== 'succeeded' && result.status !== 'failed') {
+      await new Promise(resolve => setTimeout(resolve, 1000)) // Wait 1 second
+      
+      const pollResponse = await fetch(
+        `https://api.replicate.com/v1/predictions/${result.id}`,
+        {
+          headers: {
+            'Authorization': `Token ${apiKey}`,
+          },
+        }
+      )
+      
+      result = await pollResponse.json()
+      
+      // Timeout after 30 seconds
+      if (Date.now() - new Date(prediction.created_at).getTime() > 30000) {
+        throw new Error('Generation timeout')
+      }
+    }
+
+    if (result.status === 'failed') {
+      throw new Error(result.error || 'Generation failed')
+    }
+
+    // Return the first output image
     return res.status(200).json({
-      image: data.data[0].url,
+      image: result.output[0],
     })
   } catch (error: any) {
     console.error('Error generating image:', error)
