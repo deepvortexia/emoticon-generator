@@ -1,7 +1,7 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node'
 
-// Ideogram v2 model version for emoji/icon generation
-const IDEOGRAM_V2_VERSION = '4c3c75ab66ee968a77b0101adb086e9ae6f8906b909477ea0df46e3f6c64f5a8'
+// Ideogram v2 Turbo model version for emoji/icon generation (faster & cheaper)
+const IDEOGRAM_V2_VERSION = '42b5a15c49a487c6f327c806f7d87a8f5f7bd119feb2e975c70fc7c039d0e134'
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   if (req.method !== 'POST') {
