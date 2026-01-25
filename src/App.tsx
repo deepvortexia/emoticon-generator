@@ -179,7 +179,7 @@ function App() {
         <footer className="footer">
           <p className="footer-text">
             Powered by <span className="gradient-text">Deep Vortex</span> ×{' '}
-            <span className="gradient-text">FLUX-Schnell</span>
+            <span className="gradient-text">Ideogram v2</span>
           </p>
         </footer>
       </div>

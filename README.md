@@ -1,12 +1,12 @@
 # ✨ Emoticon Generator
 
-AI-powered emoticon generator with a stunning cosmic purple theme, powered by FLUX-Schnell via Replicate.
+AI-powered emoticon generator with a stunning cosmic purple theme, powered by Ideogram v2 via Replicate.
 
 ![Emoticon Generator](https://github.com/user-attachments/assets/26ca3e88-3972-42f5-a4cd-1f0c387705cc)
 
 ## 🎨 Features
 
-- **AI-Powered Generation**: Create unique emoticons using FLUX-Schnell
+- **AI-Powered Generation**: Create unique emoticons using Ideogram v2
 - **Cosmic Purple Theme**: Beautiful animated starfield background with glassmorphism UI
 - **Responsive Design**: Works perfectly on mobile and desktop devices
 - **Download Images**: Save your generated emoticons to your device
@@ -14,7 +14,10 @@ AI-powered emoticon generator with a stunning cosmic purple theme, powered by FL
 - **Keyboard Support**: Press Enter to generate emoticons quickly
 - **Loading Animations**: Cosmic loader with planet and orbit animations
 - **Error Handling**: User-friendly error messages
-- **Cost Efficient**: 92.5% cheaper than DALL-E 3 ($0.003 vs $0.040 per image)
+- **Specialized for Icons**: Uses Ideogram v2, purpose-built for emoji and icon generation
+- **Transparent Backgrounds**: Automatic transparent backgrounds perfect for Discord/Slack
+- **No NSFW False Positives**: Reliable generation without overly strict content filters
+- **Cost Efficient**: 80% cheaper than DALL-E 3 ($0.008 vs $0.040 per image)
 
 ## 🚀 Quick Start
 
@@ -88,7 +91,7 @@ Don't forget to set the `REPLICATE_API_TOKEN` environment variable in your Verce
 - **Build Tool**: Vite 5
 - **Styling**: Pure CSS with animations
 - **API**: Vercel Serverless Functions
-- **AI**: FLUX-Schnell via Replicate API
+- **AI**: Ideogram v2 via Replicate API
 
 ## 📁 Project Structure
 
@@ -122,25 +125,27 @@ emoticon-generator/
 
 | Variable | Description | Required |
 |----------|-------------|----------|
-| `REPLICATE_API_TOKEN` | Your Replicate API token for FLUX-Schnell | Yes |
+| `REPLICATE_API_TOKEN` | Your Replicate API token for Ideogram v2 | Yes |
 
 ## 💰 Cost Efficiency
 
-This project uses FLUX-Schnell via Replicate, which is 92.5% cheaper than DALL-E 3:
+This project uses Ideogram v2 via Replicate, which is 80% cheaper than DALL-E 3:
 
-- **FLUX-Schnell**: $0.003 per image
+- **Ideogram v2**: $0.008 per image
 - **DALL-E 3**: $0.040 per image (1024x1024)
 
 For 1,000 images:
-- FLUX-Schnell: $3.00
+- Ideogram v2: $8.00
 - DALL-E 3: $40.00
-- **Savings: $37.00 (92.5%)**
+- **Savings: $32.00 (80%)**
 
-**Quality Improvements:**
-- ⚡ Faster generation (2-4 seconds vs 5-10 seconds with SDXL)
-- 🎨 Better prompt understanding and cartoon/kawaii style
-- ✨ More suitable for single character emoticons
-- 🎯 Consistent, high-quality results
+**Why Ideogram v2:**
+- 🎯 **Specialized for Icons/Emojis** - Purpose-built for this use case
+- ✨ **Simple, Flat Designs** - Perfect Discord/Slack emoji style
+- 🔲 **Transparent Backgrounds** - Automatic, no extra prompting needed
+- 🛡️ **No NSFW False Positives** - Understands creative/icon context
+- 🎨 **Consistent Quality** - Reliable, professional emoji output
+- ⚡ **Fast Generation** - Quick results with high quality
 
 ## 📝 License
 
@@ -150,4 +155,4 @@ MIT
 
 Made with ❤️ by **AphoraPixel**
 
-Powered by **FLUX-Schnell** via **Replicate**
+Powered by **Ideogram v2** via **Replicate**
