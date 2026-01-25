@@ -1,12 +1,12 @@
 # ✨ Emoticon Generator
 
-AI-powered emoticon generator with a stunning cosmic purple theme, powered by OpenAI DALL-E 3.
+AI-powered emoticon generator with a stunning cosmic purple theme, powered by Stable Diffusion XL via Replicate.
 
 ![Emoticon Generator](https://github.com/user-attachments/assets/26ca3e88-3972-42f5-a4cd-1f0c387705cc)
 
 ## 🎨 Features
 
-- **AI-Powered Generation**: Create unique emoticons using OpenAI DALL-E 3
+- **AI-Powered Generation**: Create unique emoticons using Stable Diffusion XL
 - **Cosmic Purple Theme**: Beautiful animated starfield background with glassmorphism UI
 - **Responsive Design**: Works perfectly on mobile and desktop devices
 - **Download Images**: Save your generated emoticons to your device
@@ -14,13 +14,14 @@ AI-powered emoticon generator with a stunning cosmic purple theme, powered by Op
 - **Keyboard Support**: Press Enter to generate emoticons quickly
 - **Loading Animations**: Cosmic loader with planet and orbit animations
 - **Error Handling**: User-friendly error messages
+- **Cost Efficient**: 94% cheaper than DALL-E 3 ($0.0023 vs $0.040 per image)
 
 ## 🚀 Quick Start
 
 ### Prerequisites
 
 - Node.js 18+ installed
-- OpenAI API key ([Get one here](https://platform.openai.com/api-keys))
+- Replicate API key ([Get one here](https://replicate.com/account/api-tokens))
 
 ### Installation
 
@@ -37,7 +38,7 @@ npm install
 
 3. Create a `.env` file in the root directory:
 ```bash
-OPENAI_API_KEY=your_openai_api_key_here
+REPLICATE_API_TOKEN=your_replicate_api_token_here
 ```
 
 4. Start the development server:
@@ -61,7 +62,7 @@ The built files will be in the `dist` directory.
 
 1. Click the "Deploy with Vercel" button above
 2. Connect your GitHub repository
-3. Add your `OPENAI_API_KEY` environment variable in Vercel project settings
+3. Add your `REPLICATE_API_TOKEN` environment variable in Vercel project settings
 4. Deploy!
 
 ### Manual Deployment
@@ -71,7 +72,15 @@ npm install -g vercel
 vercel
 ```
 
-Don't forget to set the `OPENAI_API_KEY` environment variable in your Vercel project settings.
+Don't forget to set the `REPLICATE_API_TOKEN` environment variable in your Vercel project settings.
+
+### Getting a Replicate API Token
+
+1. Go to [Replicate](https://replicate.com)
+2. Sign up with GitHub (free to start)
+3. Go to [API Tokens](https://replicate.com/account/api-tokens)
+4. Copy your API token
+5. Add it to your `.env` file or Vercel environment variables
 
 ## 🛠️ Tech Stack
 
@@ -79,7 +88,7 @@ Don't forget to set the `OPENAI_API_KEY` environment variable in your Vercel pro
 - **Build Tool**: Vite 5
 - **Styling**: Pure CSS with animations
 - **API**: Vercel Serverless Functions
-- **AI**: OpenAI DALL-E 3
+- **AI**: Stable Diffusion XL via Replicate API
 
 ## 📁 Project Structure
 
@@ -92,7 +101,7 @@ emoticon-generator/
 │   ├── index.css         # Base styles
 │   └── vite-env.d.ts     # TypeScript definitions
 ├── api/
-│   └── generate.ts       # OpenAI DALL-E API integration
+│   └── generate.ts       # Replicate API integration
 ├── public/               # Static assets
 ├── index.html           # HTML entry point
 ├── package.json         # Dependencies and scripts
@@ -113,7 +122,19 @@ emoticon-generator/
 
 | Variable | Description | Required |
 |----------|-------------|----------|
-| `OPENAI_API_KEY` | Your OpenAI API key | Yes |
+| `REPLICATE_API_TOKEN` | Your Replicate API token for Stable Diffusion XL | Yes |
+
+## 💰 Cost Efficiency
+
+This project uses Stable Diffusion XL via Replicate, which is 94% cheaper than DALL-E 3:
+
+- **Stable Diffusion XL**: $0.0023 per image (512x512)
+- **DALL-E 3**: $0.040 per image (1024x1024)
+
+For 1,000 images:
+- Stable Diffusion XL: $2.30
+- DALL-E 3: $40.00
+- **Savings: $37.70 (94%)**
 
 ## 📝 License
 
@@ -123,4 +144,4 @@ MIT
 
 Made with ❤️ by **AphoraPixel**
 
-Powered by **OpenAI DALL-E**
+Powered by **Stable Diffusion XL** via **Replicate**
