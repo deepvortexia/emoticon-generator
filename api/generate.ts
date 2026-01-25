@@ -18,10 +18,10 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   }
 
   try {
-    // Enhanced prompt for emoticon style optimized for FLUX-Schnell
-    const enhancedPrompt = `single ${prompt} emoji, white background, ultra simple flat design, minimal details, bold black outlines, no gradients, no shading, no shadows, clean icon style, like standard iOS emoji, not kawaii, simple or no facial features, 2D flat colors only, minimalist icon`
+    // Simplified prompt optimized for Ideogram v2 (specialized for icons/emojis)
+    const enhancedPrompt = `${prompt} emoji icon, simple flat design, minimalist, clean, suitable for discord or slack`
 
-    // Create prediction with FLUX-Schnell
+    // Create prediction with Ideogram v2
     const response = await fetch('https://api.replicate.com/v1/predictions', {
       method: 'POST',
       headers: {
@@ -29,11 +29,11 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        version: '5599ed30703defd1d160a25a63321b4dec97101d98b4674bcc56e41f62f35637', // FLUX-Schnell
+        version: '4c3c75ab66ee968a77b0101adb086e9ae6f8906b909477ea0df46e3f6c64f5a8', // Ideogram v2
         input: {
           prompt: enhancedPrompt,
           aspect_ratio: '1:1',
-          num_outputs: 1,
+          magic_prompt_option: 'OFF', // Don't auto-enhance, we control the style
         },
       }),
     })
