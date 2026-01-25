@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <defs>
+    <radialGradient id="vortexGradient" cx="50%" cy="50%">
+      <stop offset="0%" style="stop-color:#6d28d9;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#8b5cf6;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#a78bfa;stop-opacity:1" />
+    </radialGradient>
+  </defs>
+  
+  <!-- Vortex spiral shape -->
+  <path d="M 50 10 
+           Q 70 20, 75 40
+           Q 78 55, 70 65
+           Q 60 75, 45 75
+           Q 30 73, 23 60
+           Q 18 48, 25 35
+           Q 32 25, 45 23
+           Q 55 22, 60 30
+           Q 63 37, 58 43
+           Q 53 48, 47 47
+           Q 42 46, 40 42
+           Q 38 38, 41 35
+           Q 44 33, 47 34
+           L 50 50"
+        fill="url(#vortexGradient)" 
+        stroke="#8b5cf6" 
+        stroke-width="2"/>
+  
+  <!-- Center glow point -->
+  <circle cx="50" cy="50" r="3" fill="#a78bfa" opacity="0.8"/>
+</svg>
