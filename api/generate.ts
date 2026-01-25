@@ -19,7 +19,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
   try {
     // Enhanced prompt for emoticon style optimized for FLUX-Schnell
-    const enhancedPrompt = `cute ${prompt} emoticon, kawaii style, simple cartoon design, bold outlines, single character, minimalist, vibrant colors`
+    const enhancedPrompt = `single ${prompt} emoji icon, centered on white background, simple flat design, clean vector style, minimalist, bold black outlines, no pattern, no repetition, discord emoji style, sticker design, isolated object`
 
     // Create prediction with FLUX-Schnell
     const response = await fetch('https://api.replicate.com/v1/predictions', {
