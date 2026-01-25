@@ -1,8 +1,10 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node'
 
 
-// Ideogram v2 Turbo model identifier for emoji/icon generation
-const IDEOGRAM_V2_MODEL = 'ideogram-ai/ideogram-v2-turbo'
+// fofr/sdxl-emoji - Specialized emoji generation model
+// This model is specifically trained for creating clean, flat emoji designs
+// Perfect for Discord/Slack custom emojis with transparent backgrounds
+const SDXL_EMOJI_VERSION = 'dee76b5afde21b0f01ed7925f0665b7e879c50ee718c5f78a9d38e04d523cc5e'
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' })
@@ -21,10 +23,11 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   }
 
   try {
-    // Simplified prompt optimized for Ideogram v2 (specialized for icons/emojis)
-    const enhancedPrompt = `${prompt.trim()} emoji icon, simple flat design, minimalist, clean, suitable for discord or slack`
+    // Optimized prompt for emoji generation
+    // "TOK" is the trigger word for fofr/sdxl-emoji model
+    const enhancedPrompt = `A TOK emoji of a ${prompt.trim()}`
 
-    // Create prediction with Ideogram v2
+    // Create prediction with fofr/sdxl-emoji
     const response = await fetch('https://api.replicate.com/v1/predictions', {
       method: 'POST',
       headers: {
@@ -32,11 +35,11 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        model: IDEOGRAM_V2_MODEL,
+        version: SDXL_EMOJI_VERSION,
         input: {
           prompt: enhancedPrompt,
-          aspect_ratio: '1:1',
-          magic_prompt_option: 'OFF', // Don't auto-enhance, we control the style
+          apply_watermark: false,
+          negative_prompt: "ugly, blurry, poor quality, distorted"
         },
       }),
     })
