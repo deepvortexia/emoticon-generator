@@ -23,7 +23,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
   try {
     // Optimized prompt for emoji generation (simple, flat, icon style)
-    const enhancedPrompt = `${prompt} emoji, simple flat design, minimalist, clean icon style, white background`
+    const enhancedPrompt = `${prompt.trim()} emoji, simple flat design, minimalist, clean icon style, white background`
 
     // Create prediction with sdxl-emoji model
     const response = await fetch('https://api.replicate.com/v1/predictions', {
