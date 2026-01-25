@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import './App.css'
 
 function App() {
@@ -6,6 +6,12 @@ function App() {
   const [generatedImage, setGeneratedImage] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState('')
+  const [isLoaded, setIsLoaded] = useState(false)
+
+  useEffect(() => {
+    // Mark as loaded after initial render
+    setIsLoaded(true)
+  }, [])
 
   const generateEmoticon = async () => {
     if (!prompt.trim()) {
@@ -68,18 +74,14 @@ function App() {
   }
 
   return (
-    <div className="app">
-      <div className="stars"></div>
-      <div className="stars2"></div>
-      <div className="stars3"></div>
-
+    <div className={`app ${isLoaded ? 'fade-in' : ''}`}>
       <div className="container">
         <div className="header">
-          <div className="logo">✨</div>
-          <h1 className="title">
-            <span className="gradient-text">Emoticon Generator</span>
+          <div className="logo">🌀</div>
+          <h1 className="title title-glow">
+            <span className="gradient-text">Deep Vortex</span>
           </h1>
-          <p className="subtitle">Create magical emoticons with AI ✨</p>
+          <p className="subtitle">AI-Powered Emoticon Generator</p>
         </div>
 
         <div className="input-section">
@@ -108,7 +110,7 @@ function App() {
             ) : (
               <>
                 <span className="btn-icon">🎨</span>
-                <span>Generate</span>
+                <span>Generate Emoticon</span>
               </>
             )}
           </button>
@@ -132,13 +134,14 @@ function App() {
         )}
 
         {generatedImage && !isLoading && (
-          <div className="result-section">
+          <div className="result-section slide-up">
             <h3 className="result-title">Your Emoticon ✨</h3>
             <div className="emoticon-card">
               <img
                 src={generatedImage}
                 alt={prompt}
-                className="emoticon-image"
+                className="emoticon-image generated-image"
+                loading="lazy"
               />
             </div>
             <p className="prompt-display">"{prompt}"</p>
@@ -167,7 +170,7 @@ function App() {
                 }}
               >
                 <span className="btn-icon">🔄</span>
-                New
+                Generate New
               </button>
             </div>
           </div>
@@ -175,9 +178,8 @@ function App() {
 
         <footer className="footer">
           <p className="footer-text">
-            Powered by <span className="gradient-text">OpenAI DALL-E</span> •
-            Made with <span className="heart">❤️</span> by{' '}
-            <span className="gradient-text">AphoraPixel</span>
+            Powered by <span className="gradient-text">Deep Vortex</span> ×{' '}
+            <span className="gradient-text">OpenAI DALL-E 3</span>
           </p>
         </footer>
       </div>
