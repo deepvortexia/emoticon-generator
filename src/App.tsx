@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import './App.css'
 import { Gallery } from './components/Gallery'
+import PlatformGuideModal from './components/PlatformGuideModal'
 
 const loadingMessages = [
   "Creating magic... ✨",
@@ -28,6 +29,7 @@ function App() {
   const [isLoaded, setIsLoaded] = useState(false)
   const [loadingMessage, setLoadingMessage] = useState(loadingMessages[0])
   const [imagesGenerated, setImagesGenerated] = useState(0)
+  const [isPlatformGuideOpen, setIsPlatformGuideOpen] = useState(false)
 
   useEffect(() => {
     // Mark as loaded after initial render
@@ -256,6 +258,12 @@ function App() {
               <button onClick={downloadImage} className="action-btn download-btn">
                 <span>📥</span> Download
               </button>
+              <button 
+                onClick={() => setIsPlatformGuideOpen(true)} 
+                className="action-btn platform-guide-btn"
+              >
+                <span>📱</span> How to Use
+              </button>
               <button onClick={regenerate} className="action-btn regenerate-btn">
                 <span>🔄</span> Regenerate
               </button>
@@ -279,6 +287,12 @@ function App() {
           </p>
         </footer>
       </div>
+
+      {/* Platform Guide Modal */}
+      <PlatformGuideModal 
+        isOpen={isPlatformGuideOpen}
+        onClose={() => setIsPlatformGuideOpen(false)}
+      />
     </div>
   )
 }

@@ -555,6 +555,17 @@ body {
   transform: translateY(-2px);
 }
 
+.platform-guide-btn {
+  background: linear-gradient(135deg, var(--vortex-primary), var(--vortex-dark));
+  color: white;
+}
+
+.platform-guide-btn:hover {
+  background: linear-gradient(135deg, var(--vortex-dark), var(--vortex-primary));
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(139, 92, 246, 0.4);
+}
+
 .regenerate-btn {
   background: var(--bg-tertiary);
   color: var(--text-primary);
