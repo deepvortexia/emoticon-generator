@@ -25,11 +25,13 @@ const PLATFORMS: Platforms = {
     icon: '💬',
     name: 'Discord',
     steps: [
-      'Download your emoji (PNG)',
-      'Right-click server → Server Settings → Emoji',
+      'Download your emoji (PNG format)',
+      'Right-click on your server name',
+      'Select "Server Settings" → "Emoji"',
       'Click "Upload Emoji"',
-      'Name it (e.g., astronautcat)',
-      'Use with :emojiname:'
+      'Choose your downloaded PNG file',
+      'Name it (example: astronautcat)',
+      'Save and use with :emojiname:'
     ],
     requirements: {
       format: 'PNG',
@@ -43,50 +45,58 @@ const PLATFORMS: Platforms = {
     name: 'Slack',
     steps: [
       'Download your emoji',
-      'Click workspace name → Customize workspace',
+      'Click your workspace name in the top left',
+      'Select "Customize workspace"',
       'Go to "Emoji" tab',
-      'Upload your PNG',
-      'Name it (letters, numbers, dashes only)'
+      'Click "Add Custom Emoji"',
+      'Upload your PNG file',
+      'Name it (use letters, numbers, dashes only)',
+      'Save and use with :emojiname:'
     ],
     requirements: {
-      format: 'PNG/GIF',
-      size: '128x128px',
-      maxSize: '128 KB (auto-compressed)'
+      format: 'PNG or GIF',
+      size: '128x128px recommended',
+      maxSize: '128 KB (auto-compressed if larger)',
+      note: 'Workspace admin permission needed'
     }
   },
   telegram: {
     icon: '✈️',
     name: 'Telegram',
     steps: [
-      'Download your emoji',
-      'Open @Stickers bot in Telegram',
-      'Send /newpack',
-      'Upload your image',
-      'Send emoji that represents it',
-      'Send /publish to finalize'
+      'Download your emoji (PNG)',
+      'Open Telegram and search for @Stickers bot',
+      'Send command: /newpack',
+      'Follow bot instructions',
+      'Upload your image file',
+      'Send an emoji that represents it',
+      'Send /publish when done to finalize your pack'
     ],
     requirements: {
-      format: 'PNG with transparency',
+      format: 'PNG with transparent background',
       size: '512x512px',
       maxSize: '512 KB',
-      note: 'Up to 120 stickers per pack'
+      note: 'Can have up to 120 stickers per pack'
     }
   },
   whatsapp: {
     icon: '📱',
     name: 'WhatsApp',
     steps: [
-      'Download sticker app (iOS: "Sticker Maker Studio", Android: "Sticker.ly")',
-      'Create new pack in app',
-      'Add your downloaded emojis',
+      'Download a sticker maker app',
+      'iOS: "Sticker Maker Studio"',
+      'Android: "Sticker.ly" or "Personal Stickers"',
+      'Open the app and create a new sticker pack',
+      'Add your downloaded emojis to the pack',
+      'Name your pack',
       'Tap "Add to WhatsApp"',
-      'Use in chats!'
+      'Use your stickers in WhatsApp chats!'
     ],
     requirements: {
-      format: 'PNG/WebP',
+      format: 'PNG or WebP',
       size: '512x512px',
-      maxSize: '100 KB',
-      note: 'Min 3 stickers per pack'
+      maxSize: '100 KB per sticker',
+      note: 'Need minimum 3 stickers per pack'
     }
   },
   twitch: {
@@ -94,17 +104,19 @@ const PLATFORMS: Platforms = {
     name: 'Twitch',
     steps: [
       'Download your emoji',
-      'Resize to 28px, 56px, 112px (3 versions)',
+      'Resize to 3 sizes: 28x28px, 56x56px, 112x112px',
       'Go to twitch.tv/dashboard',
-      'Settings → Emotes',
-      'Upload all 3 sizes',
-      'Wait for approval (24-48h)'
+      'Navigate to Settings → Emotes',
+      'Upload all 3 size versions',
+      'Name your emote',
+      'Submit for approval',
+      'Wait 24-48 hours for review'
     ],
     requirements: {
       format: 'PNG with transparency',
-      sizes: '28x28, 56x56, 112x112px',
-      maxSize: '1 MB',
-      note: 'Must be Affiliate/Partner'
+      sizes: '28x28, 56x56, 112x112px (all 3 required)',
+      maxSize: '1 MB per file',
+      note: 'Must be Twitch Affiliate or Partner'
     }
   },
   reddit: {
@@ -112,15 +124,19 @@ const PLATFORMS: Platforms = {
     name: 'Reddit',
     steps: [
       'Go to your subreddit',
-      'Mod Tools → Emoji',
-      'Upload Emoji',
-      'Name it',
-      'Set permissions'
+      'Click "Mod Tools" (must be moderator)',
+      'Select "Emoji"',
+      'Click "Upload Emoji"',
+      'Choose your PNG file',
+      'Name your emoji',
+      'Set user permissions',
+      'Save'
     ],
     requirements: {
       format: 'PNG',
-      size: '128x128px',
-      note: 'Moderators only, max 250 per subreddit'
+      size: '128x128px recommended',
+      maxSize: 'No specific limit',
+      note: 'Moderator only, max 250 emojis per subreddit'
     }
   },
   twitter: {
@@ -128,14 +144,16 @@ const PLATFORMS: Platforms = {
     name: 'Twitter/X',
     steps: [
       'Download your emoji',
-      'Create tweet',
-      'Click image icon',
-      'Upload your emoji PNG',
+      'Create a new tweet',
+      'Click the image/media icon',
+      'Upload your emoji PNG as an image',
+      'Add your text',
       'Tweet!'
     ],
     requirements: {
+      format: 'PNG, JPG, GIF',
       maxSize: '5 MB per image',
-      note: 'No custom emoji support - use as images in tweets'
+      note: 'No custom emoji support - emojis are posted as images'
     }
   }
 };
@@ -203,7 +221,7 @@ export default function PlatformGuideModal({ isOpen, onClose }: PlatformGuideMod
             rel="noopener noreferrer"
             className="full-guide-link"
           >
-            📖 View Full Detailed Guide →
+            📖 View Full Detailed Guide on GitHub →
           </a>
         </div>
       </div>
