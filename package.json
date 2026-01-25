@@ -20,9 +20,6 @@
     "@typescript-eslint/parser": "^6.19.0",
     "@vercel/node": "^3.0.12",
     "@vitejs/plugin-react": "^4.2.1",
-    "sharp": "^0.34.5",
-    "svg2png-many": "^0.0.7",
-    "to-ico": "^1.1.5",
     "typescript": "^5.3.3",
     "vite": "^5.0.12"
   }
