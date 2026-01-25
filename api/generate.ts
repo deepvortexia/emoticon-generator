@@ -18,10 +18,10 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   }
 
   try {
-    // Enhanced prompt for emoticon style
-    const enhancedPrompt = `Create a cute emoticon illustration of: ${prompt}. Style: bold outlines, vibrant colors, simple shapes, cartoon style, flat design, centered composition, white background, emoji-like, icon style, professional emoticon design`
+    // Enhanced prompt for emoticon style optimized for FLUX-Schnell
+    const enhancedPrompt = `cute ${prompt} emoticon, kawaii style, simple cartoon design, bold outlines, single character, minimalist, vibrant colors`
 
-    // Create prediction with Stable Diffusion XL
+    // Create prediction with FLUX-Schnell
     const response = await fetch('https://api.replicate.com/v1/predictions', {
       method: 'POST',
       headers: {
@@ -29,16 +29,11 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        version: '39ed52f2a78e934b3ba6e2a89f5b1c712de7dfea535525255b1aa35c5565e08b', // SDXL 1.0
+        version: '5599ed30703defd1d160a25a63321b4dec97101d98b4674bcc56e41f62f35637', // FLUX-Schnell
         input: {
           prompt: enhancedPrompt,
-          width: 512,
-          height: 512,
+          aspect_ratio: '1:1',
           num_outputs: 1,
-          scheduler: 'K_EULER',
-          num_inference_steps: 25,
-          guidance_scale: 7.5,
-          negative_prompt: 'blurry, bad quality, distorted, ugly, watermark, text, signature, realistic photo, 3d render',
         },
       }),
     })

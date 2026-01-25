@@ -30,7 +30,7 @@ function App() {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          prompt: `Create a cute emoticon style illustration of: ${prompt}. Style: cartoon, emoji-like, expressive, simple, colorful`,
+          prompt: prompt,
         }),
       })
 
@@ -179,7 +179,7 @@ function App() {
         <footer className="footer">
           <p className="footer-text">
             Powered by <span className="gradient-text">Deep Vortex</span> ×{' '}
-            <span className="gradient-text">OpenAI DALL-E 3</span>
+            <span className="gradient-text">FLUX-Schnell</span>
           </p>
         </footer>
       </div>
