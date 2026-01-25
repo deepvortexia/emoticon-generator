@@ -1,12 +1,12 @@
 # ✨ Emoticon Generator
 
-AI-powered emoticon generator with a stunning cosmic purple theme, powered by Stable Diffusion XL via Replicate.
+AI-powered emoticon generator with a stunning cosmic purple theme, powered by FLUX-Schnell via Replicate.
 
 ![Emoticon Generator](https://github.com/user-attachments/assets/26ca3e88-3972-42f5-a4cd-1f0c387705cc)
 
 ## 🎨 Features
 
-- **AI-Powered Generation**: Create unique emoticons using Stable Diffusion XL
+- **AI-Powered Generation**: Create unique emoticons using FLUX-Schnell
 - **Cosmic Purple Theme**: Beautiful animated starfield background with glassmorphism UI
 - **Responsive Design**: Works perfectly on mobile and desktop devices
 - **Download Images**: Save your generated emoticons to your device
@@ -14,7 +14,7 @@ AI-powered emoticon generator with a stunning cosmic purple theme, powered by St
 - **Keyboard Support**: Press Enter to generate emoticons quickly
 - **Loading Animations**: Cosmic loader with planet and orbit animations
 - **Error Handling**: User-friendly error messages
-- **Cost Efficient**: 94% cheaper than DALL-E 3 ($0.0023 vs $0.040 per image)
+- **Cost Efficient**: 92.5% cheaper than DALL-E 3 ($0.003 vs $0.040 per image)
 
 ## 🚀 Quick Start
 
@@ -88,7 +88,7 @@ Don't forget to set the `REPLICATE_API_TOKEN` environment variable in your Verce
 - **Build Tool**: Vite 5
 - **Styling**: Pure CSS with animations
 - **API**: Vercel Serverless Functions
-- **AI**: Stable Diffusion XL via Replicate API
+- **AI**: FLUX-Schnell via Replicate API
 
 ## 📁 Project Structure
 
@@ -122,19 +122,25 @@ emoticon-generator/
 
 | Variable | Description | Required |
 |----------|-------------|----------|
-| `REPLICATE_API_TOKEN` | Your Replicate API token for Stable Diffusion XL | Yes |
+| `REPLICATE_API_TOKEN` | Your Replicate API token for FLUX-Schnell | Yes |
 
 ## 💰 Cost Efficiency
 
-This project uses Stable Diffusion XL via Replicate, which is 94% cheaper than DALL-E 3:
+This project uses FLUX-Schnell via Replicate, which is 92.5% cheaper than DALL-E 3:
 
-- **Stable Diffusion XL**: $0.0023 per image (512x512)
+- **FLUX-Schnell**: $0.003 per image
 - **DALL-E 3**: $0.040 per image (1024x1024)
 
 For 1,000 images:
-- Stable Diffusion XL: $2.30
+- FLUX-Schnell: $3.00
 - DALL-E 3: $40.00
-- **Savings: $37.70 (94%)**
+- **Savings: $37.00 (92.5%)**
+
+**Quality Improvements:**
+- ⚡ Faster generation (2-4 seconds vs 5-10 seconds with SDXL)
+- 🎨 Better prompt understanding and cartoon/kawaii style
+- ✨ More suitable for single character emoticons
+- 🎯 Consistent, high-quality results
 
 ## 📝 License
 
@@ -144,4 +150,4 @@ MIT
 
 Made with ❤️ by **AphoraPixel**
 
-Powered by **Stable Diffusion XL** via **Replicate**
+Powered by **FLUX-Schnell** via **Replicate**
