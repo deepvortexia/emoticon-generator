@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import './PlatformGuideModal.css';
 
 interface PlatformGuideModalProps {
@@ -8,6 +8,20 @@ interface PlatformGuideModalProps {
 
 export default function PlatformGuideModal({ isOpen, onClose }: PlatformGuideModalProps) {
   const [activeTab, setActiveTab] = useState('discord');
+
+  // Handle Escape key to close modal
+  useEffect(() => {
+    const handleEscape = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        onClose();
+      }
+    };
+
+    if (isOpen) {
+      document.addEventListener('keydown', handleEscape);
+      return () => document.removeEventListener('keydown', handleEscape);
+    }
+  }, [isOpen, onClose]);
 
   if (!isOpen) return null;
 
@@ -23,12 +37,18 @@ export default function PlatformGuideModal({ isOpen, onClose }: PlatformGuideMod
   ];
 
   return (
-    <div className="platform-guide-modal">
-      <div className="platform-guide-content">
+    <div className="platform-guide-modal" onClick={onClose}>
+      <div 
+        className="platform-guide-content"
+        onClick={(e) => e.stopPropagation()}
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="platform-guide-title"
+      >
         {/* Header */}
         <div className="platform-guide-header">
           <div>
-            <h2>📱 Platform Usage Guide</h2>
+            <h2 id="platform-guide-title">📱 Platform Usage Guide</h2>
             <p className="platform-guide-subtitle">How to use your emojis on social platforms</p>
           </div>
           <button
