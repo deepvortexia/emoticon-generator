@@ -11,11 +11,16 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     return res.status(400).json({ error: 'Image URL is required' })
   }
 
-  // Validate that URL is from OpenAI to prevent SSRF attacks
+  // Validate that URL is from allowed hosts to prevent SSRF attacks
   try {
     const imageUrl = new URL(url)
-    const allowedHosts = ['oaidalleapiprodscus.blob.core.windows.net', 'dalleprodsec.blob.core.windows.net']
-    if (!allowedHosts.some(host => imageUrl.hostname === host)) {
+    const allowedHosts = [
+      'oaidalleapiprodscus.blob.core.windows.net',
+      'dalleprodsec.blob.core.windows.net',
+      'replicate.delivery',
+      'pbxt.replicate.delivery'
+    ]
+    if (!allowedHosts.some(host => imageUrl.hostname === host || imageUrl.hostname.endsWith(`.${host}`))) {
       return res.status(400).json({ error: 'Invalid image URL' })
     }
   } catch {
@@ -23,7 +28,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   }
 
   try {
-    // Fetch the image from OpenAI
+    // Fetch the image from the hosting service
     const response = await fetch(url)
     
     if (!response.ok) {

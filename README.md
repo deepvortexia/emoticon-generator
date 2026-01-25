@@ -1,30 +1,104 @@
-# ✨ Emoticon Generator
+# 🌀 Deep Vortex - AI Emoticon Generator
 
-AI-powered emoticon generator with a stunning cosmic purple theme, powered by Ideogram v2 via Replicate.
+Generate custom emojis and stickers using AI! Perfect for Discord, Slack, and social media.
 
-![Emoticon Generator](https://github.com/user-attachments/assets/26ca3e88-3972-42f5-a4cd-1f0c387705cc)
+![Deep Vortex Banner](https://via.placeholder.com/800x200/8b5cf6/ffffff?text=Deep+Vortex+Emoticon+Generator)
 
-## 🎨 Features
+## ✨ Features
 
-- **AI-Powered Generation**: Create unique emoticons using Ideogram v2
-- **Cosmic Purple Theme**: Beautiful animated starfield background with glassmorphism UI
-- **Responsive Design**: Works perfectly on mobile and desktop devices
-- **Download Images**: Save your generated emoticons to your device
-- **Copy URLs**: Easily share emoticons by copying their URLs
-- **Keyboard Support**: Press Enter to generate emoticons quickly
-- **Loading Animations**: Cosmic loader with planet and orbit animations
-- **Error Handling**: User-friendly error messages
-- **Specialized for Icons**: Uses Ideogram v2, purpose-built for emoji and icon generation
-- **Transparent Backgrounds**: Automatic transparent backgrounds perfect for Discord/Slack
-- **No NSFW False Positives**: Reliable generation without overly strict content filters
-- **Cost Efficient**: 80% cheaper than DALL-E 3 ($0.008 vs $0.040 per image)
+- 🎨 **Two Generation Modes:**
+  - **Simple Emojis**: Flat, minimalist iOS-style emojis (1 word prompts)
+  - **Creative Stickers**: Detailed illustrations with actions/scenes (complex prompts)
+  
+- ⚡ **Fast Generation**: 3-5 seconds per image
+- 💾 **Gallery**: Save and view your generation history
+- 📥 **Easy Download**: One-click download as PNG
+- 🔄 **Regenerate**: Create variations of the same prompt
+- 💡 **Prompt Examples**: Click-to-use example prompts
+- 🎲 **Surprise Me**: Random prompt generator
+- 📊 **Usage Counter**: Track how many images you've generated
 
-## 🚀 Quick Start
+## 🚀 Live Demo
+
+Visit: [https://emoticon-generator-7cvg.vercel.app](https://emoticon-generator-7cvg.vercel.app)
+
+## 📸 Examples
+
+### Simple Flat Emojis
+
+| Prompt | Style |
+|--------|-------|
+| `happy face` | Flat, iOS-style |
+| `rocket` | Minimalist |
+| `pizza` | Simple |
+
+### Creative Stickers
+
+| Prompt | Style |
+|--------|-------|
+| `astronaut cat in space` | Detailed illustration |
+| `robot dancing with headphones` | Sticker-style |
+| `dragon wearing sunglasses` | Creative |
+
+## 🎯 How to Write Good Prompts
+
+### For Flat Emojis (iOS-style):
+Use **1-2 words**, simple objects:
+```
+✅ pizza
+✅ rocket
+✅ heart
+✅ happy face
+✅ coffee cup
+```
+
+### For Creative Stickers:
+Use **descriptive phrases** with actions:
+```
+✅ astronaut cat in space
+✅ robot dancing with headphones
+✅ cat playing guitar
+✅ dragon breathing fire
+```
+
+## 🛠️ Technology Stack
+
+- **Frontend**: React + TypeScript + Vite
+- **Styling**: CSS with custom design system
+- **AI Model**: [fofr/sdxl-emoji](https://replicate.com/fofr/sdxl-emoji) via Replicate API
+- **Deployment**: Vercel
+- **Storage**: localStorage (for gallery)
+
+## 🏗️ Architecture
+
+```
+emoticon-generator/
+├── src/
+│   ├── App.tsx           # Main application component
+│   ├── App.css           # Styles and design system
+│   ├── components/       # Reusable components
+│   │   ├── Gallery.tsx   # Image history gallery
+│   │   └── Gallery.css   # Gallery styles
+│   └── main.tsx         # Entry point
+├── api/
+│   ├── generate.ts      # Image generation endpoint
+│   └── download.ts      # Image download proxy
+└── public/
+    └── screenshots/     # Documentation images
+```
+
+## 💰 Cost & Limits
+
+- **Model**: fofr/sdxl-emoji on Replicate
+- **Cost**: ~$0.003 per image
+- **Rate Limit**: 6 requests/minute (with <$5 credit)
+- **With $2 credit**: ~660 images can be generated
+
+## 🚀 Getting Started
 
 ### Prerequisites
-
-- Node.js 18+ installed
-- Replicate API key ([Get one here](https://replicate.com/account/api-tokens))
+- Node.js 18+
+- Replicate API key
 
 ### Installation
 
@@ -39,120 +113,66 @@ cd emoticon-generator
 npm install
 ```
 
-3. Create a `.env` file in the root directory:
-```bash
-REPLICATE_API_TOKEN=your_replicate_api_token_here
+3. Create `.env` file:
+```env
+REPLICATE_API_TOKEN=your_api_token_here
 ```
 
-4. Start the development server:
+4. Run development server:
 ```bash
 npm run dev
 ```
 
-5. Open your browser and navigate to `http://localhost:5173`
-
-## 📦 Build for Production
-
+5. Build for production:
 ```bash
 npm run build
 ```
 
-The built files will be in the `dist` directory.
+## 📝 API Usage
 
-## 🌐 Deploy to Vercel
+### Generate Endpoint
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/deepvortexia/emoticon-generator)
+**POST** `/api/generate`
 
-1. Click the "Deploy with Vercel" button above
-2. Connect your GitHub repository
-3. Add your `REPLICATE_API_TOKEN` environment variable in Vercel project settings
-4. Deploy!
-
-### Manual Deployment
-
-```bash
-npm install -g vercel
-vercel
+```json
+{
+  "prompt": "happy cat"
+}
 ```
 
-Don't forget to set the `REPLICATE_API_TOKEN` environment variable in your Vercel project settings.
-
-### Getting a Replicate API Token
-
-1. Go to [Replicate](https://replicate.com)
-2. Sign up with GitHub (free to start)
-3. Go to [API Tokens](https://replicate.com/account/api-tokens)
-4. Copy your API token
-5. Add it to your `.env` file or Vercel environment variables
-
-## 🛠️ Tech Stack
-
-- **Frontend**: React 18 + TypeScript
-- **Build Tool**: Vite 5
-- **Styling**: Pure CSS with animations
-- **API**: Vercel Serverless Functions
-- **AI**: Ideogram v2 via Replicate API
-
-## 📁 Project Structure
-
-```
-emoticon-generator/
-├── src/
-│   ├── App.tsx           # Main application component
-│   ├── App.css           # Cosmic purple theme styling
-│   ├── main.tsx          # React entry point
-│   ├── index.css         # Base styles
-│   └── vite-env.d.ts     # TypeScript definitions
-├── api/
-│   └── generate.ts       # Replicate API integration
-├── public/               # Static assets
-├── index.html           # HTML entry point
-├── package.json         # Dependencies and scripts
-├── tsconfig.json        # TypeScript configuration
-├── vite.config.ts       # Vite configuration
-└── vercel.json          # Vercel deployment config
+**Response:**
+```json
+{
+  "image": "https://replicate.delivery/...",
+  "id": "prediction-id"
+}
 ```
 
-## 🎯 Usage
+## 🤝 Contributing
 
-1. **Enter Description**: Type a description of your emoticon (e.g., "happy cosmic cat", "mystical star")
-2. **Generate**: Click the "Generate" button or press Enter
-3. **Wait**: Watch the cosmic loader while your emoticon is being created
-4. **Download/Share**: Use the action buttons to download or copy the image URL
-5. **Create New**: Click "New" to create another emoticon
+Contributions are welcome! Please feel free to submit a Pull Request.
 
-## 🔒 Environment Variables
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
 
-| Variable | Description | Required |
-|----------|-------------|----------|
-| `REPLICATE_API_TOKEN` | Your Replicate API token for Ideogram v2 | Yes |
+## 📜 License
 
-## 💰 Cost Efficiency
+MIT License - see [LICENSE](LICENSE) file
 
-This project uses Ideogram v2 via Replicate, which is 80% cheaper than DALL-E 3:
+## 🙏 Acknowledgments
 
-- **Ideogram v2**: $0.008 per image
-- **DALL-E 3**: $0.040 per image (1024x1024)
+- **AI Model**: [fofr/sdxl-emoji](https://replicate.com/fofr/sdxl-emoji) by fofr
+- **API**: [Replicate](https://replicate.com)
+- **Inspiration**: iOS/Android emoji design systems
 
-For 1,000 images:
-- Ideogram v2: $8.00
-- DALL-E 3: $40.00
-- **Savings: $32.00 (80%)**
+## 📧 Contact
 
-**Why Ideogram v2:**
-- 🎯 **Specialized for Icons/Emojis** - Purpose-built for this use case
-- ✨ **Simple, Flat Designs** - Perfect Discord/Slack emoji style
-- 🔲 **Transparent Backgrounds** - Automatic, no extra prompting needed
-- 🛡️ **No NSFW False Positives** - Understands creative/icon context
-- 🎨 **Consistent Quality** - Reliable, professional emoji output
-- ⚡ **Fast Generation** - Quick results with high quality
+Created by [@deepvortexia](https://github.com/deepvortexia)
 
-## 📝 License
+---
 
-MIT
+**⭐ If you like this project, give it a star!**
 
-## 💖 Credits
-
-Made with ❤️ by **AphoraPixel**
-
-Powered by **Ideogram v2** via **Replicate**
