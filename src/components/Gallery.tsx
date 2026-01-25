@@ -13,9 +13,20 @@ export function Gallery() {
   const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
-    const saved = localStorage.getItem('emoji-history');
-    if (saved) {
-      setHistory(JSON.parse(saved));
+    const loadHistory = () => {
+      try {
+        const saved = localStorage.getItem('emoji-history');
+        if (saved) {
+          setHistory(JSON.parse(saved));
+        }
+      } catch (error) {
+        console.error('Error loading gallery history:', error);
+        localStorage.removeItem('emoji-history');
+      }
+    };
+    
+    if (isOpen) {
+      loadHistory();
     }
   }, [isOpen]);
 

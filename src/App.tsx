@@ -17,6 +17,9 @@ const surprisePrompts = [
   "ninja turtle", "wizard hat", "magic wand", "crystal ball"
 ];
 
+// Maximum images that can be generated with $2 credit
+const MAX_IMAGES_WITH_CREDIT = 660;
+
 function App() {
   const [prompt, setPrompt] = useState('')
   const [generatedImage, setGeneratedImage] = useState('')
@@ -31,7 +34,7 @@ function App() {
     setIsLoaded(true)
     
     // Load images generated counter
-    const count = parseInt(localStorage.getItem('images-generated') || '0')
+    const count = parseInt(localStorage.getItem('images-generated') || '0', 10)
     setImagesGenerated(count)
   }, [])
 
@@ -86,17 +89,22 @@ function App() {
   }
 
   const saveToHistory = (prompt: string, imageUrl: string) => {
-    const history = JSON.parse(localStorage.getItem('emoji-history') || '[]')
-    const newItem = {
-      id: Date.now().toString(),
-      prompt,
-      imageUrl,
-      timestamp: Date.now()
+    try {
+      const history = JSON.parse(localStorage.getItem('emoji-history') || '[]')
+      const timestamp = Date.now()
+      const newItem = {
+        id: timestamp.toString(),
+        prompt,
+        imageUrl,
+        timestamp
+      }
+      
+      // Keep only last 20 items
+      const updated = [newItem, ...history].slice(0, 20)
+      localStorage.setItem('emoji-history', JSON.stringify(updated))
+    } catch (error) {
+      console.error('Error saving to history:', error)
     }
-    
-    // Keep only last 20 items
-    const updated = [newItem, ...history].slice(0, 20)
-    localStorage.setItem('emoji-history', JSON.stringify(updated))
   }
 
   const regenerate = async () => {
@@ -143,7 +151,7 @@ function App() {
           <div className="credit-counter">
             <span>🎨 Generated: {imagesGenerated}</span>
             <span className="credit-separator">•</span>
-            <span>💰 Remaining: ~{660 - imagesGenerated} images</span>
+            <span>💰 Remaining: ~{MAX_IMAGES_WITH_CREDIT - imagesGenerated} images</span>
           </div>
         </div>
 
