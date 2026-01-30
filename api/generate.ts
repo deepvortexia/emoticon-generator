@@ -1,5 +1,10 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node'
+import { createClient } from '@supabase/supabase-js'
 
+const supabase = createClient(
+  process.env.SUPABASE_URL || '',
+  process.env.SUPABASE_ANON_KEY || ''
+)
 
 // fofr/sdxl-emoji - Specialized emoji model (actually works on Replicate!)
 const EMOJI_MODEL_VERSION = 'dee76b5afde21b0f01ed7925f0665b7e879c50ee718c5f78a9d38e04d523cc5e'
@@ -14,10 +19,58 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     return res.status(400).json({ error: 'Prompt is required' })
   }
 
+  // Check authentication
+  const authHeader = req.headers.authorization
+  if (!authHeader) {
+    return res.status(401).json({ error: 'Please sign in to generate emoticons' })
+  }
+
   const apiKey = process.env.REPLICATE_API_TOKEN
 
   if (!apiKey) {
     return res.status(500).json({ error: 'Replicate API key not configured' })
+  }
+
+  // Verify user and check credits
+  try {
+    const token = authHeader.replace('Bearer ', '')
+    const { data: { user }, error: authError } = await supabase.auth.getUser(token)
+
+    if (authError || !user) {
+      return res.status(401).json({ error: 'Invalid authentication token' })
+    }
+
+    // Get user's profile with credits
+    const { data: profile, error: profileError } = await supabase
+      .from('profiles')
+      .select('credits')
+      .eq('id', user.id)
+      .single()
+
+    if (profileError) {
+      return res.status(500).json({ error: 'Failed to fetch user profile' })
+    }
+
+    // Check if user has enough credits
+    if (!profile || profile.credits < 1) {
+      return res.status(402).json({ error: 'Insufficient credits. Please purchase more credits to continue.' })
+    }
+
+    // Deduct credit before generation
+    const { error: updateError } = await supabase
+      .from('profiles')
+      .update({
+        credits: profile.credits - 1,
+        updated_at: new Date().toISOString(),
+      })
+      .eq('id', user.id)
+
+    if (updateError) {
+      return res.status(500).json({ error: 'Failed to deduct credit' })
+    }
+  } catch (error: any) {
+    console.error('Error verifying credits:', error)
+    return res.status(500).json({ error: 'Failed to verify credits' })
   }
 
   try {

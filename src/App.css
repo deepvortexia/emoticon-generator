@@ -119,6 +119,13 @@ body {
   font-weight: 400;
 }
 
+.header-actions {
+  margin-top: 24px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 .credit-counter {
   margin-top: 20px;
   padding: 12px 20px;
