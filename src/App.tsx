@@ -2,6 +2,12 @@ import { useState, useEffect } from 'react'
 import './App.css'
 import { Gallery } from './components/Gallery'
 import PlatformGuideModal from './components/PlatformGuideModal'
+import { AuthProvider, useAuth } from './context/AuthContext'
+import { AuthModal } from './components/AuthModal'
+import { PricingModal } from './components/PricingModal'
+import { CreditDisplay } from './components/CreditDisplay'
+import { Notification } from './components/Notification'
+import { useCredits } from './hooks/useCredits'
 
 const loadingMessages = [
   "Creating magic... ✨",
@@ -18,10 +24,7 @@ const surprisePrompts = [
   "ninja turtle", "wizard hat", "magic wand", "crystal ball"
 ];
 
-// Maximum images that can be generated with $2 credit
-const MAX_IMAGES_WITH_CREDIT = 660;
-
-function App() {
+function AppContent() {
   const [prompt, setPrompt] = useState('')
   const [generatedImage, setGeneratedImage] = useState('')
   const [isLoading, setIsLoading] = useState(false)
@@ -30,6 +33,12 @@ function App() {
   const [loadingMessage, setLoadingMessage] = useState(loadingMessages[0])
   const [imagesGenerated, setImagesGenerated] = useState(0)
   const [isGuideOpen, setIsGuideOpen] = useState(false)
+  const [isAuthModalOpen, setIsAuthModalOpen] = useState(false)
+  const [isPricingModalOpen, setIsPricingModalOpen] = useState(false)
+  const [showNotification, setShowNotification] = useState(false)
+  
+  const { user, session } = useAuth()
+  const { hasCredits, refreshProfile } = useCredits()
 
   useEffect(() => {
     // Mark as loaded after initial render
@@ -38,11 +47,42 @@ function App() {
     // Load images generated counter
     const count = parseInt(localStorage.getItem('images-generated') || '0', 10)
     setImagesGenerated(count)
+    
+    // Check for success parameter from Stripe redirect
+    const urlParams = new URLSearchParams(window.location.search)
+    const sessionId = urlParams.get('session_id')
+    if (sessionId) {
+      // Refresh credits after successful payment
+      setTimeout(() => {
+        refreshProfile()
+      }, 1000)
+      
+      // Show success notification
+      setShowNotification(true)
+      
+      // Clean up URL
+      window.history.replaceState({}, document.title, window.location.pathname)
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const generateEmoticon = async () => {
     if (!prompt.trim()) {
       setError('Please enter a description!')
+      return
+    }
+
+    // Check if user is logged in
+    if (!user) {
+      setError('Please sign in to generate emoticons')
+      setIsAuthModalOpen(true)
+      return
+    }
+
+    // Check if user has credits
+    if (!hasCredits) {
+      setError('You have run out of credits. Please purchase more to continue.')
+      setIsPricingModalOpen(true)
       return
     }
 
@@ -52,10 +92,14 @@ function App() {
     setLoadingMessage(loadingMessages[Math.floor(Math.random() * loadingMessages.length)])
 
     try {
+      // Get the auth token
+      const token = session?.access_token
+      
       const response = await fetch('/api/generate', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
         },
         body: JSON.stringify({
           prompt: prompt,
@@ -65,6 +109,10 @@ function App() {
       const data = await response.json()
 
       if (!response.ok) {
+        // If insufficient credits, show pricing modal
+        if (response.status === 402) {
+          setIsPricingModalOpen(true)
+        }
         throw new Error(data.error || 'Failed to generate emoticon')
       }
 
@@ -77,6 +125,9 @@ function App() {
       const newCount = imagesGenerated + 1
       setImagesGenerated(newCount)
       localStorage.setItem('images-generated', newCount.toString())
+      
+      // Refresh credits after successful generation
+      await refreshProfile()
     } catch (err: any) {
       setError(err.message || 'Something went wrong. Please try again.')
     } finally {
@@ -150,10 +201,15 @@ function App() {
           </h1>
           <p className="subtitle">AI-Powered Emoticon Generator</p>
           
+          <div className="header-actions">
+            <CreditDisplay 
+              onBuyCredits={() => setIsPricingModalOpen(true)}
+              onSignIn={() => setIsAuthModalOpen(true)}
+            />
+          </div>
+          
           <div className="credit-counter">
             <span>🎨 Generated: {imagesGenerated}</span>
-            <span className="credit-separator">•</span>
-            <span>💰 Remaining: ~{MAX_IMAGES_WITH_CREDIT - imagesGenerated} images</span>
           </div>
         </div>
 
@@ -293,7 +349,33 @@ function App() {
         isOpen={isGuideOpen} 
         onClose={() => setIsGuideOpen(false)} 
       />
+      
+      <AuthModal 
+        isOpen={isAuthModalOpen}
+        onClose={() => setIsAuthModalOpen(false)}
+      />
+      
+      <PricingModal 
+        isOpen={isPricingModalOpen}
+        onClose={() => setIsPricingModalOpen(false)}
+      />
+      
+      {showNotification && (
+        <Notification
+          title="Payment Successful!"
+          message="Your credits have been added to your account."
+          onClose={() => setShowNotification(false)}
+        />
+      )}
     </div>
+  )
+}
+
+function App() {
+  return (
+    <AuthProvider>
+      <AppContent />
+    </AuthProvider>
   )
 }
 
