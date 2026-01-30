@@ -80,10 +80,24 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       }
 
       // Add credits to user profile
+      // First, get current credits
+      const { data: currentProfile, error: fetchError } = await supabase
+        .from('profiles')
+        .select('credits')
+        .eq('id', userId)
+        .single()
+
+      if (fetchError) {
+        throw fetchError
+      }
+
+      const newCredits = (currentProfile?.credits || 0) + parseInt(credits)
+
+      // Update with new total
       const { error: updateError } = await supabase
         .from('profiles')
         .update({
-          credits: supabase.raw(`credits + ${parseInt(credits)}`),
+          credits: newCredits,
           updated_at: new Date().toISOString(),
         })
         .eq('id', userId)

@@ -45,6 +45,24 @@ function AppContent() {
     // Load images generated counter
     const count = parseInt(localStorage.getItem('images-generated') || '0', 10)
     setImagesGenerated(count)
+    
+    // Check for success parameter from Stripe redirect
+    const urlParams = new URLSearchParams(window.location.search)
+    const sessionId = urlParams.get('session_id')
+    if (sessionId) {
+      // Refresh credits after successful payment
+      setTimeout(() => {
+        refreshProfile()
+      }, 1000)
+      
+      // Show success message
+      setError('')
+      alert('🎉 Payment successful! Your credits have been added.')
+      
+      // Clean up URL
+      window.history.replaceState({}, document.title, window.location.pathname)
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const generateEmoticon = async () => {
