@@ -17,8 +17,8 @@ export const config = {
   },
 }
 
-async function buffer(readable: any) {
-  const chunks = []
+async function buffer(readable: NodeJS.ReadableStream) {
+  const chunks: Buffer[] = []
   for await (const chunk of readable) {
     chunks.push(typeof chunk === 'string' ? Buffer.from(chunk) : chunk)
   }
@@ -30,7 +30,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     return res.status(405).json({ error: 'Method not allowed' })
   }
 
-  const buf = await buffer(req)
+  const buf = await buffer(req as any)
   const sig = req.headers['stripe-signature']
 
   if (!sig) {
@@ -58,25 +58,10 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     const session = event.data.object as Stripe.Checkout.Session
 
     try {
-      const { packName, credits, authHeader } = session.metadata || {}
+      const { packName, credits, userId } = session.metadata || {}
 
-      if (!credits || !authHeader) {
+      if (!credits || !userId) {
         throw new Error('Missing metadata in session')
-      }
-
-      // Extract user ID from auth header (format: Bearer <token>)
-      // In production, you would verify this token with Supabase
-      const parts = authHeader.split('.')
-      if (parts.length !== 3) {
-        throw new Error('Invalid auth token format')
-      }
-
-      // Decode the JWT payload to get user ID
-      const payload = JSON.parse(Buffer.from(parts[1], 'base64').toString())
-      const userId = payload.sub
-
-      if (!userId) {
-        throw new Error('No user ID in token')
       }
 
       // Add credits to user profile

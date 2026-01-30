@@ -32,6 +32,9 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   }
 
   // Verify user and check credits
+  let userId: string
+  let currentCredits: number
+  
   try {
     const token = authHeader.replace('Bearer ', '')
     const { data: { user }, error: authError } = await supabase.auth.getUser(token)
@@ -39,6 +42,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     if (authError || !user) {
       return res.status(401).json({ error: 'Invalid authentication token' })
     }
+
+    userId = user.id
 
     // Get user's profile with credits
     const { data: profile, error: profileError } = await supabase
@@ -56,22 +61,34 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       return res.status(402).json({ error: 'Insufficient credits. Please purchase more credits to continue.' })
     }
 
-    // Deduct credit before generation
-    const { error: updateError } = await supabase
+    currentCredits = profile.credits
+
+    // Deduct credit before generation using atomic operation
+    // This prevents race conditions by ensuring credits don't go below 0
+    const { data: updatedProfile, error: updateError } = await supabase
       .from('profiles')
       .update({
         credits: profile.credits - 1,
         updated_at: new Date().toISOString(),
       })
       .eq('id', user.id)
+      .eq('credits', profile.credits) // Only update if credits haven't changed (optimistic locking)
+      .select()
+      .single()
 
-    if (updateError) {
-      return res.status(500).json({ error: 'Failed to deduct credit' })
+    if (updateError || !updatedProfile) {
+      // If update failed, it means credits were changed by another request
+      return res.status(409).json({ error: 'Credit check failed, please try again' })
     }
   } catch (error: any) {
     console.error('Error verifying credits:', error)
     return res.status(500).json({ error: 'Failed to verify credits' })
   }
+
+  // Now attempt to generate the image
+  let generationFailed = false
+  // Now attempt to generate the image
+  let generationFailed = false
 
   try {
     // Simplified prompt optimized for emoji generation
@@ -99,6 +116,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     const prediction = await response.json()
 
     if (!response.ok) {
+      generationFailed = true
       throw new Error(prediction.detail || 'Failed to create prediction')
     }
 
@@ -118,6 +136,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       )
       
       if (!pollResponse.ok) {
+        generationFailed = true
         throw new Error(`Failed to poll prediction status: ${pollResponse.status} ${pollResponse.statusText}`)
       }
       
@@ -125,16 +144,19 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       
       // Timeout after 30 seconds
       if (Date.now() - pollStartTime > 30000) {
+        generationFailed = true
         throw new Error('Generation timeout')
       }
     }
 
     if (result.status === 'failed') {
+      generationFailed = true
       throw new Error(result.error || 'Generation failed')
     }
 
     // Validate output exists
     if (!result.output || !Array.isArray(result.output) || result.output.length === 0) {
+      generationFailed = true
       throw new Error('No image generated')
     }
 
@@ -144,6 +166,24 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     })
   } catch (error: any) {
     console.error('Error generating image:', error)
+    
+    // Refund the credit if generation failed
+    if (generationFailed) {
+      try {
+        await supabase
+          .from('profiles')
+          .update({
+            credits: currentCredits, // Restore original credits
+            updated_at: new Date().toISOString(),
+          })
+          .eq('id', userId)
+        
+        console.log(`Refunded credit to user ${userId} due to generation failure`)
+      } catch (refundError) {
+        console.error('Failed to refund credit:', refundError)
+      }
+    }
+    
     return res.status(500).json({
       error: error.message || 'Failed to generate image',
     })

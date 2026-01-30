@@ -6,6 +6,7 @@ import { AuthProvider, useAuth } from './context/AuthContext'
 import { AuthModal } from './components/AuthModal'
 import { PricingModal } from './components/PricingModal'
 import { CreditDisplay } from './components/CreditDisplay'
+import { Notification } from './components/Notification'
 import { useCredits } from './hooks/useCredits'
 
 const loadingMessages = [
@@ -34,6 +35,7 @@ function AppContent() {
   const [isGuideOpen, setIsGuideOpen] = useState(false)
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false)
   const [isPricingModalOpen, setIsPricingModalOpen] = useState(false)
+  const [showNotification, setShowNotification] = useState(false)
   
   const { user, session } = useAuth()
   const { hasCredits, refreshProfile } = useCredits()
@@ -55,9 +57,8 @@ function AppContent() {
         refreshProfile()
       }, 1000)
       
-      // Show success message
-      setError('')
-      alert('🎉 Payment successful! Your credits have been added.')
+      // Show success notification
+      setShowNotification(true)
       
       // Clean up URL
       window.history.replaceState({}, document.title, window.location.pathname)
@@ -358,6 +359,14 @@ function AppContent() {
         isOpen={isPricingModalOpen}
         onClose={() => setIsPricingModalOpen(false)}
       />
+      
+      {showNotification && (
+        <Notification
+          title="Payment Successful!"
+          message="Your credits have been added to your account."
+          onClose={() => setShowNotification(false)}
+        />
+      )}
     </div>
   )
 }
