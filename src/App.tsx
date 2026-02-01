@@ -280,7 +280,9 @@ function AppContent() {
       
       <div className="container">
         <div className="header">
-          <div className="logo">🌀</div>
+          <div className="logo">
+            <img src="/logo.svg" alt="Deep Vortex AI" className="logo-image" />
+          </div>
           <h1 className="title title-glow">
             <span className="gradient-text">Deep Vortex</span>
           </h1>
