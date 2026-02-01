@@ -87,8 +87,6 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
   // Now attempt to generate the image
   let generationFailed = false
-  // Now attempt to generate the image
-  let generationFailed = false
 
   try {
     // Simplified prompt optimized for emoji generation
