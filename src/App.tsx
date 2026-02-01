@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import './App.css'
 import { Gallery } from './components/Gallery'
 import PlatformGuideModal from './components/PlatformGuideModal'
@@ -40,6 +40,10 @@ function AppContent() {
   const { user, session, loading } = useAuth()
   const { hasCredits, refreshProfile } = useCredits()
 
+  // Refs to track if Stripe sessions have been processed
+  const processedSessionIdRef = useRef<string | null>(null)
+  const processedPendingSessionRef = useRef(false)
+
   useEffect(() => {
     // Mark as loaded after initial render
     setIsLoaded(true)
@@ -57,10 +61,16 @@ function AppContent() {
       
       if (!sessionId) return
       
+      // Skip if this session_id has already been processed
+      if (processedSessionIdRef.current === sessionId) return
+      
       console.log('Stripe session_id detected:', sessionId)
       
       // Wait for auth to finish loading
       if (loading) return
+      
+      // Mark this session as processed
+      processedSessionIdRef.current = sessionId
       
       // If user is logged in, refresh their credits
       if (user) {
@@ -91,9 +101,16 @@ function AppContent() {
     const processPendingStripeSession = async () => {
       if (!user) return
       
+      // Skip if we've already processed a pending session for this user
+      if (processedPendingSessionRef.current) return
+      
       const pendingSession = localStorage.getItem('pending_stripe_session')
       if (pendingSession) {
         console.log('Processing pending Stripe session...')
+        
+        // Mark as processed before async operation
+        processedPendingSessionRef.current = true
+        
         await refreshProfile()
         localStorage.removeItem('pending_stripe_session')
         
