@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useState, ReactNode } from 'react'
+import { createContext, useContext, useEffect, useState, ReactNode, useCallback } from 'react'
 import { User, Session, AuthError } from '@supabase/supabase-js'
 import { supabase, Profile } from '../lib/supabase'
 
@@ -29,13 +29,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [profile, setProfile] = useState<Profile | null>(null)
   const [loading, setLoading] = useState(true)
 
-  // Delay constants for session restoration
-  const SESSION_RESTORATION_DELAY = 1000 // Allow time for session to be restored from storage on mount
-  const PROFILE_CLEAR_DELAY = 300 // Small delay to avoid UI flicker when clearing profile
-  const MAX_RETRY_ATTEMPTS = 3 // Maximum number of session restoration retries
-  const RETRY_DELAY = 500 // Delay between retry attempts
-
-  const fetchProfile = async (userId: string) => {
+  const fetchProfile = useCallback(async (userId: string) => {
     try {
       const { data, error } = await supabase
         .from('profiles')
@@ -43,182 +37,109 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         .eq('id', userId)
         .single()
 
-      if (error) throw error
-      setProfile(data)
+      if (error) {
+        // Profile doesn't exist, create it
+        if (error.code === 'PGRST116') {
+          return null
+        }
+        throw error
+      }
+      return data
     } catch (error) {
       console.error('Error fetching profile:', error)
+      return null
     }
-  }
+  }, [])
 
-  const createProfile = async (user: User) => {
+  const createProfile = useCallback(async (currentUser: User) => {
     try {
       const { error } = await supabase
         .from('profiles')
         .insert({
-          id: user.id,
-          email: user.email,
-          full_name: user.user_metadata?.full_name || user.email?.split('@')[0],
-          avatar_url: user.user_metadata?.avatar_url,
-          credits: 3, // 3 free credits on signup
+          id: currentUser.id,
+          email: currentUser.email,
+          full_name: currentUser.user_metadata?.full_name || currentUser.email?.split('@')[0],
+          avatar_url: currentUser.user_metadata?.avatar_url,
+          credits: 3,
         })
 
-      if (error && error.code !== '23505') { // Ignore duplicate key error
+      if (error && error.code !== '23505') {
         throw error
       }
       
-      // Fetch the profile after creation
-      await fetchProfile(user.id)
+      return await fetchProfile(currentUser.id)
     } catch (error) {
       console.error('Error creating profile:', error)
+      return null
     }
-  }
+  }, [fetchProfile])
 
-  const refreshProfile = async () => {
+  const ensureProfile = useCallback(async (currentUser: User) => {
+    let profileData = await fetchProfile(currentUser.id)
+    if (!profileData) {
+      profileData = await createProfile(currentUser)
+    }
+    setProfile(profileData)
+  }, [fetchProfile, createProfile])
+
+  const refreshProfile = useCallback(async () => {
     if (user) {
-      await fetchProfile(user.id)
+      const profileData = await fetchProfile(user.id)
+      setProfile(profileData)
     }
-  }
-
-  // Helper function to handle profile fetching/creation
-  const ensureProfile = async (userId: string) => {
-    const { data: existingProfile } = await supabase
-      .from('profiles')
-      .select('*')
-      .eq('id', userId)
-      .single()
-
-    if (!existingProfile) {
-      await createProfile({ id: userId } as User)
-    } else {
-      setProfile(existingProfile)
-    }
-  }
+  }, [user, fetchProfile])
 
   useEffect(() => {
-    let isMounted = true
-    let logoutTimer: NodeJS.Timeout | null = null
-    let retryAttempts = 0
+    let mounted = true
 
-    // Get initial session with retry logic
-    const getSessionWithRetry = async () => {
+    // Get initial session
+    const initializeAuth = async () => {
       try {
-        const { data: { session }, error } = await supabase.auth.getSession()
+        const { data: { session: initialSession } } = await supabase.auth.getSession()
         
-        if (error) {
-          console.error('Error getting session:', error)
-          
-          // Retry if we haven't exceeded max attempts
-          if (retryAttempts < MAX_RETRY_ATTEMPTS) {
-            retryAttempts++
-            console.log(`Retrying session restoration (attempt ${retryAttempts}/${MAX_RETRY_ATTEMPTS})`)
-            setTimeout(() => {
-              if (isMounted) getSessionWithRetry()
-            }, RETRY_DELAY)
-            return
-          } else {
-            // Exhausted retry attempts, stop loading
-            console.log('Max retry attempts reached, stopping')
-            if (isMounted) setLoading(false)
-            return
-          }
+        if (!mounted) return
+
+        if (initialSession?.user) {
+          setSession(initialSession)
+          setUser(initialSession.user)
+          await ensureProfile(initialSession.user)
         }
-        
-        if (!isMounted) return
-        
-        setSession(session)
-        setUser(session?.user ?? null)
-        
-        if (session?.user) {
-          console.log('Session restored for user:', session.user.id)
-          fetchProfile(session.user.id).then(() => {
-            if (isMounted) setLoading(false)
-          })
-        } else {
-          // Add delay before declaring logged out to allow session restoration
-          setTimeout(() => {
-            if (isMounted) {
-              console.log('No session found after waiting')
-              setLoading(false)
-            }
-          }, SESSION_RESTORATION_DELAY)
+      } catch (error) {
+        console.error('Error initializing auth:', error)
+      } finally {
+        if (mounted) {
+          setLoading(false)
         }
-      } catch (err) {
-        console.error('Unexpected error getting session:', err)
-        if (isMounted) setLoading(false)
       }
     }
 
-    getSessionWithRetry()
+    initializeAuth()
 
     // Listen for auth changes
-    const {
-      data: { subscription },
-    } = supabase.auth.onAuthStateChange(async (event, session) => {
-      console.log('Auth event:', event, session?.user?.id ? `(user: ${session.user.id})` : '(no user)')
-      
-      if (!isMounted) return
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(
+      async (event, currentSession) => {
+        if (!mounted) return
 
-      // Handle specific events
-      if (event === 'INITIAL_SESSION') {
-        // Handle initial session on mount
-        if (session?.user) {
-          console.log('Initial session detected:', session.user.id)
-          setSession(session)
-          setUser(session.user)
-          await ensureProfile(session.user.id)
-        }
-        // Note: loading state is managed by getSessionWithRetry, don't set it here to avoid race condition
-      } else if (event === 'SIGNED_IN' || event === 'TOKEN_REFRESHED') {
-        // Clear any pending logout timer
-        if (logoutTimer) {
-          clearTimeout(logoutTimer)
-          logoutTimer = null
-        }
-        
-        console.log('User signed in or token refreshed:', session?.user?.id)
-        setSession(session)
-        setUser(session?.user ?? null)
+        console.log('Auth event:', event)
 
-        if (session?.user) {
-          await ensureProfile(session.user.id)
-        }
-        
-        setLoading(false)
-      } else if (event === 'SIGNED_OUT') {
-        console.log('User signed out')
-        setSession(null)
-        setUser(null)
-        setProfile(null)
-        setLoading(false)
-      } else {
-        // For other events, update state
-        console.log('Other auth event:', event)
-        setSession(session)
-        setUser(session?.user ?? null)
+        setSession(currentSession)
+        setUser(currentSession?.user ?? null)
 
-        if (session?.user) {
-          await ensureProfile(session.user.id)
+        if (currentSession?.user) {
+          await ensureProfile(currentSession.user)
         } else {
-          // Add delay before clearing profile to avoid flicker
-          logoutTimer = setTimeout(() => {
-            if (isMounted) {
-              setProfile(null)
-            }
-          }, PROFILE_CLEAR_DELAY)
+          setProfile(null)
         }
-        
+
         setLoading(false)
       }
-    })
+    )
 
     return () => {
-      isMounted = false
-      if (logoutTimer) {
-        clearTimeout(logoutTimer)
-      }
+      mounted = false
       subscription.unsubscribe()
     }
-  }, [])
+  }, [ensureProfile])
 
   const signInWithGoogle = async () => {
     const { error } = await supabase.auth.signInWithOAuth({
@@ -244,16 +165,18 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     setProfile(null)
   }
 
-  const value = {
-    user,
-    session,
-    profile,
-    loading,
-    signInWithGoogle,
-    signInWithEmail,
-    signOut,
-    refreshProfile,
-  }
-
-  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
+  return (
+    <AuthContext.Provider value={{
+      user,
+      session,
+      profile,
+      loading,
+      signInWithGoogle,
+      signInWithEmail,
+      signOut,
+      refreshProfile,
+    }}>
+      {children}
+    </AuthContext.Provider>
+  )
 }
