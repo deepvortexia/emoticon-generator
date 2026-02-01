@@ -67,10 +67,22 @@ body {
 }
 
 .logo {
-  font-size: 80px;
   margin-bottom: 20px;
-  animation: float 3s ease-in-out infinite;
   display: inline-block;
+}
+
+.logo-image {
+  width: 200px;
+  height: auto;
+  border-radius: 50%;
+  filter: drop-shadow(0 0 25px rgba(245, 158, 11, 0.6));
+  animation: float 3s ease-in-out infinite;
+  transition: transform 0.3s ease;
+}
+
+.logo-image:hover {
+  transform: scale(1.05);
+  filter: drop-shadow(0 0 35px rgba(245, 158, 11, 0.8));
 }
 
 @keyframes float {
@@ -672,6 +684,18 @@ body {
 }
 
 /* Responsive Design */
+@media (max-width: 375px) {
+  .logo-image {
+    width: 150px;
+  }
+}
+
+@media (min-width: 376px) and (max-width: 767px) {
+  .logo-image {
+    width: 180px;
+  }
+}
+
 @media (max-width: 768px) {
   .title {
     font-size: 36px;
