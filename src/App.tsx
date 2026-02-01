@@ -94,12 +94,17 @@ function AppContent() {
     }
     
     handleStripeReturn()
-  }, [loading, user, refreshProfile])
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [loading, user])
 
   // Check for pending Stripe session after login
   useEffect(() => {
     const processPendingStripeSession = async () => {
-      if (!user) return
+      // Reset the processed flag when user logs out
+      if (!user) {
+        processedPendingSessionRef.current = false
+        return
+      }
       
       // Skip if we've already processed a pending session for this user
       if (processedPendingSessionRef.current) return
@@ -120,7 +125,8 @@ function AppContent() {
     }
     
     processPendingStripeSession()
-  }, [user, refreshProfile])
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user])
 
   const generateEmoticon = async () => {
     if (!prompt.trim()) {
