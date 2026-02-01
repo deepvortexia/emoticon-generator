@@ -85,7 +85,7 @@ function AppContent() {
           window.history.replaceState({}, '', window.location.pathname)
         } catch (error) {
           console.error('Failed to refresh credits after payment:', error)
-          setError('Payment successful, but failed to refresh credits. Please refresh the page.')
+          setError('Payment successful, but failed to refresh credits. Please reload your browser to see updated credits.')
         }
       } else {
         // User not logged in after Stripe return - they need to sign in again
@@ -99,7 +99,7 @@ function AppContent() {
     }
     
     handleStripeReturn()
-  // refreshProfile is stable (wrapped in useCallback) and doesn't need to be in dependencies
+  // refreshProfile function reference is stable and doesn't change between renders
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [loading, user])
 
@@ -132,13 +132,13 @@ function AppContent() {
           console.error('Failed to refresh credits for pending session:', error)
           // Reset the flag so it can be retried
           processedPendingSessionRef.current = false
-          setError('Payment successful, but failed to refresh credits. Please refresh the page.')
+          setError('Payment successful, but failed to refresh credits. Please reload your browser to see updated credits.')
         }
       }
     }
     
     processPendingStripeSession()
-  // refreshProfile is stable (wrapped in useCallback) and doesn't need to be in dependencies
+  // refreshProfile function reference is stable and doesn't change between renders
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user])
 
