@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import './PricingModal.css'
+import { supabase } from '../lib/supabase'
 
 interface PricingModalProps {
   isOpen: boolean
@@ -32,10 +33,19 @@ export const PricingModal = ({ isOpen, onClose }: PricingModalProps) => {
     setError('')
 
     try {
+      const { data: { session } } = await supabase.auth.getSession()
+
+      if (!session) {
+        setError('Please sign in to purchase credits')
+        setIsLoading(false)
+        return
+      }
+
       const response = await fetch('/api/create-checkout', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'Authorization': `Bearer ${session.access_token}`,
         },
         body: JSON.stringify({
           packName: pack.name,
