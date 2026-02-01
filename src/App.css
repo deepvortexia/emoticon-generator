@@ -71,9 +71,7 @@ body {
 }
 
 .logo {
-  font-size: 80px;
   margin-bottom: 20px;
-  animation: float 3s ease-in-out infinite;
   display: inline-block;
 }
 
