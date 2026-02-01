@@ -67,10 +67,15 @@ body {
 }
 
 .logo {
-  font-size: 80px;
   margin-bottom: 20px;
-  animation: float 3s ease-in-out infinite;
   display: inline-block;
+}
+
+.logo-image {
+  width: 180px;
+  height: auto;
+  filter: drop-shadow(0 0 20px rgba(245, 158, 11, 0.5));
+  animation: float 3s ease-in-out infinite;
 }
 
 @keyframes float {
@@ -677,8 +682,8 @@ body {
     font-size: 36px;
   }
 
-  .logo {
-    font-size: 60px;
+  .logo-image {
+    width: 150px;
   }
 
   .credit-counter {
