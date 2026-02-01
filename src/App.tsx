@@ -75,13 +75,18 @@ function AppContent() {
       // If user is logged in, refresh their credits
       if (user) {
         console.log('Stripe payment completed, refreshing credits...')
-        await refreshProfile()
-        
-        // Show success notification
-        setShowNotification(true)
-        
-        // Clear the URL parameter
-        window.history.replaceState({}, '', window.location.pathname)
+        try {
+          await refreshProfile()
+          
+          // Show success notification
+          setShowNotification(true)
+          
+          // Clear the URL parameter
+          window.history.replaceState({}, '', window.location.pathname)
+        } catch (error) {
+          console.error('Failed to refresh credits after payment:', error)
+          setError('Payment successful, but failed to refresh credits. Please refresh the page.')
+        }
       } else {
         // User not logged in after Stripe return - they need to sign in again
         // Store session_id in localStorage to process after login
@@ -94,6 +99,7 @@ function AppContent() {
     }
     
     handleStripeReturn()
+  // refreshProfile is stable (wrapped in useCallback) and doesn't need to be in dependencies
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [loading, user])
 
@@ -116,15 +122,23 @@ function AppContent() {
         // Mark as processed before async operation
         processedPendingSessionRef.current = true
         
-        await refreshProfile()
-        localStorage.removeItem('pending_stripe_session')
-        
-        // Show success message
-        setShowNotification(true)
+        try {
+          await refreshProfile()
+          localStorage.removeItem('pending_stripe_session')
+          
+          // Show success message
+          setShowNotification(true)
+        } catch (error) {
+          console.error('Failed to refresh credits for pending session:', error)
+          // Reset the flag so it can be retried
+          processedPendingSessionRef.current = false
+          setError('Payment successful, but failed to refresh credits. Please refresh the page.')
+        }
       }
     }
     
     processPendingStripeSession()
+  // refreshProfile is stable (wrapped in useCallback) and doesn't need to be in dependencies
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user])
 
