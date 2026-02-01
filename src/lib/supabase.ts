@@ -7,13 +7,34 @@ if (!supabaseUrl || !supabaseAnonKey) {
   console.error('Supabase configuration missing. Please set VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY environment variables.')
 }
 
+// Safe localStorage wrapper for SSR compatibility
+const safeStorage = {
+  getItem: (key: string): string | null => {
+    if (typeof window !== 'undefined' && window.localStorage) {
+      return window.localStorage.getItem(key)
+    }
+    return null
+  },
+  setItem: (key: string, value: string): void => {
+    if (typeof window !== 'undefined' && window.localStorage) {
+      window.localStorage.setItem(key, value)
+    }
+  },
+  removeItem: (key: string): void => {
+    if (typeof window !== 'undefined' && window.localStorage) {
+      window.localStorage.removeItem(key)
+    }
+  },
+}
+
 export const supabase = createClient(supabaseUrl || '', supabaseAnonKey || '', {
   auth: {
     autoRefreshToken: true,
     persistSession: true,
     detectSessionInUrl: true,
     storageKey: 'emoticon-generator-auth',
-    storage: window.localStorage
+    storage: safeStorage,
+    flowType: 'pkce',
   }
 })
 

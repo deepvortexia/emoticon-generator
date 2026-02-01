@@ -52,20 +52,24 @@ function AppContent() {
     const urlParams = new URLSearchParams(window.location.search)
     const sessionId = urlParams.get('session_id')
     if (sessionId) {
-      // Wait for auth state to be ready before refreshing credits
-      if (!loading && user) {
-        // Refresh credits after successful payment
-        setTimeout(() => {
-          refreshProfile()
-        }, 1000)
+      console.log('Stripe session_id detected:', sessionId)
+      
+      // Wait for auth state to be fully loaded before processing
+      if (!loading) {
+        if (user) {
+          console.log('User authenticated, refreshing credits after payment')
+          // Refresh credits after successful payment with longer delay to ensure session is stable
+          setTimeout(() => {
+            refreshProfile()
+          }, 1500)
+          
+          // Show success notification
+          setShowNotification(true)
+        } else {
+          console.log('No user session after Stripe redirect, waiting for auth to load')
+        }
         
-        // Show success notification
-        setShowNotification(true)
-        
-        // Clean up URL
-        window.history.replaceState({}, document.title, window.location.pathname)
-      } else if (!loading && !user) {
-        // If not logged in after redirect, clean up URL
+        // Clean up URL after handling
         window.history.replaceState({}, document.title, window.location.pathname)
       }
     }
