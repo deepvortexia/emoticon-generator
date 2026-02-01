@@ -44,6 +44,14 @@ function AppContent() {
   const processedSessionIdRef = useRef<string | null>(null)
   const processedPendingSessionRef = useRef(false)
 
+  // Error message constant
+  const CREDIT_REFRESH_ERROR = 'Payment successful, but failed to refresh credits. Please refresh the page to see updated credits.'
+
+  // Helper to clean URL parameters
+  const cleanUrlParams = () => {
+    window.history.replaceState({}, '', window.location.pathname)
+  }
+
   useEffect(() => {
     // Mark as loaded after initial render
     setIsLoaded(true)
@@ -82,10 +90,10 @@ function AppContent() {
           setShowNotification(true)
           
           // Clear the URL parameter
-          window.history.replaceState({}, '', window.location.pathname)
+          cleanUrlParams()
         } catch (error) {
           console.error('Failed to refresh credits after payment:', error)
-          setError('Payment successful, but failed to refresh credits. Please refresh the page to see updated credits.')
+          setError(CREDIT_REFRESH_ERROR)
         }
       } else {
         // User not logged in after Stripe return - they need to sign in again
@@ -94,7 +102,7 @@ function AppContent() {
         console.log('User not authenticated, stored session_id for later')
         
         // Clear the URL parameter
-        window.history.replaceState({}, '', window.location.pathname)
+        cleanUrlParams()
       }
     }
     
@@ -132,7 +140,7 @@ function AppContent() {
           console.error('Failed to refresh credits for pending session:', error)
           // Reset the flag so it can be retried
           processedPendingSessionRef.current = false
-          setError('Payment successful, but failed to refresh credits. Please refresh the page to see updated credits.')
+          setError(CREDIT_REFRESH_ERROR)
         }
       }
     }
