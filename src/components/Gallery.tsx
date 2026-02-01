@@ -30,6 +30,23 @@ export function Gallery() {
     }
   }, [isOpen]);
 
+  const downloadImage = async (imageUrl: string, prompt: string) => {
+    try {
+      // Use our API proxy to download the image
+      const proxyUrl = `/api/download?url=${encodeURIComponent(imageUrl)}`;
+      
+      const link = document.createElement('a');
+      link.href = proxyUrl;
+      link.download = `${prompt.replace(/\s+/g, '-').toLowerCase()}-${Date.now()}.png`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    } catch (err) {
+      console.error('Download error:', err);
+      alert('Failed to download image. Please try right-clicking and "Save Image As..."');
+    }
+  };
+
   const clearHistory = () => {
     localStorage.removeItem('emoji-history');
     setHistory([]);
@@ -64,6 +81,13 @@ export function Gallery() {
                     {new Date(item.timestamp).toLocaleDateString()}
                   </p>
                 </div>
+                <button 
+                  className="gallery-download-btn"
+                  onClick={() => downloadImage(item.imageUrl, item.prompt)}
+                  title="Download"
+                >
+                  📥
+                </button>
               </div>
             ))
           )}
