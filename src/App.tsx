@@ -25,7 +25,10 @@ const surprisePrompts = [
 ];
 
 // Error message for credit refresh failures
-const CREDIT_REFRESH_ERROR = 'Payment successful, but failed to refresh credits. Please refresh the page to see updated credits.'
+const CREDIT_REFRESH_ERROR = 'Payment successful, but there was a temporary issue syncing your credits. Please refresh the page to see your updated balance.'
+
+// LocalStorage key for pending Stripe sessions
+const PENDING_STRIPE_SESSION_KEY = 'pending_stripe_session'
 
 // Helper to clean URL parameters
 const cleanUrlParams = () => {
@@ -98,7 +101,7 @@ function AppContent() {
       } else {
         // User not logged in after Stripe return - they need to sign in again
         // Store session_id in localStorage to process after login
-        localStorage.setItem('pending_stripe_session', sessionId)
+        localStorage.setItem(PENDING_STRIPE_SESSION_KEY, sessionId)
         console.log('User not authenticated, stored session_id for later')
         
         // Clear the URL parameter
@@ -122,7 +125,7 @@ function AppContent() {
       // Skip if we've already processed a pending session for this user
       if (processedPendingSessionRef.current) return
       
-      const pendingSession = localStorage.getItem('pending_stripe_session')
+      const pendingSession = localStorage.getItem(PENDING_STRIPE_SESSION_KEY)
       if (pendingSession) {
         console.log('Processing pending Stripe session...')
         
@@ -131,7 +134,7 @@ function AppContent() {
         
         try {
           await refreshProfile()
-          localStorage.removeItem('pending_stripe_session')
+          localStorage.removeItem(PENDING_STRIPE_SESSION_KEY)
           
           // Show success message
           setShowNotification(true)
