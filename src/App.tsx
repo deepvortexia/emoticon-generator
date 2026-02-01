@@ -47,35 +47,63 @@ function AppContent() {
     // Load images generated counter
     const count = parseInt(localStorage.getItem('images-generated') || '0', 10)
     setImagesGenerated(count)
-    
-    // Check for success parameter from Stripe redirect
-    const urlParams = new URLSearchParams(window.location.search)
-    const sessionId = urlParams.get('session_id')
-    if (sessionId) {
+  }, [])
+
+  // Handle Stripe return with session_id
+  useEffect(() => {
+    const handleStripeReturn = async () => {
+      const params = new URLSearchParams(window.location.search)
+      const sessionId = params.get('session_id')
+      
+      if (!sessionId) return
+      
       console.log('Stripe session_id detected:', sessionId)
       
-      // Wait for auth state to be fully loaded before processing
-      if (!loading) {
-        if (user) {
-          console.log('User authenticated, refreshing credits after payment')
-          // Refresh credits after successful payment with longer delay to ensure session is stable
-          setTimeout(() => {
-            refreshProfile()
-          }, 1500)
-          
-          // Show success notification
-          setShowNotification(true)
-        } else {
-          console.log('No user session after Stripe redirect, waiting for auth to load')
-        }
+      // Wait for auth to finish loading
+      if (loading) return
+      
+      // If user is logged in, refresh their credits
+      if (user) {
+        console.log('Stripe payment completed, refreshing credits...')
+        await refreshProfile()
         
-        // Clean up URL after handling
-        window.history.replaceState({}, document.title, window.location.pathname)
+        // Show success notification
+        setShowNotification(true)
+        
+        // Clear the URL parameter
+        window.history.replaceState({}, '', window.location.pathname)
+      } else {
+        // User not logged in after Stripe return - they need to sign in again
+        // Store session_id in localStorage to process after login
+        localStorage.setItem('pending_stripe_session', sessionId)
+        console.log('User not authenticated, stored session_id for later')
+        
+        // Clear the URL parameter
+        window.history.replaceState({}, '', window.location.pathname)
       }
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  // refreshProfile is stable and doesn't need to be in dependencies
-  }, [loading, user])
+    
+    handleStripeReturn()
+  }, [loading, user, refreshProfile])
+
+  // Check for pending Stripe session after login
+  useEffect(() => {
+    const processPendingStripeSession = async () => {
+      if (!user) return
+      
+      const pendingSession = localStorage.getItem('pending_stripe_session')
+      if (pendingSession) {
+        console.log('Processing pending Stripe session...')
+        await refreshProfile()
+        localStorage.removeItem('pending_stripe_session')
+        
+        // Show success message
+        setShowNotification(true)
+      }
+    }
+    
+    processPendingStripeSession()
+  }, [user, refreshProfile])
 
   const generateEmoticon = async () => {
     if (!prompt.trim()) {
