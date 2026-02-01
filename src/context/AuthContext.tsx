@@ -29,6 +29,10 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [profile, setProfile] = useState<Profile | null>(null)
   const [loading, setLoading] = useState(true)
 
+  // Delay constants for session restoration
+  const SESSION_RESTORATION_DELAY = 500 // Allow time for session to be restored from storage on mount
+  const PROFILE_CLEAR_DELAY = 300 // Small delay to avoid UI flicker when clearing profile
+
   const fetchProfile = async (userId: string) => {
     try {
       const { data, error } = await supabase
@@ -73,49 +77,104 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     }
   }
 
+  // Helper function to handle profile fetching/creation
+  const ensureProfile = async (userId: string) => {
+    const { data: existingProfile } = await supabase
+      .from('profiles')
+      .select('*')
+      .eq('id', userId)
+      .single()
+
+    if (!existingProfile) {
+      await createProfile({ id: userId } as User)
+    } else {
+      setProfile(existingProfile)
+    }
+  }
+
   useEffect(() => {
-    // Get initial session
-    supabase.auth.getSession().then(({ data: { session } }) => {
+    let isMounted = true
+    let logoutTimer: NodeJS.Timeout | null = null
+
+    // Get initial session with error handling
+    supabase.auth.getSession().then(({ data: { session }, error }) => {
+      if (error) {
+        console.error('Error getting session:', error)
+      }
+      
+      if (!isMounted) return
+      
       setSession(session)
       setUser(session?.user ?? null)
       
       if (session?.user) {
         fetchProfile(session.user.id).then(() => {
-          setLoading(false)
+          if (isMounted) setLoading(false)
         })
       } else {
-        setLoading(false)
+        // Add small delay before declaring logged out to allow session restoration
+        setTimeout(() => {
+          if (isMounted) setLoading(false)
+        }, SESSION_RESTORATION_DELAY)
       }
     })
 
     // Listen for auth changes
     const {
       data: { subscription },
-    } = supabase.auth.onAuthStateChange(async (_event, session) => {
-      setSession(session)
-      setUser(session?.user ?? null)
-
-      if (session?.user) {
-        // Check if profile exists, if not create it
-        const { data: existingProfile } = await supabase
-          .from('profiles')
-          .select('*')
-          .eq('id', session.user.id)
-          .single()
-
-        if (!existingProfile) {
-          await createProfile(session.user)
-        } else {
-          setProfile(existingProfile)
-        }
-      } else {
-        setProfile(null)
-      }
+    } = supabase.auth.onAuthStateChange(async (event, session) => {
+      console.log('Auth event:', event)
       
-      setLoading(false)
+      if (!isMounted) return
+
+      // Handle specific events
+      if (event === 'SIGNED_IN' || event === 'TOKEN_REFRESHED') {
+        // Clear any pending logout timer
+        if (logoutTimer) {
+          clearTimeout(logoutTimer)
+          logoutTimer = null
+        }
+        
+        setSession(session)
+        setUser(session?.user ?? null)
+
+        if (session?.user) {
+          await ensureProfile(session.user.id)
+        }
+        
+        setLoading(false)
+      } else if (event === 'SIGNED_OUT') {
+        setSession(null)
+        setUser(null)
+        setProfile(null)
+        setLoading(false)
+      } else {
+        // For other events, update state
+        setSession(session)
+        setUser(session?.user ?? null)
+
+        if (session?.user) {
+          await ensureProfile(session.user.id)
+        } else {
+          // Add delay before clearing profile to avoid flicker
+          logoutTimer = setTimeout(() => {
+            if (isMounted) {
+              setProfile(null)
+            }
+          }, PROFILE_CLEAR_DELAY)
+        }
+        
+        setLoading(false)
+      }
     })
 
-    return () => subscription.unsubscribe()
+    return () => {
+      isMounted = false
+      if (logoutTimer) {
+        clearTimeout(logoutTimer)
+      }
+      subscription.unsubscribe()
+    }
   }, [])
 
   const signInWithGoogle = async () => {

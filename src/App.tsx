@@ -37,7 +37,7 @@ function AppContent() {
   const [isPricingModalOpen, setIsPricingModalOpen] = useState(false)
   const [showNotification, setShowNotification] = useState(false)
   
-  const { user, session } = useAuth()
+  const { user, session, loading } = useAuth()
   const { hasCredits, refreshProfile } = useCredits()
 
   useEffect(() => {
@@ -52,19 +52,26 @@ function AppContent() {
     const urlParams = new URLSearchParams(window.location.search)
     const sessionId = urlParams.get('session_id')
     if (sessionId) {
-      // Refresh credits after successful payment
-      setTimeout(() => {
-        refreshProfile()
-      }, 1000)
-      
-      // Show success notification
-      setShowNotification(true)
-      
-      // Clean up URL
-      window.history.replaceState({}, document.title, window.location.pathname)
+      // Wait for auth state to be ready before refreshing credits
+      if (!loading && user) {
+        // Refresh credits after successful payment
+        setTimeout(() => {
+          refreshProfile()
+        }, 1000)
+        
+        // Show success notification
+        setShowNotification(true)
+        
+        // Clean up URL
+        window.history.replaceState({}, document.title, window.location.pathname)
+      } else if (!loading && !user) {
+        // If not logged in after redirect, clean up URL
+        window.history.replaceState({}, document.title, window.location.pathname)
+      }
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  // refreshProfile is stable and doesn't need to be in dependencies
+  }, [loading, user])
 
   const generateEmoticon = async () => {
     if (!prompt.trim()) {
