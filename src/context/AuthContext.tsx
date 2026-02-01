@@ -30,8 +30,10 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [loading, setLoading] = useState(true)
 
   // Delay constants for session restoration
-  const SESSION_RESTORATION_DELAY = 500 // Allow time for session to be restored from storage on mount
+  const SESSION_RESTORATION_DELAY = 1000 // Allow time for session to be restored from storage on mount
   const PROFILE_CLEAR_DELAY = 300 // Small delay to avoid UI flicker when clearing profile
+  const MAX_RETRY_ATTEMPTS = 3 // Maximum number of session restoration retries
+  const RETRY_DELAY = 500 // Delay between retry attempts
 
   const fetchProfile = async (userId: string) => {
     try {
@@ -95,46 +97,80 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   useEffect(() => {
     let isMounted = true
     let logoutTimer: NodeJS.Timeout | null = null
+    let retryAttempts = 0
 
-    // Get initial session with error handling
-    supabase.auth.getSession().then(({ data: { session }, error }) => {
-      if (error) {
-        console.error('Error getting session:', error)
+    // Get initial session with retry logic
+    const getSessionWithRetry = async () => {
+      try {
+        const { data: { session }, error } = await supabase.auth.getSession()
+        
+        if (error) {
+          console.error('Error getting session:', error)
+          
+          // Retry if we haven't exceeded max attempts
+          if (retryAttempts < MAX_RETRY_ATTEMPTS) {
+            retryAttempts++
+            console.log(`Retrying session restoration (attempt ${retryAttempts}/${MAX_RETRY_ATTEMPTS})`)
+            setTimeout(() => {
+              if (isMounted) getSessionWithRetry()
+            }, RETRY_DELAY)
+            return
+          }
+        }
+        
+        if (!isMounted) return
+        
+        setSession(session)
+        setUser(session?.user ?? null)
+        
+        if (session?.user) {
+          console.log('Session restored for user:', session.user.id)
+          fetchProfile(session.user.id).then(() => {
+            if (isMounted) setLoading(false)
+          })
+        } else {
+          // Add delay before declaring logged out to allow session restoration
+          setTimeout(() => {
+            if (isMounted) {
+              console.log('No session found after waiting')
+              setLoading(false)
+            }
+          }, SESSION_RESTORATION_DELAY)
+        }
+      } catch (err) {
+        console.error('Unexpected error getting session:', err)
+        if (isMounted) setLoading(false)
       }
-      
-      if (!isMounted) return
-      
-      setSession(session)
-      setUser(session?.user ?? null)
-      
-      if (session?.user) {
-        fetchProfile(session.user.id).then(() => {
-          if (isMounted) setLoading(false)
-        })
-      } else {
-        // Add small delay before declaring logged out to allow session restoration
-        setTimeout(() => {
-          if (isMounted) setLoading(false)
-        }, SESSION_RESTORATION_DELAY)
-      }
-    })
+    }
+
+    getSessionWithRetry()
 
     // Listen for auth changes
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange(async (event, session) => {
-      console.log('Auth event:', event)
+      console.log('Auth event:', event, session?.user?.id ? `(user: ${session.user.id})` : '(no user)')
       
       if (!isMounted) return
 
       // Handle specific events
-      if (event === 'SIGNED_IN' || event === 'TOKEN_REFRESHED') {
+      if (event === 'INITIAL_SESSION') {
+        // Handle initial session on mount
+        if (session?.user) {
+          console.log('Initial session detected:', session.user.id)
+          setSession(session)
+          setUser(session.user)
+          await ensureProfile(session.user.id)
+        }
+        setLoading(false)
+      } else if (event === 'SIGNED_IN' || event === 'TOKEN_REFRESHED') {
         // Clear any pending logout timer
         if (logoutTimer) {
           clearTimeout(logoutTimer)
           logoutTimer = null
         }
         
+        console.log('User signed in or token refreshed:', session?.user?.id)
         setSession(session)
         setUser(session?.user ?? null)
 
@@ -144,12 +180,14 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         
         setLoading(false)
       } else if (event === 'SIGNED_OUT') {
+        console.log('User signed out')
         setSession(null)
         setUser(null)
         setProfile(null)
         setLoading(false)
       } else {
         // For other events, update state
+        console.log('Other auth event:', event)
         setSession(session)
         setUser(session?.user ?? null)
 
