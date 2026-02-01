@@ -115,6 +115,11 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
               if (isMounted) getSessionWithRetry()
             }, RETRY_DELAY)
             return
+          } else {
+            // Exhausted retry attempts, stop loading
+            console.log('Max retry attempts reached, stopping')
+            if (isMounted) setLoading(false)
+            return
           }
         }
         
@@ -162,7 +167,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
           setUser(session.user)
           await ensureProfile(session.user.id)
         }
-        setLoading(false)
+        // Note: loading state is managed by getSessionWithRetry, don't set it here to avoid race condition
       } else if (event === 'SIGNED_IN' || event === 'TOKEN_REFRESHED') {
         // Clear any pending logout timer
         if (logoutTimer) {
