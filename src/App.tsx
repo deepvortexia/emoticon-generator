@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import './App.css'
 import { Gallery } from './components/Gallery'
 import PlatformGuideModal from './components/PlatformGuideModal'
@@ -24,6 +24,17 @@ const surprisePrompts = [
   "ninja turtle", "wizard hat", "magic wand", "crystal ball"
 ];
 
+// Error message for credit refresh failures
+const CREDIT_REFRESH_ERROR = 'Payment successful, but there was a temporary issue syncing your credits. Please refresh the page to see your updated balance.'
+
+// LocalStorage key for pending Stripe sessions
+const PENDING_STRIPE_SESSION_KEY = 'pending_stripe_session'
+
+// Helper to clean URL parameters
+const cleanUrlParams = () => {
+  window.history.replaceState({}, '', window.location.pathname)
+}
+
 function AppContent() {
   const [prompt, setPrompt] = useState('')
   const [generatedImage, setGeneratedImage] = useState('')
@@ -40,6 +51,10 @@ function AppContent() {
   const { user, session, loading } = useAuth()
   const { hasCredits, refreshProfile } = useCredits()
 
+  // Refs to track if Stripe sessions have been processed
+  const processedSessionIdRef = useRef<string | null>(null)
+  const processedPendingSessionRef = useRef(false)
+
   useEffect(() => {
     // Mark as loaded after initial render
     setIsLoaded(true)
@@ -47,35 +62,94 @@ function AppContent() {
     // Load images generated counter
     const count = parseInt(localStorage.getItem('images-generated') || '0', 10)
     setImagesGenerated(count)
-    
-    // Check for success parameter from Stripe redirect
-    const urlParams = new URLSearchParams(window.location.search)
-    const sessionId = urlParams.get('session_id')
-    if (sessionId) {
+  }, [])
+
+  // Handle Stripe return with session_id
+  useEffect(() => {
+    const handleStripeReturn = async () => {
+      const params = new URLSearchParams(window.location.search)
+      const sessionId = params.get('session_id')
+      
+      if (!sessionId) return
+      
+      // Skip if this session_id has already been processed
+      if (processedSessionIdRef.current === sessionId) return
+      
       console.log('Stripe session_id detected:', sessionId)
       
-      // Wait for auth state to be fully loaded before processing
-      if (!loading) {
-        if (user) {
-          console.log('User authenticated, refreshing credits after payment')
-          // Refresh credits after successful payment with longer delay to ensure session is stable
-          setTimeout(() => {
-            refreshProfile()
-          }, 1500)
+      // Wait for auth to finish loading
+      if (loading) return
+      
+      // Mark this session as processed
+      processedSessionIdRef.current = sessionId
+      
+      // If user is logged in, refresh their credits
+      if (user) {
+        console.log('Stripe payment completed, refreshing credits...')
+        try {
+          await refreshProfile()
           
           // Show success notification
           setShowNotification(true)
-        } else {
-          console.log('No user session after Stripe redirect, waiting for auth to load')
+          
+          // Clear the URL parameter
+          cleanUrlParams()
+        } catch (error) {
+          console.error('Failed to refresh credits after payment:', error)
+          setError(CREDIT_REFRESH_ERROR)
         }
+      } else {
+        // User not logged in after Stripe return - they need to sign in again
+        // Store session_id in localStorage to process after login
+        localStorage.setItem(PENDING_STRIPE_SESSION_KEY, sessionId)
+        console.log('User not authenticated, stored session_id for later')
         
-        // Clean up URL after handling
-        window.history.replaceState({}, document.title, window.location.pathname)
+        // Clear the URL parameter
+        cleanUrlParams()
       }
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  // refreshProfile is stable and doesn't need to be in dependencies
+    
+    handleStripeReturn()
+  // eslint-disable-next-line react-hooks/exhaustive-deps -- refreshProfile is stable from useCredits hook
   }, [loading, user])
+
+  // Check for pending Stripe session after login
+  useEffect(() => {
+    const processPendingStripeSession = async () => {
+      // Reset the processed flag when user logs out
+      if (!user) {
+        processedPendingSessionRef.current = false
+        return
+      }
+      
+      // Skip if we've already processed a pending session for this user
+      if (processedPendingSessionRef.current) return
+      
+      const pendingSession = localStorage.getItem(PENDING_STRIPE_SESSION_KEY)
+      if (pendingSession) {
+        console.log('Processing pending Stripe session...')
+        
+        // Mark as processed before async operation
+        processedPendingSessionRef.current = true
+        
+        try {
+          await refreshProfile()
+          localStorage.removeItem(PENDING_STRIPE_SESSION_KEY)
+          
+          // Show success message
+          setShowNotification(true)
+        } catch (error) {
+          console.error('Failed to refresh credits for pending session:', error)
+          // Reset the flag so it can be retried
+          processedPendingSessionRef.current = false
+          setError(CREDIT_REFRESH_ERROR)
+        }
+      }
+    }
+    
+    processPendingStripeSession()
+  // eslint-disable-next-line react-hooks/exhaustive-deps -- refreshProfile is stable from useCredits hook
+  }, [user])
 
   const generateEmoticon = async () => {
     if (!prompt.trim()) {
