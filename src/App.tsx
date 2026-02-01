@@ -24,6 +24,14 @@ const surprisePrompts = [
   "ninja turtle", "wizard hat", "magic wand", "crystal ball"
 ];
 
+// Error message for credit refresh failures
+const CREDIT_REFRESH_ERROR = 'Payment successful, but failed to refresh credits. Please refresh the page to see updated credits.'
+
+// Helper to clean URL parameters
+const cleanUrlParams = () => {
+  window.history.replaceState({}, '', window.location.pathname)
+}
+
 function AppContent() {
   const [prompt, setPrompt] = useState('')
   const [generatedImage, setGeneratedImage] = useState('')
@@ -43,14 +51,6 @@ function AppContent() {
   // Refs to track if Stripe sessions have been processed
   const processedSessionIdRef = useRef<string | null>(null)
   const processedPendingSessionRef = useRef(false)
-
-  // Error message constant
-  const CREDIT_REFRESH_ERROR = 'Payment successful, but failed to refresh credits. Please refresh the page to see updated credits.'
-
-  // Helper to clean URL parameters
-  const cleanUrlParams = () => {
-    window.history.replaceState({}, '', window.location.pathname)
-  }
 
   useEffect(() => {
     // Mark as loaded after initial render
@@ -107,8 +107,7 @@ function AppContent() {
     }
     
     handleStripeReturn()
-  // refreshProfile function reference is stable and doesn't change between renders
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+  // eslint-disable-next-line react-hooks/exhaustive-deps -- refreshProfile is stable from useCredits hook
   }, [loading, user])
 
   // Check for pending Stripe session after login
@@ -146,8 +145,7 @@ function AppContent() {
     }
     
     processPendingStripeSession()
-  // refreshProfile function reference is stable and doesn't change between renders
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+  // eslint-disable-next-line react-hooks/exhaustive-deps -- refreshProfile is stable from useCredits hook
   }, [user])
 
   const generateEmoticon = async () => {
