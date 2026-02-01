@@ -4,27 +4,7 @@ const supabaseUrl = import.meta.env.VITE_SUPABASE_URL
 const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY
 
 if (!supabaseUrl || !supabaseAnonKey) {
-  console.error('Supabase configuration missing. Please set VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY environment variables.')
-}
-
-// Safe localStorage wrapper for SSR compatibility
-const safeStorage = {
-  getItem: (key: string): string | null => {
-    if (typeof window !== 'undefined' && window.localStorage) {
-      return window.localStorage.getItem(key)
-    }
-    return null
-  },
-  setItem: (key: string, value: string): void => {
-    if (typeof window !== 'undefined' && window.localStorage) {
-      window.localStorage.setItem(key, value)
-    }
-  },
-  removeItem: (key: string): void => {
-    if (typeof window !== 'undefined' && window.localStorage) {
-      window.localStorage.removeItem(key)
-    }
-  },
+  console.error('Supabase configuration missing.')
 }
 
 export const supabase = createClient(supabaseUrl || '', supabaseAnonKey || '', {
@@ -33,8 +13,6 @@ export const supabase = createClient(supabaseUrl || '', supabaseAnonKey || '', {
     persistSession: true,
     detectSessionInUrl: true,
     storageKey: 'emoticon-generator-auth',
-    storage: safeStorage,
-    flowType: 'pkce',
   }
 })
 
