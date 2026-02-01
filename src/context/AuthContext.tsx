@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useState, ReactNode, useCallback } from 'react'
+import { createContext, useContext, useEffect, useState, ReactNode, useCallback, useRef } from 'react'
 import { User, Session, AuthError } from '@supabase/supabase-js'
 import { supabase, Profile } from '../lib/supabase'
 
@@ -28,8 +28,9 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [session, setSession] = useState<Session | null>(null)
   const [profile, setProfile] = useState<Profile | null>(null)
   const [loading, setLoading] = useState(true)
+  const initialized = useRef(false)
 
-  const fetchProfile = useCallback(async (userId: string) => {
+  const fetchProfile = useCallback(async (userId: string): Promise<Profile | null> => {
     try {
       const { data, error } = await supabase
         .from('profiles')
@@ -38,7 +39,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         .single()
 
       if (error) {
-        // Profile doesn't exist, create it
         if (error.code === 'PGRST116') {
           return null
         }
@@ -51,7 +51,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     }
   }, [])
 
-  const createProfile = useCallback(async (currentUser: User) => {
+  const createProfile = useCallback(async (currentUser: User): Promise<Profile | null> => {
     try {
       const { error } = await supabase
         .from('profiles')
@@ -79,7 +79,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     if (!profileData) {
       profileData = await createProfile(currentUser)
     }
-    setProfile(profileData)
+    return profileData
   }, [fetchProfile, createProfile])
 
   const refreshProfile = useCallback(async () => {
@@ -90,53 +90,52 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   }, [user, fetchProfile])
 
   useEffect(() => {
-    let mounted = true
+    // Prevent double initialization in React Strict Mode
+    if (initialized.current) return
+    initialized.current = true
 
-    // Get initial session
-    const initializeAuth = async () => {
-      try {
-        const { data: { session: initialSession } } = await supabase.auth.getSession()
-        
-        if (!mounted) return
+    // Set up auth state listener FIRST
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(
+      async (event, currentSession) => {
+        console.log('Auth event:', event)
 
-        if (initialSession?.user) {
-          setSession(initialSession)
-          setUser(initialSession.user)
-          await ensureProfile(initialSession.user)
-        }
-      } catch (error) {
-        console.error('Error initializing auth:', error)
-      } finally {
-        if (mounted) {
+        if (currentSession?.user) {
+          setSession(currentSession)
+          setUser(currentSession.user)
+          
+          // Use setTimeout to avoid blocking the auth state change
+          setTimeout(async () => {
+            const profileData = await ensureProfile(currentSession.user)
+            setProfile(profileData)
+            setLoading(false)
+          }, 0)
+        } else {
+          setSession(null)
+          setUser(null)
+          setProfile(null)
           setLoading(false)
         }
       }
-    }
-
-    initializeAuth()
-
-    // Listen for auth changes
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      async (event, currentSession) => {
-        if (!mounted) return
-
-        console.log('Auth event:', event)
-
-        setSession(currentSession)
-        setUser(currentSession?.user ?? null)
-
-        if (currentSession?.user) {
-          await ensureProfile(currentSession.user)
-        } else {
-          setProfile(null)
-        }
-
-        setLoading(false)
-      }
     )
 
+    // Then check for existing session
+    supabase.auth.getSession().then(async ({ data: { session: initialSession }, error }) => {
+      if (error) {
+        console.error('Error getting session:', error)
+        setLoading(false)
+        return
+      }
+
+      if (initialSession?.user) {
+        setSession(initialSession)
+        setUser(initialSession.user)
+        const profileData = await ensureProfile(initialSession.user)
+        setProfile(profileData)
+      }
+      setLoading(false)
+    })
+
     return () => {
-      mounted = false
       subscription.unsubscribe()
     }
   }, [ensureProfile])
