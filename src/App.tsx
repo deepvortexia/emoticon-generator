@@ -70,6 +70,7 @@ function AppContent() {
       }
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // refreshProfile is stable and doesn't need to be in dependencies
   }, [loading, user])
 
   const generateEmoticon = async () => {

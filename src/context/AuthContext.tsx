@@ -29,6 +29,10 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [profile, setProfile] = useState<Profile | null>(null)
   const [loading, setLoading] = useState(true)
 
+  // Delay constants for session restoration
+  const SESSION_RESTORATION_DELAY = 500 // Allow time for session to be restored from storage on mount
+  const PROFILE_CLEAR_DELAY = 300 // Small delay to avoid UI flicker when clearing profile
+
   const fetchProfile = async (userId: string) => {
     try {
       const { data, error } = await supabase
@@ -73,6 +77,21 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     }
   }
 
+  // Helper function to handle profile fetching/creation
+  const ensureProfile = async (userId: string) => {
+    const { data: existingProfile } = await supabase
+      .from('profiles')
+      .select('*')
+      .eq('id', userId)
+      .single()
+
+    if (!existingProfile) {
+      await createProfile({ id: userId } as User)
+    } else {
+      setProfile(existingProfile)
+    }
+  }
+
   useEffect(() => {
     let isMounted = true
     let logoutTimer: NodeJS.Timeout | null = null
@@ -96,7 +115,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         // Add small delay before declaring logged out to allow session restoration
         setTimeout(() => {
           if (isMounted) setLoading(false)
-        }, 500)
+        }, SESSION_RESTORATION_DELAY)
       }
     })
 
@@ -120,18 +139,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         setUser(session?.user ?? null)
 
         if (session?.user) {
-          // Check if profile exists, if not create it
-          const { data: existingProfile } = await supabase
-            .from('profiles')
-            .select('*')
-            .eq('id', session.user.id)
-            .single()
-
-          if (!existingProfile) {
-            await createProfile(session.user)
-          } else {
-            setProfile(existingProfile)
-          }
+          await ensureProfile(session.user.id)
         }
         
         setLoading(false)
@@ -146,24 +154,14 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         setUser(session?.user ?? null)
 
         if (session?.user) {
-          const { data: existingProfile } = await supabase
-            .from('profiles')
-            .select('*')
-            .eq('id', session.user.id)
-            .single()
-
-          if (!existingProfile) {
-            await createProfile(session.user)
-          } else {
-            setProfile(existingProfile)
-          }
+          await ensureProfile(session.user.id)
         } else {
           // Add delay before clearing profile to avoid flicker
           logoutTimer = setTimeout(() => {
             if (isMounted) {
               setProfile(null)
             }
-          }, 300)
+          }, PROFILE_CLEAR_DELAY)
         }
         
         setLoading(false)
