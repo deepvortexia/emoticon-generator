@@ -76,7 +76,7 @@ body {
 }
 
 .logo-image {
-  width: 300px;
+  width: 400px;
   height: auto;
   aspect-ratio: 1/1;
   border-radius: 50%;
@@ -718,7 +718,7 @@ body {
   }
 
   .logo-image {
-    width: 200px;
+    width: 250px;
   }
 
   .title {
@@ -759,7 +759,7 @@ body {
   }
 
   .logo-image {
-    width: 250px;
+    width: 300px;
   }
 
   .title {
@@ -781,7 +781,7 @@ body {
 /* Tablet (577px - 768px) */
 @media (max-width: 768px) {
   .logo-image {
-    width: 250px;
+    width: 300px;
   }
 
   .title {
