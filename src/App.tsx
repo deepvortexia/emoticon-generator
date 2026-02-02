@@ -284,7 +284,7 @@ function AppContent() {
             <img src="/deepgoldremoveetiny.png" alt="Deep Vortex AI" className="logo-image" />
           </div>
           <h1 className="title title-glow">
-            <span className="gradient-text">Deep Vortex</span>
+            <span className="gradient-text">DΞΞP VORTΞX AI</span>
           </h1>
           <p className="subtitle">AI-Powered Emoticon Generator</p>
           
