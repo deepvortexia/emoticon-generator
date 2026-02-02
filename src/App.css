@@ -76,9 +76,13 @@ body {
 }
 
 .logo-image {
-  width: 100px;
-  height: 100px;
-  filter: drop-shadow(0 0 20px var(--gold-glow));
+  width: 300px;
+  height: auto;
+  aspect-ratio: 1/1;
+  border-radius: 50%;
+  filter: drop-shadow(0 0 25px rgba(245, 158, 11, 0.6));
+  animation: float 3s ease-in-out infinite;
+  transition: transform 0.3s ease;
 }
 
 @keyframes float {
@@ -91,8 +95,8 @@ body {
 }
 
 .title {
-  font-size: 48px;
-  margin-bottom: 10px;
+  font-size: 2.5rem;
+  margin: 1rem 0 0.5rem 0;
   font-weight: 800;
   letter-spacing: -1px;
   color: var(--text-primary);
@@ -104,12 +108,13 @@ body {
 }
 
 .gradient-text {
-  background: linear-gradient(135deg, var(--gold-primary) 0%, var(--gold-secondary) 50%, var(--gold-primary) 100%);
-  background-size: 200% 200%;
+  background: linear-gradient(135deg, #d4af37 0%, #c9a227 50%, #b8962a 100%);
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
-  animation: gradient-shift 3s ease infinite;
+  font-weight: 700;
+  letter-spacing: 3px;
+  text-transform: uppercase;
 }
 
 @keyframes gradient-shift {
@@ -712,6 +717,10 @@ body {
     border-radius: 12px;
   }
 
+  .logo-image {
+    width: 200px;
+  }
+
   .title {
     font-size: 28px;
   }
@@ -749,6 +758,10 @@ body {
     padding: 1.5rem;
   }
 
+  .logo-image {
+    width: 250px;
+  }
+
   .title {
     font-size: 32px;
   }
@@ -767,6 +780,10 @@ body {
 
 /* Tablet (577px - 768px) */
 @media (max-width: 768px) {
+  .logo-image {
+    width: 250px;
+  }
+
   .title {
     font-size: 36px;
   }
