@@ -18,6 +18,9 @@ SUPABASE_SERVICE_ROLE_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
 
 # Replicate
 REPLICATE_API_TOKEN=r8_...
+
+# Resend (Email Notifications)
+RESEND_API_KEY=re_...
 ```
 
 ### Local Development (.env)
@@ -35,6 +38,9 @@ SUPABASE_URL=https://txznlbzrvbxjxujrmhee.supabase.co
 SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
 SUPABASE_SERVICE_ROLE_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
 REPLICATE_API_TOKEN=r8_...
+
+# Resend (Email Notifications)
+RESEND_API_KEY=re_...
 ```
 
 ## Supabase Database Setup
@@ -159,6 +165,48 @@ STRIPE_WEBHOOK_SECRET=whsec_...
 4. Use Stripe test card: `4242 4242 4242 4242`
 5. Complete checkout
 6. Verify credits are added (check Supabase)
+7. Verify confirmation email is received (check spam folder)
+
+## Resend Email Setup
+
+### 1. Get Resend API Key
+
+1. Sign up at [resend.com](https://resend.com)
+2. Go to **API Keys** in the dashboard
+3. Create a new API key
+4. Copy the key (starts with `re_...`)
+5. Add it to your environment variables as `RESEND_API_KEY`
+
+### 2. Configure Email Domain (Optional)
+
+For production, you can use a custom domain:
+1. Go to **Domains** in Resend dashboard
+2. Add your domain (e.g., `deepvortexai.xyz`)
+3. Add DNS records as instructed
+4. Update the `from` address in `lib/emailService.ts`:
+   ```typescript
+   from: 'Deep Vortex AI <noreply@deepvortexai.xyz>'
+   ```
+
+For testing, you can use the default `onboarding@resend.dev` sender.
+
+### 3. Test Email Delivery
+
+1. Complete a test purchase
+2. Check the email inbox for the confirmation
+3. Verify email renders correctly (check in Gmail, Outlook, etc.)
+4. Test the "Start Creating Emojis" button link
+
+### 4. Email Features
+
+The purchase confirmation email includes:
+- ✅ Gold/black theme matching the app design
+- 📦 Purchase details (pack name, credits, balance, amount)
+- 🚀 Call-to-action button to return to the app
+- 💡 Pro tips for using the platform
+- 📅 Transaction timestamp
+
+**Note**: Email sending is non-blocking. If the email fails to send, credits are still added successfully.
 
 ## Security Checklist
 
@@ -176,6 +224,12 @@ STRIPE_WEBHOOK_SECRET=whsec_...
 - Verify webhook secret matches
 - Check Vercel logs for webhook errors
 - Ensure Supabase service role key has write permissions
+
+### Email not being sent
+- Verify `RESEND_API_KEY` is configured in environment variables
+- Check Vercel logs for email sending errors
+- Ensure user has a valid email address in their profile
+- Test with Resend's default sender `onboarding@resend.dev` first
 
 ### Authentication not working
 - Verify Supabase URL and anon key are correct
