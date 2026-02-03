@@ -109,6 +109,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       }
 
       console.log(`Successfully added ${credits} credits to user ${userId}`)
+      // TODO: Re-implement email confirmation once email service is properly deployed
     } catch (error: any) {
       console.error('Error processing webhook:', error)
       return res.status(500).json({ error: error.message })
