@@ -147,10 +147,10 @@ body {
 
 /* Logo Animations - Cosmic Portal */
 .logo-image {
-  width: 400px;
-  height: auto;
-  aspect-ratio: 1/1;
+  width: 200px;
+  height: 200px;
   border-radius: 50%;
+  object-fit: cover;
   filter: drop-shadow(0 0 30px var(--glow-cyan)) 
           drop-shadow(0 0 50px var(--glow-purple));
   transition: transform 0.5s ease, filter 0.5s ease;
@@ -336,12 +336,12 @@ body {
 /* Input Fields - Glowing Cyan Focus */
 .input-field {
   width: 100%;
-  padding: 1rem;
+  padding: 15px 20px;
   font-size: 16px;
-  border: 2px solid var(--border-color);
+  border: 2px solid var(--cyan-primary);
   border-radius: 12px;
-  background: var(--bg-tertiary);
-  color: var(--text-primary);
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
   transition: all 0.3s ease;
   font-family: inherit;
 }
@@ -349,13 +349,12 @@ body {
 .input-field:focus {
   outline: none;
   border-color: var(--cyan-primary);
-  box-shadow: 0 0 0 3px var(--glow-cyan),
-              inset 0 0 20px rgba(0, 212, 255, 0.1);
-  background: rgba(26, 26, 58, 0.8);
+  box-shadow: 0 0 20px var(--glow-cyan);
+  background: rgba(255, 255, 255, 0.1);
 }
 
 .input-field::placeholder {
-  color: var(--text-tertiary);
+  color: rgba(255, 255, 255, 0.6);
 }
 
 .input-field:disabled {
@@ -914,7 +913,8 @@ body {
   }
 
   .logo-image {
-    width: 250px;
+    width: 150px;
+    height: 150px;
   }
 
   .title {
@@ -955,7 +955,8 @@ body {
   }
 
   .logo-image {
-    width: 300px;
+    width: 180px;
+    height: 180px;
   }
 
   .title {
@@ -977,7 +978,8 @@ body {
 /* Tablet (577px - 768px) */
 @media (max-width: 768px) {
   .logo-image {
-    width: 300px;
+    width: 180px;
+    height: 180px;
   }
 
   .title {
