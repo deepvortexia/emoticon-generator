@@ -1,7 +1,6 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node'
 import Stripe from 'stripe'
 import { createClient } from '@supabase/supabase-js'
-import { sendPurchaseConfirmationEmail } from '../lib/emailService'
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || '', {
   apiVersion: '2024-11-20.acacia',
@@ -110,25 +109,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       }
 
       console.log(`Successfully added ${credits} credits to user ${userId}`)
-
-      // Get user email from profiles
-      const { data: userProfile } = await supabase
-        .from('profiles')
-        .select('email, full_name')
-        .eq('id', userId)
-        .single();
-
-      if (userProfile?.email) {
-        // Send confirmation email (non-blocking - don't throw error if it fails)
-        await sendPurchaseConfirmationEmail({
-          to: userProfile.email,
-          userName: userProfile.full_name || userProfile.email.split('@')[0],
-          packName: packName || 'Credit Pack',
-          creditsPurchased: parseInt(credits),
-          newCreditBalance: newCredits,
-          amountPaid: ((session.amount_total || 0) / 100).toFixed(2)
-        });
-      }
+      // TODO: Re-implement email confirmation once email service is properly deployed
     } catch (error: any) {
       console.error('Error processing webhook:', error)
       return res.status(500).json({ error: error.message })
