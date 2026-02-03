@@ -153,8 +153,8 @@ body {
   border-radius: 50%;
   filter: drop-shadow(0 0 30px var(--glow-cyan)) 
           drop-shadow(0 0 50px var(--glow-purple));
-  animation: logoFloat 3s ease-in-out infinite, logoPulse 2s ease-in-out infinite;
   transition: transform 0.5s ease, filter 0.5s ease;
+  animation: portalOpen 1s ease-out, logoFloat 3s ease-in-out 1s infinite, logoPulse 2s ease-in-out 1s infinite;
 }
 
 /* Gentle floating effect */
@@ -200,10 +200,6 @@ body {
     opacity: 1;
     filter: blur(0);
   }
-}
-
-.logo-image {
-  animation: portalOpen 1s ease-out, logoFloat 3s ease-in-out 1s infinite, logoPulse 2s ease-in-out 1s infinite;
 }
 
 .title {
