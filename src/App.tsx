@@ -281,7 +281,7 @@ function AppContent() {
       <div className="container">
         <div className="header">
           <div className="logo">
-            <img src="/vfaviconmagnifique.png" alt="Deep Vortex AI" className="logo-image" />
+            <img src="/vortextiny.png" alt="Deep Vortex AI" className="logo-image" />
           </div>
           <p className="subtitle">AI-Powered Emoticon Generator</p>
           

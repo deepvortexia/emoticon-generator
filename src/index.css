@@ -9,6 +9,44 @@
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+
+  /* Primary Colors - Cosmic Vortex Theme */
+  --bg-primary: #0A0A1A;
+  --bg-secondary: #12122A;
+  --bg-tertiary: #1A1A3A;
+
+  /* Accent Colors - Vortex Theme */
+  --cyan-primary: #00D4FF;
+  --cyan-secondary: #00B4E6;
+  --purple-primary: #8B5CF6;
+  --purple-secondary: #7C3AED;
+  --pink-primary: #FF6EB4;
+  --pink-secondary: #EC4899;
+
+  /* Gradients */
+  --gradient-vortex: linear-gradient(135deg, #00D4FF, #8B5CF6, #FF6EB4);
+  --gradient-button: linear-gradient(135deg, #00D4FF, #8B5CF6);
+  --gradient-hover: linear-gradient(135deg, #8B5CF6, #FF6EB4);
+
+  /* Glows */
+  --glow-cyan: rgba(0, 212, 255, 0.4);
+  --glow-purple: rgba(139, 92, 246, 0.4);
+  --glow-pink: rgba(255, 110, 180, 0.4);
+
+  /* Text */
+  --text-primary: #FFFFFF;
+  --text-secondary: rgba(255, 255, 255, 0.7);
+  --text-tertiary: #71717a;
+
+  /* System Colors */
+  --success: #10b981;
+  --error: #ef4444;
+  --warning: #f59e0b;
+
+  /* Borders */
+  --border-color: #2a2a4a;
+  --border-vortex: rgba(0, 212, 255, 0.3);
+  --border-vortex-strong: rgba(0, 212, 255, 0.6);
 }
 
 body {

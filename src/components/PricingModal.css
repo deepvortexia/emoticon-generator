@@ -16,14 +16,15 @@
 }
 
 .pricing-modal {
-  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+  background: linear-gradient(135deg, #1a1a3a 0%, #12122a 100%);
   border-radius: 24px;
   padding: 40px;
   max-width: 1200px;
   width: 100%;
   position: relative;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5),
+              0 0 40px var(--glow-cyan);
+  border: 1px solid var(--border-vortex);
   animation: slideUp 0.3s ease-out;
   margin: auto;
 }
@@ -88,17 +89,17 @@
 
 .pricing-card:hover {
   transform: translateY(-8px);
-  border-color: rgba(102, 126, 234, 0.5);
-  box-shadow: 0 12px 40px rgba(102, 126, 234, 0.2);
+  border-color: var(--cyan-primary);
+  box-shadow: 0 12px 40px var(--glow-cyan);
 }
 
 .pricing-card.popular {
-  border-color: #fbbf24;
-  background: rgba(251, 191, 36, 0.05);
+  border-color: var(--pink-primary);
+  background: rgba(255, 110, 180, 0.05);
 }
 
 .pricing-card.popular:hover {
-  box-shadow: 0 12px 40px rgba(251, 191, 36, 0.3);
+  box-shadow: 0 12px 40px var(--glow-pink);
 }
 
 .popular-badge {
@@ -106,13 +107,14 @@
   top: -12px;
   left: 50%;
   transform: translateX(-50%);
-  background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
-  color: #1a1a2e;
+  background: var(--gradient-vortex);
+  color: white;
   padding: 6px 16px;
   border-radius: 20px;
   font-size: 12px;
   font-weight: 700;
   white-space: nowrap;
+  box-shadow: 0 4px 12px var(--glow-pink);
 }
 
 .pricing-card-header {
@@ -137,7 +139,7 @@
 .credits-count {
   font-size: 48px;
   font-weight: 700;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: var(--gradient-vortex);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -186,7 +188,7 @@
 .pricing-btn {
   width: 100%;
   padding: 14px 24px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: var(--gradient-button);
   color: white;
   border: none;
   border-radius: 12px;
@@ -198,7 +200,7 @@
 
 .pricing-btn:hover:not(:disabled) {
   transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+  box-shadow: 0 8px 20px var(--glow-cyan);
 }
 
 .pricing-btn:disabled {
@@ -207,12 +209,12 @@
 }
 
 .popular .pricing-btn {
-  background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
-  color: #1a1a2e;
+  background: var(--gradient-hover);
+  color: white;
 }
 
 .popular .pricing-btn:hover:not(:disabled) {
-  box-shadow: 0 8px 20px rgba(251, 191, 36, 0.4);
+  box-shadow: 0 8px 20px var(--glow-purple);
 }
 
 .pricing-error {
