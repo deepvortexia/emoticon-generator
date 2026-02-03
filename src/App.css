@@ -149,6 +149,7 @@ body {
 .logo-image {
   width: 200px;
   height: 200px;
+  aspect-ratio: 1/1;
   border-radius: 50%;
   object-fit: cover;
   filter: drop-shadow(0 0 30px var(--glow-cyan)) 
@@ -350,7 +351,7 @@ body {
   outline: none;
   border-color: var(--cyan-primary);
   box-shadow: 0 0 20px var(--glow-cyan);
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.15);
 }
 
 .input-field::placeholder {
