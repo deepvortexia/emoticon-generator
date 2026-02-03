@@ -1,6 +1,7 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node'
 import Stripe from 'stripe'
 import { createClient } from '@supabase/supabase-js'
+import { sendPurchaseConfirmationEmail } from '../lib/emailService'
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || '', {
   apiVersion: '2024-11-20.acacia',
@@ -122,8 +123,6 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         if (profileError) {
           console.error('Failed to fetch user profile for email:', profileError)
         } else if (profile?.email) {
-          const { sendPurchaseConfirmationEmail } = await import('../lib/emailService')
-          
           const emailSent = await sendPurchaseConfirmationEmail({
             to: profile.email,
             userName: profile.full_name || 'there',
