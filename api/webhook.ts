@@ -1,7 +1,7 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node'
 import Stripe from 'stripe'
 import { createClient } from '@supabase/supabase-js'
-import { sendPurchaseConfirmationEmail } from '../lib/emailService'
+import { sendPurchaseConfirmationEmail } from './emailService'
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || '', {
   apiVersion: '2024-11-20.acacia',
@@ -111,36 +111,28 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
       console.log(`Successfully added ${credits} credits to user ${userId}`)
 
-      // Send purchase confirmation email
+      // Send purchase confirmation email (NE DOIT PAS bloquer les crédits)
       try {
-        // Get user email from Supabase
-        const { data: profile, error: profileError } = await supabase
+        const { data: userProfile } = await supabase
           .from('profiles')
-          .select('email, full_name')
+          .select('email, display_name')
           .eq('id', userId)
           .single()
 
-        if (profileError) {
-          console.error('Failed to fetch user profile for email:', profileError)
-        } else if (profile?.email) {
-          const emailSent = await sendPurchaseConfirmationEmail({
-            to: profile.email,
-            userName: profile.full_name || 'there',
+        if (userProfile?.email) {
+          await sendPurchaseConfirmationEmail({
+            to: userProfile.email,
+            userName: userProfile.display_name || 'there',
             packName: packName || 'Credit',
             creditsPurchased: parseInt(credits),
             newCreditBalance: newCredits,
-            amountPaid: `$${((session.amount_total || 0) / 100).toFixed(2)}`,
+            amountPaid: ((session.amount_total || 0) / 100).toFixed(2),
           })
-
-          if (emailSent) {
-            console.log(`Purchase confirmation email sent to ${profile.email}`)
-          } else {
-            console.error(`Failed to send email to ${profile.email}`)
-          }
+          console.log(`✅ Purchase confirmation email sent to ${userProfile.email}`)
         }
       } catch (emailError) {
-        // Don't fail the webhook if email fails
-        console.error('Error sending purchase confirmation email:', emailError)
+        // Log l'erreur mais NE PAS crasher - les crédits sont déjà ajoutés!
+        console.error('⚠️ Failed to send confirmation email (credits still added):', emailError)
       }
     } catch (error: any) {
       console.error('Error processing webhook:', error)
