@@ -42,7 +42,7 @@ export async function sendPurchaseConfirmationEmail(params: SendPurchaseEmailPar
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        from: 'Deep Vortex AI <onboarding@resend.dev>',
+        from: 'Deep Vortex AI <admin@deepvortexai.xyz>',
         to: params.to,
         subject: `🎉 Your ${params.packName} Pack is Ready! (+${params.creditsPurchased} Credits)`,
         html: emailHtml

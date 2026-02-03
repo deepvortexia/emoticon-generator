@@ -109,7 +109,40 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       }
 
       console.log(`Successfully added ${credits} credits to user ${userId}`)
-      // TODO: Re-implement email confirmation once email service is properly deployed
+
+      // Send purchase confirmation email
+      try {
+        // Get user email from Supabase
+        const { data: profile, error: profileError } = await supabase
+          .from('profiles')
+          .select('email, full_name')
+          .eq('id', userId)
+          .single()
+
+        if (profileError) {
+          console.error('Failed to fetch user profile for email:', profileError)
+        } else if (profile?.email) {
+          const { sendPurchaseConfirmationEmail } = await import('../lib/emailService')
+          
+          const emailSent = await sendPurchaseConfirmationEmail({
+            to: profile.email,
+            userName: profile.full_name || 'there',
+            packName: packName || 'Credit',
+            creditsPurchased: parseInt(credits),
+            newCreditBalance: newCredits,
+            amountPaid: `$${((session.amount_total || 0) / 100).toFixed(2)}`,
+          })
+
+          if (emailSent) {
+            console.log(`Purchase confirmation email sent to ${profile.email}`)
+          } else {
+            console.error(`Failed to send email to ${profile.email}`)
+          }
+        }
+      } catch (emailError) {
+        // Don't fail the webhook if email fails
+        console.error('Error sending purchase confirmation email:', emailError)
+      }
     } catch (error: any) {
       console.error('Error processing webhook:', error)
       return res.status(500).json({ error: error.message })
