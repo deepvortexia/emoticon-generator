@@ -64,13 +64,13 @@ body {
   height: auto;
   aspect-ratio: 1/1;
   border-radius: 50%;
-  filter: drop-shadow(0 2px 8px var(--glow-cyan));
+  filter: drop-shadow(0 2px 8px var(--glow-primary));
   transition: all 0.2s ease;
 }
 
 .logo-image:hover {
   transform: scale(1.02);
-  filter: drop-shadow(0 4px 12px var(--glow-cyan));
+  filter: drop-shadow(0 4px 12px var(--glow-primary));
 }
 
 .title {
@@ -82,7 +82,7 @@ body {
 }
 
 .title-glow {
-  text-shadow: 0 2px 8px var(--glow-cyan);
+  text-shadow: 0 2px 8px var(--glow-primary);
 }
 
 .gradient-text {
@@ -199,7 +199,6 @@ body {
 /* Input Fields - Wider with Subtle Focus */
 .input-field {
   width: 100%;
-  max-width: 500px;
   min-height: 50px;
   padding: 14px 20px;
   font-size: 16px;
@@ -406,7 +405,7 @@ body {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  box-shadow: 0 0 30px var(--glow-cyan),
+  box-shadow: 0 0 30px var(--glow-primary),
               0 0 50px var(--glow-purple);
   animation: pulse 2s ease-in-out infinite;
 }
@@ -416,7 +415,7 @@ body {
   color: var(--text-primary);
   font-weight: 600;
   margin-bottom: 10px;
-  text-shadow: 0 0 10px var(--glow-cyan);
+  text-shadow: 0 0 10px var(--glow-primary);
 }
 
 .loading-hint {
@@ -440,7 +439,7 @@ body {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  box-shadow: 0 0 30px var(--glow-cyan),
+  box-shadow: 0 0 30px var(--glow-primary),
               0 0 50px var(--glow-purple);
   animation: pulse 2s ease-in-out infinite;
 }
@@ -459,12 +458,12 @@ body {
 @keyframes pulse {
   0%, 100% {
     transform: translate(-50%, -50%) scale(1);
-    box-shadow: 0 0 30px var(--glow-cyan),
+    box-shadow: 0 0 30px var(--glow-primary),
                 0 0 50px var(--glow-purple);
   }
   50% {
     transform: translate(-50%, -50%) scale(1.2);
-    box-shadow: 0 0 40px var(--glow-cyan),
+    box-shadow: 0 0 40px var(--glow-primary),
                 0 0 70px var(--glow-purple),
                 0 0 30px var(--glow-pink);
   }
