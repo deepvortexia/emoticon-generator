@@ -3,9 +3,9 @@
   align-items: center;
   gap: 16px;
   padding: 12px;
-  background: rgba(255, 255, 255, 0.08);
+  background: var(--bg-card);
   border-radius: 16px;
-  border: 1px solid rgba(255, 255, 255, 0.15);
+  border: 1px solid var(--border-color);
 }
 
 .credit-info {
@@ -19,9 +19,9 @@
   align-items: center;
   gap: 8px;
   padding: 8px 16px;
-  background: rgba(255, 255, 255, 0.08);
+  background: var(--bg-card);
   border-radius: 12px;
-  border: 1px solid rgba(255, 255, 255, 0.15);
+  border: 1px solid var(--border-color);
 }
 
 .credit-icon {
@@ -36,29 +36,28 @@
 
 .credit-label {
   font-size: 14px;
-  color: rgba(255, 255, 255, 0.7);
+  color: var(--text-secondary);
 }
 
 .buy-credits-btn,
 .signin-btn {
   padding: 10px 20px;
-  background: linear-gradient(135deg, #8B5CF6, #EC4899);
-  color: white;
-  border: none;
-  border-radius: 12px;
+  background: var(--bg-tertiary);
+  border: 1px solid var(--accent-primary);
+  border-radius: 10px;
+  color: var(--accent-primary);
   font-size: 14px;
-  font-weight: 600;
+  font-weight: 500;
   cursor: pointer;
-  transition: all 0.2s;
+  transition: all 0.3s ease;
   white-space: nowrap;
-  box-shadow: 0 2px 8px rgba(139, 92, 246, 0.4);
   min-height: 48px;
 }
 
 .buy-credits-btn:hover,
 .signin-btn:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(139, 92, 246, 0.6);
+  background: rgba(59, 130, 246, 0.15);
+  box-shadow: 0 0 15px var(--glow-secondary);
 }
 
 .user-menu {
@@ -76,9 +75,9 @@
 }
 
 .user-avatar:hover {
-  border-color: #8B5CF6;
+  border-color: var(--accent-primary);
   transform: scale(1.05);
-  box-shadow: 0 2px 8px rgba(139, 92, 246, 0.4);
+  box-shadow: 0 2px 8px var(--glow-primary);
 }
 
 .user-avatar:hover + .user-dropdown {
@@ -99,7 +98,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, #8B5CF6, #EC4899);
+  background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
   color: white;
   font-weight: 600;
   font-size: 18px;
