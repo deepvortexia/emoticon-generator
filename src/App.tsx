@@ -18,11 +18,12 @@ const loadingMessages = [
   "Generating awesomeness... 🚀"
 ];
 
-const surprisePrompts = [
-  "happy cat", "pizza", "rocket", "rainbow", "unicorn",
-  "robot dancing", "dragon with crown", "astronaut dog",
-  "ninja turtle", "wizard hat", "magic wand", "crystal ball"
-];
+// Removed for cleaner design - prompts are now chips
+// const surprisePrompts = [
+//   "happy cat", "pizza", "rocket", "rainbow", "unicorn",
+//   "robot dancing", "dragon with crown", "astronaut dog",
+//   "ninja turtle", "wizard hat", "magic wand", "crystal ball"
+// ];
 
 // Error message for credit refresh failures
 const CREDIT_REFRESH_ERROR = 'Payment successful, but there was a temporary issue syncing your credits. Please refresh the page to see your updated balance.'
@@ -250,10 +251,11 @@ function AppContent() {
     await generateEmoticon()
   }
 
-  const surpriseMe = () => {
-    const random = surprisePrompts[Math.floor(Math.random() * surprisePrompts.length)]
-    setPrompt(random)
-  }
+  // Removed surprise button for cleaner design
+  // const surpriseMe = () => {
+  //   const random = surprisePrompts[Math.floor(Math.random() * surprisePrompts.length)]
+  //   setPrompt(random)
+  // }
 
   const downloadImage = async () => {
     if (!generatedImage) return
@@ -329,15 +331,6 @@ function AppContent() {
         </div>
 
         <div className="input-section">
-          <div className="input-wrapper">
-            <input
-              type="text"
-              placeholder="Describe your emoticon (e.g., happy cosmic cat, mystical star...)"
-              value={prompt}
-              onChange={(e) => setPrompt(e.target.value)}
-              onKeyPress={handleKeyPress}
-              className="input-field"
-              disabled={isLoading}
           <input
             type="text"
             placeholder="Describe your emoticon (e.g., happy cosmic cat, mystical star...)"
