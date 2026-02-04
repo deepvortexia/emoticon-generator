@@ -10,33 +10,34 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 
-  /* Primary Colors - Cosmic Vortex Theme */
-  --bg-primary: #0A0A1A;
-  --bg-secondary: #12122A;
-  --bg-tertiary: #1A1A3A;
+  /* Backgrounds - GitHub dark style */
+  --bg-primary: #0D1117;
+  --bg-secondary: #161B22;
+  --bg-tertiary: #21262D;
 
-  /* Accent Colors - Vortex Theme */
-  --cyan-primary: #00D4FF;
-  --cyan-secondary: #00B4E6;
-  --purple-primary: #8B5CF6;
-  --purple-secondary: #7C3AED;
-  --pink-primary: #FF6EB4;
-  --pink-secondary: #EC4899;
+  /* Accent Colors - SOFT & ELEGANT */
+  --cyan-primary: #58A6FF;
+  --cyan-secondary: #79C0FF;
+  --purple-primary: #A371F7;
+  --purple-secondary: #B392F0;
+  --pink-primary: #F778BA;
+  --pink-secondary: #DB61A2;
 
-  /* Gradients */
-  --gradient-vortex: linear-gradient(135deg, #00D4FF, #8B5CF6, #FF6EB4);
-  --gradient-button: linear-gradient(135deg, #00D4FF, #8B5CF6);
-  --gradient-hover: linear-gradient(135deg, #8B5CF6, #FF6EB4);
+  /* Gradients - Softer */
+  --gradient-vortex: linear-gradient(135deg, #58A6FF, #A371F7, #F778BA);
+  --gradient-button: linear-gradient(135deg, #58A6FF, #A371F7);
+  --gradient-hover: linear-gradient(135deg, #A371F7, #F778BA);
 
-  /* Glows */
-  --glow-cyan: rgba(0, 212, 255, 0.4);
-  --glow-purple: rgba(139, 92, 246, 0.4);
-  --glow-pink: rgba(255, 110, 180, 0.4);
+  /* Glows - More Subtle */
+  --glow-primary: rgba(88, 166, 255, 0.2);
+  --glow-cyan: rgba(88, 166, 255, 0.2);
+  --glow-purple: rgba(163, 113, 247, 0.2);
+  --glow-pink: rgba(247, 120, 186, 0.2);
 
   /* Text */
   --text-primary: #FFFFFF;
   --text-secondary: rgba(255, 255, 255, 0.7);
-  --text-tertiary: #71717a;
+  --text-tertiary: #8B949E;
 
   /* System Colors */
   --success: #10b981;
@@ -44,9 +45,10 @@
   --warning: #f59e0b;
 
   /* Borders */
-  --border-color: #2a2a4a;
-  --border-vortex: rgba(0, 212, 255, 0.3);
-  --border-vortex-strong: rgba(0, 212, 255, 0.6);
+  --border-color: #30363D;
+  --border-focus: var(--cyan-primary);
+  --border-vortex: rgba(88, 166, 255, 0.3);
+  --border-vortex-strong: rgba(88, 166, 255, 0.6);
 }
 
 body {
