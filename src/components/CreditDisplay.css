@@ -3,9 +3,9 @@
   align-items: center;
   gap: 16px;
   padding: 12px;
-  background: var(--bg-tertiary);
+  background: rgba(255, 255, 255, 0.08);
   border-radius: 16px;
-  border: 1px solid var(--border-color);
+  border: 1px solid rgba(255, 255, 255, 0.15);
 }
 
 .credit-info {
@@ -19,9 +19,9 @@
   align-items: center;
   gap: 8px;
   padding: 8px 16px;
-  background: var(--bg-tertiary);
+  background: rgba(255, 255, 255, 0.08);
   border-radius: 12px;
-  border: 1px solid var(--border-color);
+  border: 1px solid rgba(255, 255, 255, 0.15);
 }
 
 .credit-icon {
@@ -42,7 +42,7 @@
 .buy-credits-btn,
 .signin-btn {
   padding: 10px 20px;
-  background: var(--gradient-button);
+  background: linear-gradient(135deg, #8B5CF6, #EC4899);
   color: white;
   border: none;
   border-radius: 12px;
@@ -51,13 +51,14 @@
   cursor: pointer;
   transition: all 0.2s;
   white-space: nowrap;
-  box-shadow: 0 2px 8px var(--glow-primary);
+  box-shadow: 0 2px 8px rgba(139, 92, 246, 0.4);
+  min-height: 48px;
 }
 
 .buy-credits-btn:hover,
 .signin-btn:hover {
   transform: translateY(-1px);
-  box-shadow: 0 4px 12px var(--glow-primary);
+  box-shadow: 0 4px 12px rgba(139, 92, 246, 0.6);
 }
 
 .user-menu {
@@ -75,9 +76,9 @@
 }
 
 .user-avatar:hover {
-  border-color: var(--cyan-primary);
+  border-color: #8B5CF6;
   transform: scale(1.05);
-  box-shadow: 0 2px 8px var(--glow-primary);
+  box-shadow: 0 2px 8px rgba(139, 92, 246, 0.4);
 }
 
 .user-avatar:hover + .user-dropdown {
@@ -98,7 +99,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: var(--gradient-button);
+  background: linear-gradient(135deg, #8B5CF6, #EC4899);
   color: white;
   font-weight: 600;
   font-size: 18px;
@@ -109,11 +110,11 @@
   top: calc(100% + 8px);
   right: 0;
   background: var(--bg-tertiary);
-  border: 1px solid var(--border-color);
+  border: 1px solid rgba(255, 255, 255, 0.15);
   border-radius: 12px;
   padding: 16px;
   min-width: 220px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
   opacity: 0;
   visibility: hidden;
   transform: translateY(-10px);
