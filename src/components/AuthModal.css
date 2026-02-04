@@ -20,8 +20,8 @@
   max-width: 440px;
   width: 90%;
   position: relative;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-  border: 1px solid var(--border-color);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.15);
   animation: slideUp 0.3s ease-out;
 }
 
@@ -88,6 +88,7 @@
   align-items: center;
   justify-content: center;
   gap: 12px;
+  min-height: 48px;
 }
 
 .auth-btn:disabled {
@@ -133,7 +134,7 @@
 .auth-input {
   width: 100%;
   padding: 16px;
-  border: 1px solid var(--border-color);
+  border: 1px solid rgba(255, 255, 255, 0.15);
   border-radius: 12px;
   background: var(--bg-tertiary);
   color: white;
@@ -145,8 +146,8 @@
 
 .auth-input:focus {
   outline: none;
-  border-color: var(--cyan-primary);
-  box-shadow: 0 0 0 3px rgba(88, 166, 255, 0.1);
+  border-color: #8B5CF6;
+  box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.1);
 }
 
 .auth-input::placeholder {
@@ -154,13 +155,13 @@
 }
 
 .auth-btn-email {
-  background: var(--gradient-button);
+  background: linear-gradient(135deg, #8B5CF6, #EC4899);
   color: white;
 }
 
 .auth-btn-email:hover:not(:disabled) {
   transform: translateY(-1px);
-  box-shadow: 0 4px 12px var(--glow-primary);
+  box-shadow: 0 4px 12px rgba(139, 92, 246, 0.6);
 }
 
 .auth-message {

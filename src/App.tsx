@@ -18,11 +18,12 @@ const loadingMessages = [
   "Generating awesomeness... 🚀"
 ];
 
-const surprisePrompts = [
-  "happy cat", "pizza", "rocket", "rainbow", "unicorn",
-  "robot dancing", "dragon with crown", "astronaut dog",
-  "ninja turtle", "wizard hat", "magic wand", "crystal ball"
-];
+// Removed for cleaner design - prompts are now chips
+// const surprisePrompts = [
+//   "happy cat", "pizza", "rocket", "rainbow", "unicorn",
+//   "robot dancing", "dragon with crown", "astronaut dog",
+//   "ninja turtle", "wizard hat", "magic wand", "crystal ball"
+// ];
 
 // Error message for credit refresh failures
 const CREDIT_REFRESH_ERROR = 'Payment successful, but there was a temporary issue syncing your credits. Please refresh the page to see your updated balance.'
@@ -250,10 +251,11 @@ function AppContent() {
     await generateEmoticon()
   }
 
-  const surpriseMe = () => {
-    const random = surprisePrompts[Math.floor(Math.random() * surprisePrompts.length)]
-    setPrompt(random)
-  }
+  // Removed surprise button for cleaner design
+  // const surpriseMe = () => {
+  //   const random = surprisePrompts[Math.floor(Math.random() * surprisePrompts.length)]
+  //   setPrompt(random)
+  // }
 
   const downloadImage = async () => {
     if (!generatedImage) return
@@ -276,65 +278,68 @@ function AppContent() {
 
   return (
     <div className={`app ${isLoaded ? 'fade-in' : ''}`}>
+      {/* Fixed Header Logo - Top Right */}
+      <img src="/VLOGOFINAL.png" alt="Deep Vortex" className="header-logo" />
+      
+      {/* Login Button - Top Left */}
+      {!user ? (
+        <button className="login-btn" onClick={() => setIsAuthModalOpen(true)}>
+          Sign In
+        </button>
+      ) : null}
+      
       <Gallery />
       
-      <div className="container">
-        <div className="header">
-          <div className="logo">
-            <img src="/vortextiny.png" alt="Deep Vortex AI" className="logo-image" />
-          </div>
-          <p className="subtitle">AI-Powered Emoticon Generator</p>
-          
-          <div className="header-actions">
-            <CreditDisplay 
-              onBuyCredits={() => setIsPricingModalOpen(true)}
-              onSignIn={() => setIsAuthModalOpen(true)}
-            />
-          </div>
-          
-          <div className="credit-counter">
-            <span>🎨 Generated: {imagesGenerated}</span>
-          </div>
+      {/* Animated Background */}
+      <div className="app-container">
+        {/* Floating Particles */}
+        <div className="particles">
+          <div className="particle" style={{ left: '10%', animationDelay: '0s' }}></div>
+          <div className="particle" style={{ left: '20%', animationDelay: '2s' }}></div>
+          <div className="particle" style={{ left: '30%', animationDelay: '4s' }}></div>
+          <div className="particle" style={{ left: '40%', animationDelay: '1s' }}></div>
+          <div className="particle" style={{ left: '50%', animationDelay: '3s' }}></div>
+          <div className="particle" style={{ left: '60%', animationDelay: '5s' }}></div>
+          <div className="particle" style={{ left: '70%', animationDelay: '2.5s' }}></div>
+          <div className="particle" style={{ left: '80%', animationDelay: '4.5s' }}></div>
+          <div className="particle" style={{ left: '90%', animationDelay: '1.5s' }}></div>
+        </div>
+      </div>
+      
+      <div className="main-content">
+        <h1 className="title">Deep Vortex</h1>
+        <p className="subtitle">Create unique AI-powered emoticons in seconds</p>
+        
+        <div className="header-actions">
+          <CreditDisplay 
+            onBuyCredits={() => setIsPricingModalOpen(true)}
+            onSignIn={() => setIsAuthModalOpen(true)}
+          />
         </div>
 
-        <div className="examples-section">
-          <h3>✨ Try these prompts:</h3>
-          
-          <div className="example-category">
-            <span className="category-label">Simple Emojis (Flat):</span>
-            <div className="example-buttons">
-              <button onClick={() => setPrompt("pizza")}>🍕 pizza</button>
-              <button onClick={() => setPrompt("rocket")}>🚀 rocket</button>
-              <button onClick={() => setPrompt("heart")}>❤️ heart</button>
-              <button onClick={() => setPrompt("happy face")}>😊 happy face</button>
-              <button onClick={() => setPrompt("star")}>⭐ star</button>
-              <button onClick={() => setPrompt("coffee cup")}>☕ coffee cup</button>
-            </div>
-          </div>
-          
-          <div className="example-category">
-            <span className="category-label">Creative Stickers:</span>
-            <div className="example-buttons">
-              <button onClick={() => setPrompt("astronaut cat in space")}>🐱 astronaut cat</button>
-              <button onClick={() => setPrompt("robot dancing with headphones")}>🤖 robot dancing</button>
-              <button onClick={() => setPrompt("dragon wearing sunglasses")}>🐉 dragon with sunglasses</button>
-              <button onClick={() => setPrompt("cat playing guitar")}>🎸 cat musician</button>
-            </div>
-          </div>
+        <div className="suggestions-container">
+          <button className="suggestion-chip" onClick={() => setPrompt("pizza")}>🍕 pizza</button>
+          <button className="suggestion-chip" onClick={() => setPrompt("rocket")}>🚀 rocket</button>
+          <button className="suggestion-chip" onClick={() => setPrompt("heart")}>❤️ heart</button>
+          <button className="suggestion-chip" onClick={() => setPrompt("happy face")}>😊 happy face</button>
+          <button className="suggestion-chip" onClick={() => setPrompt("star")}>⭐ star</button>
+          <button className="suggestion-chip" onClick={() => setPrompt("coffee cup")}>☕ coffee cup</button>
+          <button className="suggestion-chip" onClick={() => setPrompt("astronaut cat in space")}>🐱 astronaut cat</button>
+          <button className="suggestion-chip" onClick={() => setPrompt("robot dancing with headphones")}>🤖 robot dancing</button>
+          <button className="suggestion-chip" onClick={() => setPrompt("dragon wearing sunglasses")}>🐉 cool dragon</button>
+          <button className="suggestion-chip" onClick={() => setPrompt("cat playing guitar")}>🎸 cat musician</button>
         </div>
 
         <div className="input-section">
-          <div className="input-wrapper">
-            <input
-              type="text"
-              placeholder="Describe your emoticon (e.g., happy cosmic cat, mystical star...)"
-              value={prompt}
-              onChange={(e) => setPrompt(e.target.value)}
-              onKeyPress={handleKeyPress}
-              className="input-field"
-              disabled={isLoading}
-            />
-          </div>
+          <input
+            type="text"
+            placeholder="Describe your emoticon (e.g., happy cosmic cat, mystical star...)"
+            value={prompt}
+            onChange={(e) => setPrompt(e.target.value)}
+            onKeyPress={handleKeyPress}
+            className="input-field"
+            disabled={isLoading}
+          />
 
           <button
             onClick={generateEmoticon}
@@ -349,17 +354,9 @@ function AppContent() {
             ) : (
               <>
                 <span className="btn-icon">🎨</span>
-                <span>Generate Emoticon</span>
+                <span>Generate</span>
               </>
             )}
-          </button>
-          
-          <button
-            onClick={surpriseMe}
-            disabled={isLoading}
-            className="surprise-btn"
-          >
-            🎲 Surprise Me!
           </button>
         </div>
 

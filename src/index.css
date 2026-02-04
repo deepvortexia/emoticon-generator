@@ -10,33 +10,31 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 
-  /* Backgrounds - GitHub dark style */
-  --bg-primary: #0D1117;
-  --bg-secondary: #161B22;
-  --bg-tertiary: #21262D;
+  /* Backgrounds */
+  --bg-primary: #0a0a0f;
+  --bg-secondary: #12121a;
+  --bg-tertiary: #1a1a25;
 
-  /* Accent Colors - SOFT & ELEGANT */
-  --cyan-primary: #58A6FF;
-  --cyan-secondary: #79C0FF;
-  --purple-primary: #A371F7;
-  --purple-secondary: #B392F0;
-  --pink-primary: #F778BA;
-  --pink-secondary: #DB61A2;
+  /* Accent Colors */
+  --purple-primary: #8B5CF6;
+  --pink-primary: #EC4899;
+  --cyan-primary: #06B6D4;
 
-  /* Gradients - Softer */
-  --gradient-vortex: linear-gradient(135deg, #58A6FF, #A371F7, #F778BA);
-  --gradient-button: linear-gradient(135deg, #58A6FF, #A371F7);
-  --gradient-hover: linear-gradient(135deg, #A371F7, #F778BA);
+  /* Gradients */
+  --gradient-primary: linear-gradient(135deg, #8B5CF6, #EC4899);
+  --gradient-text: linear-gradient(135deg, #8B5CF6, #EC4899, #06B6D4);
+  --gradient-vortex: linear-gradient(135deg, #8B5CF6, #EC4899, #06B6D4);
+  --gradient-button: linear-gradient(135deg, #8B5CF6, #EC4899);
 
-  /* Glows - More Subtle */
-  --glow-primary: rgba(88, 166, 255, 0.2);
-  --glow-purple: rgba(163, 113, 247, 0.2);
-  --glow-pink: rgba(247, 120, 186, 0.2);
+  /* Glows */
+  --glow-primary: rgba(139, 92, 246, 0.4);
+  --glow-purple: rgba(139, 92, 246, 0.4);
+  --glow-pink: rgba(236, 72, 153, 0.4);
 
   /* Text */
   --text-primary: #FFFFFF;
   --text-secondary: rgba(255, 255, 255, 0.7);
-  --text-tertiary: #8B949E;
+  --text-tertiary: rgba(255, 255, 255, 0.5);
 
   /* System Colors */
   --success: #10b981;
@@ -44,14 +42,22 @@
   --warning: #f59e0b;
 
   /* Borders */
-  --border-color: #30363D;
-  --border-focus: var(--cyan-primary);
-  --border-vortex: rgba(88, 166, 255, 0.3);
-  --border-vortex-strong: rgba(88, 166, 255, 0.6);
+  --border-color: rgba(255, 255, 255, 0.15);
+  --border-focus: #8B5CF6;
+  --border-vortex: rgba(139, 92, 246, 0.3);
+  --border-vortex-strong: rgba(139, 92, 246, 0.6);
 }
 
 body {
   margin: 0;
   min-width: 320px;
   min-height: 100vh;
+}
+
+/* Optimized animations */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
 }
