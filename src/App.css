@@ -68,7 +68,7 @@ body {
 }
 
 /* Animated Background */
-.app-container::before {
+.app::before {
   content: '';
   position: fixed;
   top: 0;
@@ -580,7 +580,6 @@ body {
 }
 
 /* GPU Acceleration for animated elements */
-.animated-element,
 .header-logo,
 .generate-btn,
 .particle {
