@@ -56,7 +56,12 @@ export const AuthModal = ({ isOpen, onClose }: AuthModalProps) => {
         <button className="auth-modal-close" onClick={onClose}>×</button>
         
         <div className="auth-modal-header">
-          <div className="auth-modal-logo">🌀</div>
+          <img 
+            src="/deepgoldremoveetiny.png" 
+            alt="Deep Vortex Logo" 
+            className="auth-modal-logo"
+            aria-label="Deep Vortex AI"
+          />
           <h2>Welcome to Deep Vortex</h2>
           <p>Sign in to get 3 free credits and start generating!</p>
         </div>

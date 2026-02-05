@@ -54,8 +54,11 @@
 }
 
 .auth-modal-logo {
-  font-size: 48px;
-  margin-bottom: 16px;
+  width: 80px;
+  height: auto;
+  display: block;
+  margin: 0 auto 1.5rem;
+  filter: drop-shadow(0 0 10px var(--glow-gold));
 }
 
 .auth-modal-header h2 {
