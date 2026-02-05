@@ -277,11 +277,24 @@ body {
 
 /* Brand Description */
 .brand-description {
-  font-size: 1rem;
-  color: var(--text-secondary);
+  font-family: 'Inter', sans-serif;
+  font-size: 1.1rem;
+  color: var(--gold-primary);
   text-align: center;
   margin: 0;
   padding: 0;
+  font-weight: 600;
+}
+
+/* Brand Subdescription */
+.brand-subdescription {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.95rem;
+  color: rgba(212, 175, 55, 0.7);
+  text-align: center;
+  margin: 0.5rem 0 0;
+  font-weight: 400;
+  letter-spacing: 0.02em;
 }
 
 /* Action Buttons Section */
@@ -931,6 +944,10 @@ body {
   
   .brand-description {
     font-size: 0.9rem;
+  }
+  
+  .brand-subdescription {
+    font-size: 0.85rem;
   }
   
   /* Reduce particle count on mobile */

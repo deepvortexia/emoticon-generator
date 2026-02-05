@@ -323,7 +323,8 @@ function AppContent() {
           <h1 className="brand-text-orbitron">DΞΞP VORTΞX AI</h1>
           
           {/* Short description */}
-          <p className="brand-description">Create unique AI-powered emoticons in seconds</p>
+          <p className="brand-description">Your AI Tools Ecosystem</p>
+          <p className="brand-subdescription">Start with Emoticons • Chat &amp; Images Coming Soon</p>
         </div>
       </header>
       
