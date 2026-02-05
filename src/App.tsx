@@ -31,6 +31,14 @@ const CREDIT_REFRESH_ERROR = 'Payment successful, but there was a temporary issu
 // LocalStorage key for pending Stripe sessions
 const PENDING_STRIPE_SESSION_KEY = 'pending_stripe_session'
 
+// Future routes structure - Ready for expansion:
+// /emoticons or / - Current emoticon generator (default)
+// /chat - AI chat interface (coming soon)
+// /images - Image generation tool (coming soon)
+// /music - Music generation tool (coming soon)
+// /tools - Overview of all available tools
+// /pricing - Unified pricing for all tools
+
 // Helper to clean URL parameters
 const cleanUrlParams = () => {
   window.history.replaceState({}, '', window.location.pathname)
@@ -323,7 +331,12 @@ function AppContent() {
           <h1 className="brand-text-orbitron">DΞΞP VORTΞX AI</h1>
           
           {/* Short description */}
-          <p className="brand-description">Create unique AI-powered emoticons in seconds</p>
+          <p className="brand-description">
+            Your AI Tools Ecosystem
+            <span className="brand-subdescription" aria-label="Current and upcoming features">
+              <br />Start with Emoticons • Chat &amp; Images Coming Soon
+            </span>
+          </p>
         </div>
       </header>
       
@@ -343,6 +356,36 @@ function AppContent() {
           <span className="btn-icon" aria-hidden="true">⭐</span>
           <span>Favorites</span>
         </button>
+      </div>
+      
+      {/* Coming Soon Tools Preview */}
+      <div className="tools-preview-section" role="region" aria-label="Available and upcoming AI tools">
+        <h3 className="tools-preview-title">Complete AI Ecosystem</h3>
+        <div className="tools-preview-grid" role="list">
+          <div className="tool-card tool-card-active" role="listitem">
+            <span className="tool-icon" aria-hidden="true">😀</span>
+            <span className="tool-name">Emoticons</span>
+            <span className="tool-status" aria-label="Currently available">Available Now</span>
+          </div>
+          
+          <div className="tool-card tool-card-soon" role="listitem">
+            <span className="tool-icon" aria-hidden="true">💬</span>
+            <span className="tool-name">AI Chat</span>
+            <span className="tool-status" aria-label="Coming in the future">Coming Soon</span>
+          </div>
+          
+          <div className="tool-card tool-card-soon" role="listitem">
+            <span className="tool-icon" aria-hidden="true">🖼️</span>
+            <span className="tool-name">Image Gen</span>
+            <span className="tool-status" aria-label="Coming in the future">Coming Soon</span>
+          </div>
+          
+          <div className="tool-card tool-card-soon" role="listitem">
+            <span className="tool-icon" aria-hidden="true">✨</span>
+            <span className="tool-name">More Tools</span>
+            <span className="tool-status" aria-label="Currently in development">In Development</span>
+          </div>
+        </div>
       </div>
       
       <Gallery isOpen={isGalleryOpen} onClose={() => setIsGalleryOpen(false)} />
@@ -474,6 +517,9 @@ function AppContent() {
         )}
 
         <footer className="footer">
+          <p className="footer-tagline">
+            Deep Vortex AI - Building the complete AI creative ecosystem
+          </p>
           <p className="footer-text">
             Powered by <span className="gradient-text">Deep Vortex</span> ×{' '}
             <span className="gradient-text">SDXL Emoji</span>

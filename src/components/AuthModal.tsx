@@ -63,7 +63,7 @@ export const AuthModal = ({ isOpen, onClose }: AuthModalProps) => {
             aria-label="Deep Vortex AI"
           />
           <h2>Welcome to Deep Vortex</h2>
-          <p>Sign in to get 3 free credits and start generating!</p>
+          <p>Sign in to get 3 free credits and explore the ecosystem!</p>
         </div>
 
         {!emailSent ? (
