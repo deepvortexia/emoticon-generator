@@ -433,9 +433,9 @@ function AppContent() {
               { emoji: '💎', text: 'crystal' },
               { emoji: '🌟', text: 'glowing' },
               { emoji: '🔥', text: 'fire' }
-            ].map((item, index) => (
+            ].map((item) => (
               <button
-                key={index}
+                key={item.text}
                 className="suggestion-tag-compact"
                 onClick={() => setPrompt(`${item.emoji} ${item.text}`)}
                 aria-label={`Quick suggestion: ${item.text}`}
@@ -460,9 +460,9 @@ function AppContent() {
               { emoji: '🐱', text: 'cat' },
               { emoji: '🎮', text: 'gaming' },
               { emoji: '🌙', text: 'moon' }
-            ].map((item, index) => (
+            ].map((item) => (
               <button
-                key={index}
+                key={item.text}
                 className="suggestion-tag-compact"
                 onClick={() => setPrompt(`${item.emoji} ${item.text}`)}
                 aria-label={`Quick suggestion: ${item.text}`}
