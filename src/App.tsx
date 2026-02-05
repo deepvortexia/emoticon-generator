@@ -5,7 +5,6 @@ import PlatformGuideModal from './components/PlatformGuideModal'
 import { AuthProvider, useAuth } from './context/AuthContext'
 import { AuthModal } from './components/AuthModal'
 import { PricingModal } from './components/PricingModal'
-import { CreditDisplay } from './components/CreditDisplay'
 import { Notification } from './components/Notification'
 import { useCredits } from './hooks/useCredits'
 
@@ -58,7 +57,7 @@ function AppContent() {
   const [showNotification, setShowNotification] = useState(false)
   const [isGalleryOpen, setIsGalleryOpen] = useState(false)
   
-  const { user, session, loading } = useAuth()
+  const { user, session, loading, profile } = useAuth()
   const { hasCredits, refreshProfile } = useCredits()
 
   // Refs to track if Stripe sessions have been processed
@@ -388,6 +387,37 @@ function AppContent() {
         </div>
       </div>
       
+      {/* Credits Display Section - Positioned after tools */}
+      {user && profile && (
+        <div className="credits-display-section">
+          <div className="credits-display-content">
+            <div className="credits-info">
+              <span className="credits-icon">💰</span>
+              <span className="credits-amount">{profile.credits || 0} credits</span>
+            </div>
+            
+            <div className="credits-actions">
+              <button 
+                className="buy-credits-btn"
+                onClick={() => setIsPricingModalOpen(true)}
+                aria-label="Buy more credits"
+              >
+                <span aria-hidden="true">💳</span>
+                <span>Buy Credits</span>
+              </button>
+              
+              {profile.avatar_url && (
+                <img 
+                  src={profile.avatar_url} 
+                  alt={`${profile.full_name || 'User'} avatar`}
+                  className="user-avatar-small"
+                />
+              )}
+            </div>
+          </div>
+        </div>
+      )}
+      
       <Gallery isOpen={isGalleryOpen} onClose={() => setIsGalleryOpen(false)} />
       
       {/* Animated Background */}
@@ -407,13 +437,6 @@ function AppContent() {
       </div>
       
       <div className="main-content">
-        <div className="header-actions">
-          <CreditDisplay 
-            onBuyCredits={() => setIsPricingModalOpen(true)}
-            onSignIn={() => setIsAuthModalOpen(true)}
-          />
-        </div>
-
         <div className="suggestions-container">
           <button className="suggestion-chip" onClick={() => setPrompt("pizza")}>🍕 pizza</button>
           <button className="suggestion-chip" onClick={() => setPrompt("rocket")}>🚀 rocket</button>
