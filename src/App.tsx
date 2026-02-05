@@ -287,7 +287,7 @@ function AppContent() {
             className="app-logo"
             aria-label="Deep Vortex AI - Emoticon Generator"
           />
-          <h1 className="brand-text" aria-level={1}>DΞΞP VORTΞX AI</h1>
+          <h1 className="brand-text">DΞΞP VORTΞX AI</h1>
         </div>
       </header>
       
