@@ -87,18 +87,18 @@
 }
 
 .pricing-card:hover {
-  transform: translateY(-2px);
-  border-color: var(--accent-primary);
-  box-shadow: 0 4px 12px var(--glow-primary);
+  transform: translateY(-2px) translateZ(0);
+  border-color: var(--gold-primary);
+  box-shadow: 0 4px 12px var(--glow-gold);
 }
 
 .pricing-card.popular {
-  border-color: var(--accent-primary);
+  border-color: var(--gold-primary);
   background: var(--bg-tertiary);
 }
 
 .pricing-card.popular:hover {
-  box-shadow: 0 4px 12px var(--glow-primary);
+  box-shadow: 0 4px 12px var(--glow-gold-strong);
 }
 
 .popular-badge {
@@ -106,14 +106,14 @@
   top: -12px;
   left: 50%;
   transform: translateX(-50%);
-  background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+  background: linear-gradient(135deg, var(--gold-dark), var(--gold-primary));
   color: white;
   padding: 6px 16px;
   border-radius: 20px;
   font-size: 12px;
   font-weight: 700;
   white-space: nowrap;
-  box-shadow: 0 2px 8px var(--glow-primary);
+  box-shadow: 0 2px 8px var(--glow-gold);
 }
 
 .pricing-card-header {
@@ -138,7 +138,7 @@
 .credits-count {
   font-size: 48px;
   font-weight: 700;
-  background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary), var(--accent-cyan));
+  background: linear-gradient(135deg, var(--gold-dark), var(--gold-primary), var(--gold-light));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -187,20 +187,20 @@
 .pricing-btn {
   width: 100%;
   padding: 14px 24px;
-  background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+  background: linear-gradient(135deg, var(--gold-dark), var(--gold-primary));
   color: white;
   border: none;
   border-radius: 12px;
   font-size: 16px;
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.2s;
+  transition: transform 0.2s, box-shadow 0.2s;
   min-height: 48px;
 }
 
 .pricing-btn:hover:not(:disabled) {
-  transform: translateY(-1px);
-  box-shadow: 0 4px 12px var(--glow-primary);
+  transform: translateY(-1px) translateZ(0);
+  box-shadow: 0 4px 12px var(--glow-gold-strong);
 }
 
 .pricing-btn:disabled {
@@ -209,12 +209,12 @@
 }
 
 .popular .pricing-btn {
-  background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+  background: linear-gradient(135deg, var(--gold-dark), var(--gold-primary));
   color: white;
 }
 
 .popular .pricing-btn:hover:not(:disabled) {
-  box-shadow: 0 4px 12px var(--glow-primary);
+  box-shadow: 0 4px 12px var(--glow-gold-strong);
 }
 
 .pricing-error {
@@ -256,11 +256,11 @@
 @keyframes slideUp {
   from {
     opacity: 0;
-    transform: translateY(30px);
+    transform: translateY(30px) translateZ(0);
   }
   to {
     opacity: 1;
-    transform: translateY(0);
+    transform: translateY(0) translateZ(0);
   }
 }
 

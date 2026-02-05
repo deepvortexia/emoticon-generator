@@ -45,7 +45,7 @@
 
 .auth-modal-close:hover {
   background: rgba(255, 255, 255, 0.2);
-  transform: rotate(90deg);
+  transform: rotate(90deg) translateZ(0);
 }
 
 .auth-modal-header {
@@ -103,7 +103,7 @@
 }
 
 .auth-btn-google:hover:not(:disabled) {
-  transform: translateY(-2px);
+  transform: translateY(-2px) translateZ(0);
   box-shadow: 0 8px 20px rgba(255, 255, 255, 0.2);
 }
 
@@ -146,8 +146,8 @@
 
 .auth-input:focus {
   outline: none;
-  border-color: var(--accent-primary);
-  box-shadow: 0 0 0 3px var(--glow-primary);
+  border-color: var(--gold-primary);
+  box-shadow: 0 0 0 3px var(--glow-gold);
 }
 
 .auth-input::placeholder {
@@ -155,13 +155,13 @@
 }
 
 .auth-btn-email {
-  background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+  background: linear-gradient(135deg, var(--gold-dark), var(--gold-primary));
   color: white;
 }
 
 .auth-btn-email:hover:not(:disabled) {
-  transform: translateY(-1px);
-  box-shadow: 0 4px 12px var(--glow-primary);
+  transform: translateY(-1px) translateZ(0);
+  box-shadow: 0 4px 12px var(--glow-gold-strong);
 }
 
 .auth-message {

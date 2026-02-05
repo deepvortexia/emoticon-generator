@@ -279,7 +279,7 @@ function AppContent() {
   return (
     <div className={`app ${isLoaded ? 'fade-in' : ''}`}>
       {/* Fixed Header Logo - Top Right */}
-      <img src="/VLOGOFINAL.png" alt="Deep Vortex" className="header-logo" />
+      <img src="/deepgoldremoveetiny.png" alt="Deep Vortex" className="header-logo" />
       
       {/* Login Button - Top Left */}
       {!user ? (
@@ -388,6 +388,7 @@ function AppContent() {
                 alt="Generated emoticon"
                 className="generated-image fade-in-image"
                 loading="lazy"
+                decoding="async"
               />
             </div>
             

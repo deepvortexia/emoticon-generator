@@ -43,21 +43,22 @@
 .signin-btn {
   padding: 10px 20px;
   background: var(--bg-tertiary);
-  border: 1px solid var(--accent-primary);
+  border: 1px solid var(--gold-primary);
   border-radius: 10px;
-  color: var(--accent-primary);
+  color: var(--gold-primary);
   font-size: 14px;
   font-weight: 500;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: transform 0.3s ease, background 0.3s ease, box-shadow 0.3s ease;
   white-space: nowrap;
   min-height: 48px;
 }
 
 .buy-credits-btn:hover,
 .signin-btn:hover {
-  background: rgba(59, 130, 246, 0.15);
-  box-shadow: 0 0 15px var(--glow-secondary);
+  background: rgba(212, 175, 55, 0.15);
+  box-shadow: 0 0 15px var(--glow-gold);
+  transform: translateY(-1px) translateZ(0);
 }
 
 .user-menu {
@@ -75,9 +76,9 @@
 }
 
 .user-avatar:hover {
-  border-color: var(--accent-primary);
-  transform: scale(1.05);
-  box-shadow: 0 2px 8px var(--glow-primary);
+  border-color: var(--gold-primary);
+  transform: scale(1.05) translateZ(0);
+  box-shadow: 0 2px 8px var(--glow-gold);
 }
 
 .user-avatar:hover + .user-dropdown {
@@ -98,7 +99,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+  background: linear-gradient(135deg, var(--gold-dark), var(--gold-primary));
   color: white;
   font-weight: 600;
   font-size: 18px;
@@ -160,7 +161,7 @@
 
 .signout-btn:hover {
   background: rgba(239, 68, 68, 0.3);
-  transform: translateY(-1px);
+  transform: translateY(-1px) translateZ(0);
 }
 
 @media (max-width: 768px) {

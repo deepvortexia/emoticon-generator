@@ -23,20 +23,20 @@
   max-height: 90vh;
   display: flex;
   flex-direction: column;
-  box-shadow: 0 8px 32px rgba(245, 158, 11, 0.4),
-              0 0 40px rgba(245, 158, 11, 0.2);
-  border: 1px solid rgba(245, 158, 11, 0.3);
+  box-shadow: 0 8px 32px var(--glow-gold),
+              0 0 40px var(--glow-gold);
+  border: 1px solid var(--gold-primary);
   animation: slideUp 0.3s ease-out;
 }
 
 @keyframes slideUp {
   from {
     opacity: 0;
-    transform: translateY(20px);
+    transform: translateY(20px) translateZ(0);
   }
   to {
     opacity: 1;
-    transform: translateY(0);
+    transform: translateY(0) translateZ(0);
   }
 }
 
@@ -50,7 +50,7 @@
 
 .modal-header h2 {
   margin: 0;
-  color: #a78bfa;
+  color: var(--gold-light);
   font-size: 24px;
   font-weight: 700;
 }
@@ -74,7 +74,7 @@
 .close-button:hover {
   background: #333;
   color: #fff;
-  transform: scale(1.1);
+  transform: scale(1.1) translateZ(0);
 }
 
 .platform-tabs {
