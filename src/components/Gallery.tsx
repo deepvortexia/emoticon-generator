@@ -74,7 +74,12 @@ export function Gallery() {
           ) : (
             history.map((item) => (
               <div key={item.id} className="gallery-item">
-                <img src={item.imageUrl} alt={item.prompt} />
+                <img 
+                  src={item.imageUrl} 
+                  alt={item.prompt}
+                  loading="lazy"
+                  decoding="async"
+                />
                 <div className="gallery-item-info">
                   <p className="gallery-prompt">{item.prompt}</p>
                   <p className="gallery-date">

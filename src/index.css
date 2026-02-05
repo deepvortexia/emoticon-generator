@@ -1,5 +1,5 @@
 :root {
-  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', sans-serif;
   line-height: 1.5;
   font-weight: 400;
 
@@ -10,21 +10,29 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 
-  /* Backgrounds - TRÈS SOMBRES */
-  --bg-primary: #050508;
-  --bg-secondary: #0A0A12;
-  --bg-tertiary: #12121F;
-  --bg-card: #0F0F1A;
+  /* Primary Gold Colors (from Deep Vortex logo) */
+  --gold-primary: #D4AF37;
+  --gold-light: #E8C87C;
+  --gold-dark: #B8860B;
+  
+  /* Dark Theme Backgrounds */
+  --bg-primary: #0a0a0a;
+  --bg-secondary: #1a1a1a;
+  --bg-tertiary: #0f0f0f;
+  --bg-card: rgba(26, 26, 26, 0.7);
 
-  /* Accents - BLEU/VIOLET/CYAN - PAS DE ROSE */
-  --accent-primary: #3B82F6;     /* Bleu */
-  --accent-secondary: #6366F1;   /* Indigo */
-  --accent-tertiary: #818CF8;    /* Violet clair */
-  --accent-cyan: #22D3EE;        /* Cyan */
+  /* Gold Glows & Effects */
+  --glow-gold: rgba(212, 175, 55, 0.3);
+  --glow-gold-strong: rgba(212, 175, 55, 0.6);
+  
+  /* Legacy accent support (for gradual migration) */
+  --accent-primary: var(--gold-primary);
+  --accent-secondary: var(--gold-light);
+  --accent-tertiary: var(--gold-dark);
 
   /* Glows */
-  --glow-primary: rgba(99, 102, 241, 0.4);
-  --glow-secondary: rgba(59, 130, 246, 0.3);
+  --glow-primary: var(--glow-gold);
+  --glow-secondary: var(--glow-gold);
 
   /* Text */
   --text-primary: #FFFFFF;
@@ -37,8 +45,8 @@
   --warning: #f59e0b;
 
   /* Borders */
-  --border-color: rgba(255, 255, 255, 0.1);
-  --border-hover: rgba(99, 102, 241, 0.5);
+  --border-color: rgba(212, 175, 55, 0.2);
+  --border-hover: rgba(212, 175, 55, 0.5);
 }
 
 body {
