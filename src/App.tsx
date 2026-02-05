@@ -333,14 +333,14 @@ function AppContent() {
           className="action-btn action-btn-signin"
           onClick={() => setIsAuthModalOpen(true)}
         >
-          <span className="btn-icon">🔒</span>
+          <span className="btn-icon" aria-hidden="true">🔒</span>
           <span>Sign In</span>
         </button>
         <button 
           className="action-btn action-btn-favorites"
           onClick={() => setIsGalleryOpen(true)}
         >
-          <span className="btn-icon">⭐</span>
+          <span className="btn-icon" aria-hidden="true">⭐</span>
           <span>Favorites</span>
         </button>
       </div>
