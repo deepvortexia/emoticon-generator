@@ -1134,32 +1134,6 @@ body {
   }
 }
 
-/* Tablet and smaller devices */
-@media (max-width: 767px) {
-  .tools-preview-section {
-    padding: 1rem 1rem 0.8rem;
-  }
-  
-  .tools-preview-title {
-    font-size: 1.2rem;
-    margin-bottom: 0.8rem;
-  }
-  
-  .tool-card {
-    padding: 1rem 0.6rem;
-    gap: 0.3rem;
-  }
-  
-  .tool-icon {
-    font-size: 1.4rem;
-  }
-  
-  .action-buttons-section {
-    padding: 1rem 1rem 0.8rem;
-    gap: 1rem;
-  }
-}
-
 /* Tablet */
 @media (max-width: 768px) {
   .main-content {
