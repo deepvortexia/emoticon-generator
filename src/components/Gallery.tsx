@@ -8,9 +8,20 @@ interface HistoryItem {
   timestamp: number;
 }
 
-export function Gallery() {
+interface GalleryProps {
+  isOpen?: boolean;
+  onClose?: () => void;
+}
+
+export function Gallery({ isOpen: externalIsOpen, onClose: externalOnClose }: GalleryProps = {}) {
   const [history, setHistory] = useState<HistoryItem[]>([]);
-  const [isOpen, setIsOpen] = useState(false);
+  const [internalIsOpen, setInternalIsOpen] = useState(false);
+  
+  // Use external control if provided, otherwise use internal state
+  const isOpen = externalIsOpen !== undefined ? externalIsOpen : internalIsOpen;
+  const setIsOpen = externalOnClose ? (value: boolean) => {
+    if (!value) externalOnClose();
+  } : setInternalIsOpen;
 
   useEffect(() => {
     const loadHistory = () => {
@@ -52,12 +63,18 @@ export function Gallery() {
     setHistory([]);
   };
 
-  if (!isOpen) {
+  // Don't render toggle button if controlled externally
+  if (!isOpen && externalIsOpen === undefined) {
     return (
       <button className="gallery-toggle" onClick={() => setIsOpen(true)}>
         🖼️ Gallery ({history.length})
       </button>
     );
+  }
+  
+  // Don't render anything if closed and controlled externally
+  if (!isOpen) {
+    return null;
   }
 
   return (

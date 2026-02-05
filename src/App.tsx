@@ -48,6 +48,7 @@ function AppContent() {
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false)
   const [isPricingModalOpen, setIsPricingModalOpen] = useState(false)
   const [showNotification, setShowNotification] = useState(false)
+  const [isGalleryOpen, setIsGalleryOpen] = useState(false)
   
   const { user, session, loading } = useAuth()
   const { hasCredits, refreshProfile } = useCredits()
@@ -278,27 +279,73 @@ function AppContent() {
 
   return (
     <div className={`app ${isLoaded ? 'fade-in' : ''}`}>
-      {/* App Header with Logo and Brand Text */}
+      {/* App Header - Minimal & Magical */}
       <header className="app-header">
-        <div className="logo-container">
-          <img 
-            src="/deepgoldremoveetiny.png" 
-            alt="Deep Vortex Logo" 
-            className="app-logo"
-            aria-label="Deep Vortex AI - Emoticon Generator"
-          />
-          <h1 className="brand-text">DΞΞP VORTΞX AI</h1>
+        <div className="logo-container-magic">
+          {/* Magic effects wrapper around logo */}
+          <div className="magic-effects-wrapper">
+            {/* Pulsing glow aura */}
+            <div className="magic-glow"></div>
+            
+            {/* Rotating magic circles */}
+            <div className="magic-circles">
+              <div className="circle circle-1"></div>
+              <div className="circle circle-2"></div>
+              <div className="circle circle-3"></div>
+            </div>
+            
+            {/* Floating particles */}
+            <div className="magic-particles">
+              <div className="magic-particle"></div>
+              <div className="magic-particle"></div>
+              <div className="magic-particle"></div>
+              <div className="magic-particle"></div>
+              <div className="magic-particle"></div>
+              <div className="magic-particle"></div>
+              <div className="magic-particle"></div>
+              <div className="magic-particle"></div>
+              <div className="magic-particle"></div>
+              <div className="magic-particle"></div>
+              <div className="magic-particle"></div>
+              <div className="magic-particle"></div>
+            </div>
+            
+            {/* Logo in center */}
+            <img 
+              src="/deepgoldremoveetiny.png" 
+              alt="Deep Vortex Logo" 
+              className="app-logo-large"
+              aria-label="Deep Vortex AI - Emoticon Generator"
+            />
+          </div>
+          
+          {/* Brand text below logo */}
+          <h1 className="brand-text-orbitron">DΞΞP VORTΞX AI</h1>
+          
+          {/* Short description */}
+          <p className="brand-description">Create unique AI-powered emoticons in seconds</p>
         </div>
       </header>
       
-      {/* Login Button - Top Left */}
-      {!user ? (
-        <button className="login-btn" onClick={() => setIsAuthModalOpen(true)}>
-          Sign In
+      {/* Action Buttons Section */}
+      <div className="action-buttons-section">
+        <button 
+          className="action-btn action-btn-signin"
+          onClick={() => setIsAuthModalOpen(true)}
+        >
+          <span className="btn-icon">🔒</span>
+          <span>Sign In</span>
         </button>
-      ) : null}
+        <button 
+          className="action-btn action-btn-favorites"
+          onClick={() => setIsGalleryOpen(true)}
+        >
+          <span className="btn-icon">⭐</span>
+          <span>Favorites</span>
+        </button>
+      </div>
       
-      <Gallery />
+      <Gallery isOpen={isGalleryOpen} onClose={() => setIsGalleryOpen(false)} />
       
       {/* Animated Background */}
       <div className="app-container">
@@ -317,9 +364,6 @@ function AppContent() {
       </div>
       
       <div className="main-content">
-        <h1 className="title">Deep Vortex</h1>
-        <p className="subtitle">Create unique AI-powered emoticons in seconds</p>
-        
         <div className="header-actions">
           <CreditDisplay 
             onBuyCredits={() => setIsPricingModalOpen(true)}
