@@ -278,8 +278,18 @@ function AppContent() {
 
   return (
     <div className={`app ${isLoaded ? 'fade-in' : ''}`}>
-      {/* Fixed Header Logo - Top Right */}
-      <img src="/deepgoldremoveetiny.png" alt="Deep Vortex" className="header-logo" />
+      {/* App Header with Logo and Brand Text */}
+      <header className="app-header">
+        <div className="logo-container">
+          <img 
+            src="/deepgoldremoveetiny.png" 
+            alt="Deep Vortex Logo" 
+            className="app-logo"
+            aria-label="Deep Vortex AI - Emoticon Generator"
+          />
+          <h1 className="brand-text" aria-level={1}>DΞΞP VORTΞX AI</h1>
+        </div>
+      </header>
       
       {/* Login Button - Top Left */}
       {!user ? (

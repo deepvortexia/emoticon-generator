@@ -21,23 +21,52 @@ body {
   overflow-x: hidden;
 }
 
-/* Fixed Header Logo - Top Right with Gold Glow */
-.header-logo {
-  position: fixed;
-  top: 20px;
-  right: 20px;
-  width: 100px;
-  height: 100px;
-  z-index: 1000;
-  filter: drop-shadow(0 0 15px var(--glow-gold));
-  cursor: pointer;
-  transition: transform 0.3s ease, filter 0.3s ease;
-  will-change: transform;
+/* App Header - Clean & Centered */
+.app-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 2.5rem 1rem 1.5rem;
+  background: var(--bg-primary);
+  position: relative;
+  z-index: 100;
 }
 
-.header-logo:hover {
-  transform: scale(1.1) translateZ(0);
+/* Logo Container */
+.logo-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+/* App Logo - Large & Visible */
+.app-logo {
+  width: 140px;
+  height: auto;
+  display: block;
+  filter: drop-shadow(0 0 15px var(--glow-gold));
+  transition: transform 0.3s ease, filter 0.3s ease;
+}
+
+.app-logo:hover {
+  transform: scale(1.05) translateZ(0);
   filter: drop-shadow(0 0 25px var(--glow-gold-strong));
+}
+
+/* Brand Text - Gold & Futuristic */
+.brand-text {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: var(--gold-primary);
+  letter-spacing: 0.15em;
+  text-align: center;
+  margin: 0;
+  text-transform: uppercase;
+  line-height: 1.2;
+  text-shadow: 0 0 20px var(--glow-gold);
 }
 
 /* Login Button - Top Left with Gold Accent */
@@ -626,7 +655,7 @@ body {
 }
 
 /* GPU Acceleration for actively animated elements */
-.header-logo:hover,
+.app-logo:hover,
 .generate-btn:hover,
 .suggestion-chip:hover,
 .action-btn:hover,
@@ -643,11 +672,22 @@ body {
 
 /* Mobile First - Ultra Mobile-Friendly */
 @media (max-width: 480px) {
-  .header-logo {
-    width: 70px;
-    height: 70px;
-    top: 70px;        /* Sous le header */
-    right: 15px;
+  .app-header {
+    padding: 1.5rem 1rem 1rem;
+  }
+  
+  .logo-container {
+    gap: 0.8rem;
+    margin-bottom: 1rem;
+  }
+  
+  .app-logo {
+    width: 100px;
+  }
+  
+  .brand-text {
+    font-size: 1.3rem;
+    letter-spacing: 0.1em;
   }
   
   .login-btn {
@@ -709,6 +749,17 @@ body {
   }
 }
 
+/* Tablet - Medium sizes */
+@media (min-width: 768px) and (max-width: 1024px) {
+  .app-logo {
+    width: 120px;
+  }
+  
+  .brand-text {
+    font-size: 1.6rem;
+  }
+}
+
 /* Optimized animations for reduced motion preference */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
@@ -716,7 +767,7 @@ body {
     transition-duration: 0.01ms !important;
   }
   
-  .header-logo {
+  .app-logo {
     animation: none;
   }
   
