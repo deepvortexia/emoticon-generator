@@ -418,6 +418,63 @@ function AppContent() {
         </div>
       )}
       
+      {/* Compact Suggestions Section - fills whitespace */}
+      <div className="suggestions-compact-section">
+        {/* Popular/Trending Row */}
+        <div className="suggestion-row">
+          <h4 className="suggestion-row-title">🔥 Popular Styles</h4>
+          <div className="suggestion-tags-compact">
+            {[
+              { emoji: '✨', text: 'sparkle' },
+              { emoji: '🎨', text: 'neon' },
+              { emoji: '🔮', text: 'mystical' },
+              { emoji: '⚡', text: 'electric' },
+              { emoji: '🌈', text: 'rainbow' },
+              { emoji: '💎', text: 'crystal' },
+              { emoji: '🌟', text: 'glowing' },
+              { emoji: '🔥', text: 'fire' }
+            ].map((item) => (
+              <button
+                key={item.text}
+                className="suggestion-tag-compact"
+                onClick={() => setPrompt(`${item.emoji} ${item.text}`)}
+                aria-label={`Quick suggestion: ${item.text}`}
+              >
+                <span className="tag-emoji" aria-hidden="true">{item.emoji}</span>
+                <span className="tag-text">{item.text}</span>
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Quick Ideas Row */}
+        <div className="suggestion-row">
+          <h4 className="suggestion-row-title">💡 Quick Ideas</h4>
+          <div className="suggestion-tags-compact">
+            {[
+              { emoji: '🍕', text: 'pizza' },
+              { emoji: '🚀', text: 'rocket' },
+              { emoji: '❤️', text: 'heart' },
+              { emoji: '⭐', text: 'star' },
+              { emoji: '☕', text: 'coffee' },
+              { emoji: '🐱', text: 'cat' },
+              { emoji: '🎮', text: 'gaming' },
+              { emoji: '🌙', text: 'moon' }
+            ].map((item) => (
+              <button
+                key={item.text}
+                className="suggestion-tag-compact"
+                onClick={() => setPrompt(`${item.emoji} ${item.text}`)}
+                aria-label={`Quick suggestion: ${item.text}`}
+              >
+                <span className="tag-emoji" aria-hidden="true">{item.emoji}</span>
+                <span className="tag-text">{item.text}</span>
+              </button>
+            ))}
+          </div>
+        </div>
+      </div>
+      
       <Gallery isOpen={isGalleryOpen} onClose={() => setIsGalleryOpen(false)} />
       
       {/* Animated Background */}
