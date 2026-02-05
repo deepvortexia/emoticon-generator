@@ -31,6 +31,14 @@ const CREDIT_REFRESH_ERROR = 'Payment successful, but there was a temporary issu
 // LocalStorage key for pending Stripe sessions
 const PENDING_STRIPE_SESSION_KEY = 'pending_stripe_session'
 
+// Future routes structure - Ready for expansion:
+// /emoticons or / - Current emoticon generator (default)
+// /chat - AI chat interface (coming soon)
+// /images - Image generation tool (coming soon)
+// /music - Music generation tool (coming soon)
+// /tools - Overview of all available tools
+// /pricing - Unified pricing for all tools
+
 // Helper to clean URL parameters
 const cleanUrlParams = () => {
   window.history.replaceState({}, '', window.location.pathname)
