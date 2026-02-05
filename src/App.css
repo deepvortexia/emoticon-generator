@@ -288,6 +288,7 @@ body {
 
 /* Brand Subdescription */
 .brand-subdescription {
+  display: block;
   font-family: 'Inter', sans-serif;
   font-size: 0.95rem;
   color: rgba(212, 175, 55, 0.7);
@@ -327,7 +328,7 @@ body {
 
 .tools-preview-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
   gap: 1rem;
   max-width: 800px;
   margin: 0 auto;
