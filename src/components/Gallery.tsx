@@ -77,7 +77,9 @@ export function Gallery({ isOpen: externalIsOpen, onClose: externalOnClose }: Ga
       // Create download link
       const link = document.createElement('a');
       link.href = url;
-      link.download = `emoticon-${prompt.replace(/\s+/g, '-').slice(0, 30)}-${id.slice(0, 8)}.png`;
+      // Sanitize filename by removing invalid characters
+      const safePrompt = prompt.replace(/[^a-zA-Z0-9-_\s]/g, '').replace(/\s+/g, '-').slice(0, 30);
+      link.download = `emoticon-${safePrompt}-${id.slice(0, 8)}.png`;
       
       // Trigger download
       document.body.appendChild(link);

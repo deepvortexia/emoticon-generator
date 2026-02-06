@@ -454,9 +454,9 @@ function AppContent() {
         <div className="suggestion-row suggestion-row-desktop">
           <h4 className="suggestion-row-title">🔥 Popular Styles</h4>
           <div className="suggestion-tags-compact">
-            {popularStyles.map((item, index) => (
+            {popularStyles.map((item) => (
               <button
-                key={index}
+                key={item.text}
                 className="suggestion-tag-compact"
                 onClick={() => setPrompt(`${item.emoji} ${item.text}`)}
                 aria-label={`Quick suggestion: ${item.text}`}
@@ -471,9 +471,9 @@ function AppContent() {
         <div className="suggestion-row suggestion-row-desktop">
           <h4 className="suggestion-row-title">💡 Quick Ideas</h4>
           <div className="suggestion-tags-compact">
-            {quickIdeas.map((item, index) => (
+            {quickIdeas.map((item) => (
               <button
-                key={index}
+                key={item.text}
                 className="suggestion-tag-compact"
                 onClick={() => setPrompt(`${item.emoji} ${item.text}`)}
                 aria-label={`Quick suggestion: ${item.text}`}
@@ -489,9 +489,9 @@ function AppContent() {
         <div className="suggestion-row suggestion-row-mobile">
           <h4 className="suggestion-row-title">🔥 Popular</h4>
           <div className="suggestion-tags-compact suggestion-tags-mobile">
-            {mobileSuggestions.map((item, index) => (
+            {mobileSuggestions.map((item) => (
               <button
-                key={index}
+                key={item.text}
                 className="suggestion-tag-compact"
                 onClick={() => setPrompt(`${item.emoji} ${item.text}`)}
                 aria-label={`Quick suggestion: ${item.text}`}

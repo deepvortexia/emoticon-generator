@@ -606,8 +606,8 @@ body {
   }
   
   /* Force 2 columns on mobile */
-  .suggestion-tags-mobile {
-    display: grid !important;
+  .suggestion-row-mobile .suggestion-tags-mobile {
+    display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: 0.5rem;
   }
