@@ -523,19 +523,6 @@ function AppContent() {
       </div>
       
       <div className="main-content">
-        <div className="suggestions-container">
-          <button className="suggestion-chip" onClick={() => setPrompt("pizza")}>🍕 pizza</button>
-          <button className="suggestion-chip" onClick={() => setPrompt("rocket")}>🚀 rocket</button>
-          <button className="suggestion-chip" onClick={() => setPrompt("heart")}>❤️ heart</button>
-          <button className="suggestion-chip" onClick={() => setPrompt("happy face")}>😊 happy face</button>
-          <button className="suggestion-chip" onClick={() => setPrompt("star")}>⭐ star</button>
-          <button className="suggestion-chip" onClick={() => setPrompt("coffee cup")}>☕ coffee cup</button>
-          <button className="suggestion-chip" onClick={() => setPrompt("astronaut cat in space")}>🐱 astronaut cat</button>
-          <button className="suggestion-chip" onClick={() => setPrompt("robot dancing with headphones")}>🤖 robot dancing</button>
-          <button className="suggestion-chip" onClick={() => setPrompt("dragon wearing sunglasses")}>🐉 cool dragon</button>
-          <button className="suggestion-chip" onClick={() => setPrompt("cat playing guitar")}>🎸 cat musician</button>
-        </div>
-
         {/* Prompt Section - Eye-catching */}
         <div className="prompt-section-wrapper">
           <h3 className="prompt-section-title">
