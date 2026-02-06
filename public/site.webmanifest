@@ -4,9 +4,15 @@
   "description": "Generate custom emojis and stickers using AI",
   "icons": [
     {
-      "src": "/vfavicon.jpg",
+      "src": "/rings.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/rings.png",
       "sizes": "512x512",
-      "type": "image/jpeg",
+      "type": "image/png",
       "purpose": "any"
     }
   ],
