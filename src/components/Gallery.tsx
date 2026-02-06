@@ -16,6 +16,7 @@ interface GalleryProps {
 export function Gallery({ isOpen: externalIsOpen, onClose: externalOnClose }: GalleryProps = {}) {
   const [history, setHistory] = useState<HistoryItem[]>([]);
   const [internalIsOpen, setInternalIsOpen] = useState(false);
+  const [brokenImages, setBrokenImages] = useState<Set<string>>(new Set());
   
   // Use external control if provided, otherwise use internal state
   const isOpen = externalIsOpen !== undefined ? externalIsOpen : internalIsOpen;
@@ -41,20 +42,62 @@ export function Gallery({ isOpen: externalIsOpen, onClose: externalOnClose }: Ga
     }
   }, [isOpen]);
 
-  const downloadImage = async (imageUrl: string, prompt: string) => {
+  const handleImageError = (id: string) => {
+    setBrokenImages(prev => {
+      const newSet = new Set(prev);
+      newSet.add(id);
+      return newSet;
+    });
+  };
+  
+  const handleImageLoad = (id: string) => {
+    // Remove from broken set if it loads successfully
+    setBrokenImages(prev => {
+      const newSet = new Set(prev);
+      newSet.delete(id);
+      return newSet;
+    });
+  };
+
+  const handleDownloadImage = async (imageUrl: string, prompt: string, id: string) => {
     try {
-      // Use our API proxy to download the image
-      const proxyUrl = `/api/download?url=${encodeURIComponent(imageUrl)}`;
+      // Fetch image with proper CORS
+      const response = await fetch(imageUrl, {
+        mode: 'cors',
+        credentials: 'include'
+      });
       
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+      
+      // Create download link
       const link = document.createElement('a');
-      link.href = proxyUrl;
-      link.download = `${prompt.replace(/\s+/g, '-').toLowerCase()}-${Date.now()}.png`;
+      link.href = url;
+      // Sanitize filename by removing invalid characters
+      const safePrompt = prompt.replace(/[^a-zA-Z0-9-_\s]/g, '').replace(/\s+/g, '-').slice(0, 30);
+      link.download = `emoticon-${safePrompt}-${id.slice(0, 8)}.png`;
+      
+      // Trigger download
       document.body.appendChild(link);
       link.click();
+      
+      // Cleanup
       document.body.removeChild(link);
-    } catch (err) {
-      console.error('Download error:', err);
-      alert('Failed to download image. Please try right-clicking and "Save Image As..."');
+      window.URL.revokeObjectURL(url);
+      
+      console.log('Download successful');
+    } catch (error) {
+      console.error('Download failed:', error);
+      
+      // Fallback: open in new tab
+      const fallbackWindow = window.open(imageUrl, '_blank');
+      if (!fallbackWindow) {
+        alert('Download failed. Please allow popups and try again.');
+      }
     }
   };
 
@@ -91,12 +134,22 @@ export function Gallery({ isOpen: externalIsOpen, onClose: externalOnClose }: Ga
           ) : (
             history.map((item) => (
               <div key={item.id} className="gallery-item">
-                <img 
-                  src={item.imageUrl} 
-                  alt={item.prompt}
-                  loading="lazy"
-                  decoding="async"
-                />
+                {brokenImages.has(item.id) ? (
+                  <div className="image-placeholder-broken">
+                    <span className="placeholder-icon">😕</span>
+                    <p className="placeholder-text">Image unavailable</p>
+                    <p className="placeholder-prompt">{item.prompt}</p>
+                  </div>
+                ) : (
+                  <img 
+                    src={item.imageUrl} 
+                    alt={item.prompt}
+                    loading="lazy"
+                    decoding="async"
+                    onError={() => handleImageError(item.id)}
+                    onLoad={() => handleImageLoad(item.id)}
+                  />
+                )}
                 <div className="gallery-item-info">
                   <p className="gallery-prompt">{item.prompt}</p>
                   <p className="gallery-date">
@@ -105,10 +158,15 @@ export function Gallery({ isOpen: externalIsOpen, onClose: externalOnClose }: Ga
                 </div>
                 <button 
                   className="gallery-download-btn"
-                  onClick={() => downloadImage(item.imageUrl, item.prompt)}
-                  title="Download"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleDownloadImage(item.imageUrl, item.prompt, item.id);
+                  }}
+                  disabled={brokenImages.has(item.id)}
+                  title={brokenImages.has(item.id) ? "Image unavailable" : "Download"}
+                  aria-label={brokenImages.has(item.id) ? "Image unavailable" : "Download image"}
                 >
-                  📥
+                  💾
                 </button>
               </div>
             ))

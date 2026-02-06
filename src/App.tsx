@@ -24,6 +24,42 @@ const loadingMessages = [
 //   "ninja turtle", "wizard hat", "magic wand", "crystal ball"
 // ];
 
+// Mobile suggestions (8 items - 4 rows of 2)
+const mobileSuggestions = [
+  { emoji: '✨', text: 'sparkle' },
+  { emoji: '🎨', text: 'neon' },
+  { emoji: '🔮', text: 'mystical' },
+  { emoji: '⚡', text: 'electric' },
+  { emoji: '🍕', text: 'pizza' },
+  { emoji: '🚀', text: 'rocket' },
+  { emoji: '❤️', text: 'heart' },
+  { emoji: '⭐', text: 'star' }
+];
+
+// Popular styles for desktop
+const popularStyles = [
+  { emoji: '✨', text: 'sparkle' },
+  { emoji: '🎨', text: 'neon' },
+  { emoji: '🔮', text: 'mystical' },
+  { emoji: '⚡', text: 'electric' },
+  { emoji: '🌈', text: 'rainbow' },
+  { emoji: '💎', text: 'crystal' },
+  { emoji: '🌟', text: 'glowing' },
+  { emoji: '🔥', text: 'fire' }
+];
+
+// Quick ideas for desktop
+const quickIdeas = [
+  { emoji: '🍕', text: 'pizza' },
+  { emoji: '🚀', text: 'rocket' },
+  { emoji: '❤️', text: 'heart' },
+  { emoji: '⭐', text: 'star' },
+  { emoji: '☕', text: 'coffee' },
+  { emoji: '🐱', text: 'cat' },
+  { emoji: '🎮', text: 'gaming' },
+  { emoji: '🌙', text: 'moon' }
+];
+
 // Error message for credit refresh failures
 const CREDIT_REFRESH_ERROR = 'Payment successful, but there was a temporary issue syncing your credits. Please refresh the page to see your updated balance.'
 
@@ -229,12 +265,6 @@ function AppContent() {
     }
   }
 
-  const handleKeyPress = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter' && !isLoading) {
-      generateEmoticon()
-    }
-  }
-
   const saveToHistory = (prompt: string, imageUrl: string) => {
     try {
       const history = JSON.parse(localStorage.getItem('emoji-history') || '[]')
@@ -418,22 +448,13 @@ function AppContent() {
         </div>
       )}
       
-      {/* Compact Suggestions Section - fills whitespace */}
+      {/* Compact Suggestions Section - Different layout for mobile */}
       <div className="suggestions-compact-section">
-        {/* Popular/Trending Row */}
-        <div className="suggestion-row">
+        {/* Desktop: Show both rows */}
+        <div className="suggestion-row suggestion-row-desktop">
           <h4 className="suggestion-row-title">🔥 Popular Styles</h4>
           <div className="suggestion-tags-compact">
-            {[
-              { emoji: '✨', text: 'sparkle' },
-              { emoji: '🎨', text: 'neon' },
-              { emoji: '🔮', text: 'mystical' },
-              { emoji: '⚡', text: 'electric' },
-              { emoji: '🌈', text: 'rainbow' },
-              { emoji: '💎', text: 'crystal' },
-              { emoji: '🌟', text: 'glowing' },
-              { emoji: '🔥', text: 'fire' }
-            ].map((item) => (
+            {popularStyles.map((item) => (
               <button
                 key={item.text}
                 className="suggestion-tag-compact"
@@ -447,20 +468,28 @@ function AppContent() {
           </div>
         </div>
 
-        {/* Quick Ideas Row */}
-        <div className="suggestion-row">
+        <div className="suggestion-row suggestion-row-desktop">
           <h4 className="suggestion-row-title">💡 Quick Ideas</h4>
           <div className="suggestion-tags-compact">
-            {[
-              { emoji: '🍕', text: 'pizza' },
-              { emoji: '🚀', text: 'rocket' },
-              { emoji: '❤️', text: 'heart' },
-              { emoji: '⭐', text: 'star' },
-              { emoji: '☕', text: 'coffee' },
-              { emoji: '🐱', text: 'cat' },
-              { emoji: '🎮', text: 'gaming' },
-              { emoji: '🌙', text: 'moon' }
-            ].map((item) => (
+            {quickIdeas.map((item) => (
+              <button
+                key={item.text}
+                className="suggestion-tag-compact"
+                onClick={() => setPrompt(`${item.emoji} ${item.text}`)}
+                aria-label={`Quick suggestion: ${item.text}`}
+              >
+                <span className="tag-emoji" aria-hidden="true">{item.emoji}</span>
+                <span className="tag-text">{item.text}</span>
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Mobile: Show only one combined row */}
+        <div className="suggestion-row suggestion-row-mobile">
+          <h4 className="suggestion-row-title">🔥 Popular</h4>
+          <div className="suggestion-tags-compact suggestion-tags-mobile">
+            {mobileSuggestions.map((item) => (
               <button
                 key={item.text}
                 className="suggestion-tag-compact"
@@ -507,34 +536,41 @@ function AppContent() {
           <button className="suggestion-chip" onClick={() => setPrompt("cat playing guitar")}>🎸 cat musician</button>
         </div>
 
-        <div className="input-section">
-          <input
-            type="text"
-            placeholder="Describe your emoticon (e.g., happy cosmic cat, mystical star...)"
-            value={prompt}
-            onChange={(e) => setPrompt(e.target.value)}
-            onKeyPress={handleKeyPress}
-            className="input-field"
-            disabled={isLoading}
-          />
-
-          <button
-            onClick={generateEmoticon}
-            disabled={isLoading || !prompt.trim()}
-            className="generate-btn"
-          >
-            {isLoading ? (
-              <>
-                <span className="spinner"></span>
-                <span>Generating...</span>
-              </>
-            ) : (
-              <>
-                <span className="btn-icon">🎨</span>
-                <span>Generate</span>
-              </>
-            )}
-          </button>
+        {/* Prompt Section - Eye-catching */}
+        <div className="prompt-section-wrapper">
+          <h3 className="prompt-section-title">
+            <span className="title-icon">✨</span>
+            Create Your Emoticon
+          </h3>
+          
+          <div className="prompt-input-container">
+            <input
+              className="prompt-input-enhanced"
+              value={prompt}
+              onChange={(e) => setPrompt(e.target.value)}
+              placeholder="Describe your emoticon (e.g., happy cosmic cat)"
+              onKeyPress={(e) => e.key === 'Enter' && !isLoading && generateEmoticon()}
+              disabled={isLoading}
+            />
+            
+            <button 
+              className="generate-btn-enhanced"
+              onClick={generateEmoticon}
+              disabled={isLoading || !prompt.trim()}
+            >
+              {isLoading ? (
+                <>
+                  <span className="spinner"></span>
+                  <span className="btn-text">Generating...</span>
+                </>
+              ) : (
+                <>
+                  <span className="btn-icon">🎨</span>
+                  <span className="btn-text">Generate</span>
+                </>
+              )}
+            </button>
+          </div>
         </div>
 
         {error && (
