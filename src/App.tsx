@@ -458,7 +458,7 @@ function AppContent() {
               <button
                 key={item.text}
                 className="suggestion-tag-compact"
-                onClick={() => setPrompt(`${item.emoji} ${item.text}`)}
+                onClick={() => setPrompt(item.text)}
                 aria-label={`Quick suggestion: ${item.text}`}
               >
                 <span className="tag-emoji" aria-hidden="true">{item.emoji}</span>
@@ -475,7 +475,7 @@ function AppContent() {
               <button
                 key={item.text}
                 className="suggestion-tag-compact"
-                onClick={() => setPrompt(`${item.emoji} ${item.text}`)}
+                onClick={() => setPrompt(item.text)}
                 aria-label={`Quick suggestion: ${item.text}`}
               >
                 <span className="tag-emoji" aria-hidden="true">{item.emoji}</span>
@@ -493,7 +493,7 @@ function AppContent() {
               <button
                 key={item.text}
                 className="suggestion-tag-compact"
-                onClick={() => setPrompt(`${item.emoji} ${item.text}`)}
+                onClick={() => setPrompt(item.text)}
                 aria-label={`Quick suggestion: ${item.text}`}
               >
                 <span className="tag-emoji" aria-hidden="true">{item.emoji}</span>
