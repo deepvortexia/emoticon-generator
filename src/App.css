@@ -32,6 +32,30 @@ body {
   z-index: 100;
 }
 
+/* Back to Home Button */
+.back-to-home-link {
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+  color: rgba(255, 255, 255, 0.4);
+  text-decoration: none;
+  font-size: 0.9rem;
+  transition: color 0.3s ease;
+  z-index: 101;
+}
+
+.back-to-home-link:hover {
+  color: var(--gold-primary);
+}
+
+.back-to-home-text-short {
+  display: none;
+}
+
+.back-to-home-text-full {
+  display: inline;
+}
+
 /* Logo Container with Magic */
 .logo-container-magic {
   display: flex;
@@ -1366,6 +1390,19 @@ body {
 @media (max-width: 480px) {
   .app-header {
     padding: 0.8rem 1rem 1.5rem;
+  }
+  
+  /* Mobile: Show short text */
+  .back-to-home-text-full {
+    display: none;
+  }
+  
+  .back-to-home-text-short {
+    display: inline;
+  }
+  
+  .back-to-home-link {
+    font-size: 0.85rem;
   }
   
   .logo-container-magic {

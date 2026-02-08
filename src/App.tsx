@@ -318,6 +318,15 @@ function AppContent() {
     <div className={`app ${isLoaded ? 'fade-in' : ''}`}>
       {/* App Header - Minimal & Magical */}
       <header className="app-header">
+        {/* Back to Home Button */}
+        <a 
+          href="https://deepvortexai.art"
+          className="back-to-home-link"
+        >
+          <span className="back-to-home-text-full">← Back to Home</span>
+          <span className="back-to-home-text-short">← Home</span>
+        </a>
+        
         <div className="logo-container-magic">
           {/* Magic effects wrapper around logo */}
           <div className="magic-effects-wrapper">
