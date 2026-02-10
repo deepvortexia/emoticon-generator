@@ -6,8 +6,8 @@ const supabase = createClient(
   process.env.SUPABASE_ANON_KEY || ''
 )
 
-// fofr/sdxl-emoji - Specialized emoji model (actually works on Replicate!)
-const EMOJI_MODEL_VERSION = 'dee76b5afde21b0f01ed7925f0665b7e879c50ee718c5f78a9d38e04d523cc5e'
+// appmeloncreator/platmoji-beta - Most popular emoji model on Replicate (95k+ runs)
+const EMOJI_MODEL_VERSION = '146f588bddfc0157bb4920b3bd0b2d43c59c5dda42eefcc95f2563a10a1d677e'
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   console.log('[generate] Request received:', { method: req.method, hasPrompt: !!req.body?.prompt })
   
@@ -99,9 +99,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     // Simplified prompt optimized for emoji generation
     const enhancedPrompt = `${prompt.trim()} emoji icon, simple flat design, minimalist, clean, suitable for discord or slack`
 
-    console.log('[generate] Calling Replicate...', { hasApiKey: !!apiKey })
-
-    // Create prediction with fofr/sdxl-emoji
+    // Create prediction with platmoji-beta
     const response = await fetch('https://api.replicate.com/v1/predictions', {
       method: 'POST',
       headers: {
@@ -114,8 +112,9 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
           prompt: enhancedPrompt,
           width: 1024,
           height: 1024,
-          apply_watermark: false,
-          negative_prompt: "gradient, shading, 3D, realistic, photograph, complex background"
+          num_inference_steps: 28, // Recommended for platmoji-beta quality
+          guidance_scale: 3, // Balance between prompt adherence and creativity
+          output_format: "webp"
         }
       }),
     })
