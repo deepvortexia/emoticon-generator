@@ -177,7 +177,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       image: result.output[0],
     })
   } catch (error: any) {
-    console.log('[generate] Error:', error.message)
+    console.log('[generate] Error:', error?.message || 'Unknown error')
     console.error('Error generating image:', error)
     
     // Refund the credit if generation failed
