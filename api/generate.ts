@@ -99,7 +99,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     // Simplified prompt optimized for emoji generation
     const enhancedPrompt = `${prompt.trim()} emoji icon, simple flat design, minimalist, clean, suitable for discord or slack`
 
-    console.log('[generate] Calling Replicate...', { hasApiKey: !!apiKey, apiKeyPrefix: apiKey?.substring(0, 8) })
+    console.log('[generate] Calling Replicate...', { hasApiKey: !!apiKey })
 
     // Create prediction with fofr/sdxl-emoji
     const response = await fetch('https://api.replicate.com/v1/predictions', {
