@@ -105,8 +105,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
           prompt: enhancedPrompt,
           width: 1024,
           height: 1024,
-          num_inference_steps: 28,
-          guidance_scale: 3,
+          num_inference_steps: 28, // Recommended for platmoji-beta quality
+          guidance_scale: 3, // Balance between prompt adherence and creativity
           output_format: "webp"
         }
       }),
