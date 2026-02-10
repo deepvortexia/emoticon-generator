@@ -9,6 +9,8 @@ const supabase = createClient(
 // fofr/sdxl-emoji - Specialized emoji model (actually works on Replicate!)
 const EMOJI_MODEL_VERSION = 'dee76b5afde21b0f01ed7925f0665b7e879c50ee718c5f78a9d38e04d523cc5e'
 export default async function handler(req: VercelRequest, res: VercelResponse) {
+  console.log('[generate] Request received:', { method: req.method, hasPrompt: !!req.body?.prompt })
+  
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' })
   }
@@ -21,6 +23,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
   // Check authentication
   const authHeader = req.headers.authorization
+  console.log('[generate] Auth check:', { hasAuthHeader: !!authHeader })
+  
   if (!authHeader) {
     return res.status(401).json({ error: 'Please sign in to generate emoticons' })
   }
@@ -44,6 +48,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     }
 
     userId = user.id
+    console.log('[generate] User verified:', { userId: user.id })
 
     // Get user's profile with credits
     const { data: profile, error: profileError } = await supabase
@@ -51,6 +56,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       .select('credits')
       .eq('id', user.id)
       .single()
+
+    console.log('[generate] Profile fetched:', { credits: profile?.credits, hasProfile: !!profile })
 
     if (profileError) {
       return res.status(500).json({ error: 'Failed to fetch user profile' })
@@ -92,6 +99,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     // Simplified prompt optimized for emoji generation
     const enhancedPrompt = `${prompt.trim()} emoji icon, simple flat design, minimalist, clean, suitable for discord or slack`
 
+    console.log('[generate] Calling Replicate...', { hasApiKey: !!apiKey, apiKeyPrefix: apiKey?.substring(0, 8) })
+
     // Create prediction with fofr/sdxl-emoji
     const response = await fetch('https://api.replicate.com/v1/predictions', {
       method: 'POST',
@@ -112,6 +121,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     })
 
     const prediction = await response.json()
+
+    console.log('[generate] Replicate response:', { status: response.status, ok: response.ok })
 
     if (!response.ok) {
       generationFailed = true
@@ -140,6 +151,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       
       result = await pollResponse.json()
       
+      console.log('[generate] Poll result:', { status: result.status, id: result.id })
+      
       // Timeout after 30 seconds
       if (Date.now() - pollStartTime > 30000) {
         generationFailed = true
@@ -149,6 +162,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
     if (result.status === 'failed') {
       generationFailed = true
+      console.log('[generate] Generation failed:', { error: result.error })
       throw new Error(result.error || 'Generation failed')
     }
 
@@ -163,6 +177,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       image: result.output[0],
     })
   } catch (error: any) {
+    console.log('[generate] Error:', error.message)
     console.error('Error generating image:', error)
     
     // Refund the credit if generation failed
