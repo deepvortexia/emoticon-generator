@@ -6,8 +6,8 @@ const supabase = createClient(
   process.env.SUPABASE_ANON_KEY || ''
 )
 
-// fofr/sdxl-emoji - Specialized emoji model (actually works on Replicate!)
-const EMOJI_MODEL_VERSION = 'dee76b5afde21b0f01ed7925f0665b7e879c50ee718c5f78a9d38e04d523cc5e'
+// miike-ai/flux-ico - High quality icon/emoji generator based on Flux
+const EMOJI_MODEL_VERSION = '478cae37f1aec0fde7977fdd54b272aaeabede7d8060801841920c16306369a9'
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   console.log('[generate] Request received:', { method: req.method, hasPrompt: !!req.body?.prompt })
   
@@ -96,10 +96,10 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   let generationFailed = false
 
   try {
-    // Simplified prompt optimized for emoji generation
-    const enhancedPrompt = `${prompt.trim()} emoji icon, simple flat design, minimalist, clean, suitable for discord or slack`
+    // Simplified prompt optimized for emoji/icon generation with Flux
+    const enhancedPrompt = `${prompt.trim()}, icon style, emoji`
 
-    // Create prediction with fofr/sdxl-emoji
+    // Create prediction with miike-ai/flux-ico
     const response = await fetch('https://api.replicate.com/v1/predictions', {
       method: 'POST',
       headers: {
@@ -110,10 +110,10 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         version: EMOJI_MODEL_VERSION,
         input: {
           prompt: enhancedPrompt,
-          width: 1024,
-          height: 1024,
-          apply_watermark: false,
-          negative_prompt: "gradient, shading, 3D, realistic, photograph, complex background"
+          num_outputs: 1,
+          aspect_ratio: "1:1",
+          output_format: "png",
+          output_quality: 90
         }
       }),
     })
