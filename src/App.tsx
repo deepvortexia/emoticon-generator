@@ -50,14 +50,21 @@ const popularStyles = [
 
 // Quick ideas for desktop
 const quickIdeas = [
-  { emoji: '🍕', text: 'pizza' },
-  { emoji: '🚀', text: 'rocket' },
-  { emoji: '❤️', text: 'heart' },
-  { emoji: '⭐', text: 'star' },
-  { emoji: '☕', text: 'coffee' },
-  { emoji: '🐱', text: 'cat' },
-  { emoji: '🎮', text: 'gaming' },
-  { emoji: '🌙', text: 'moon' }
+  { emoji: '👑', text: 'Happy cat wearing crown' },
+  { emoji: '🍕', text: 'Robot eating pizza slice' },
+  { emoji: '😎', text: 'Panda with cool sunglasses' },
+  { emoji: '☕', text: 'Unicorn drinking hot coffee' },
+  { emoji: '🎸', text: 'Ninja playing electric guitar' },
+  { emoji: '🚀', text: 'Astronaut riding a rocket' },
+  { emoji: '🪄', text: 'Fox wizard with wand' },
+  { emoji: '🎩', text: 'Penguin wearing top hat' },
+  { emoji: '🎂', text: 'Dragon blowing birthday candles' },
+  { emoji: '🧘', text: 'Sloth doing yoga pose' },
+  { emoji: '🌌', text: 'Monkey astronaut in space' },
+  { emoji: '🍝', text: 'Bunny chef cooking pasta' },
+  { emoji: '🦸', text: 'Bear superhero with cape' },
+  { emoji: '📖', text: 'Owl reading magic book' },
+  { emoji: '🛹', text: 'Dinosaur on skateboard' }
 ];
 
 // Error message for credit refresh failures
