@@ -113,7 +113,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
           num_outputs: 1,
           aspect_ratio: "1:1",
           output_format: "png",
-          output_quality: 100
+          output_quality: 90
         }
       }),
     })
