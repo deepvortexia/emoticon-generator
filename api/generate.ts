@@ -97,7 +97,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
   try {
     // Simplified prompt optimized for emoji/icon generation with Flux
-    const enhancedPrompt = `${prompt.trim()}, icon style, emoji`
+    const enhancedPrompt = `ICO, ${prompt.trim()}`
 
     // Create prediction with miike-ai/flux-ico
     const response = await fetch('https://api.replicate.com/v1/predictions', {
@@ -110,9 +110,9 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         version: EMOJI_MODEL_VERSION,
         input: {
           prompt: enhancedPrompt,
-          num_outputs: 1,
-          aspect_ratio: "1:1",
-          output_format: "png",
+          seed: 52907,
+          lora_scale: 0.5,
+          guidance_scale: 3.5,
           output_quality: 90
         }
       }),
