@@ -355,12 +355,6 @@ function AppContent() {
               <div className="magic-particle"></div>
               <div className="magic-particle"></div>
               <div className="magic-particle"></div>
-              <div className="magic-particle"></div>
-              <div className="magic-particle"></div>
-              <div className="magic-particle"></div>
-              <div className="magic-particle"></div>
-              <div className="magic-particle"></div>
-              <div className="magic-particle"></div>
             </div>
             
             {/* Logo in center */}
@@ -408,20 +402,38 @@ function AppContent() {
         <h3 className="tools-preview-title">Complete AI Ecosystem</h3>
         <div className="tools-preview-grid" role="list">
           <div className="tool-card tool-card-active" role="listitem">
+            <span className="tool-badge-available">✅ Available</span>
             <span className="tool-icon" aria-hidden="true">😀</span>
             <span className="tool-name">Emoticons</span>
-            <span className="tool-status" aria-label="Currently available">Available Now</span>
+            <span className="tool-button tool-button-current" aria-label="Current tool">
+              Current Tool
+            </span>
           </div>
+          
+          <div className="tool-card tool-card-soon" role="listitem">
+            <span className="tool-icon" aria-hidden="true">🎥</span>
+            <span className="tool-name">Video</span>
+            <span className="tool-status" aria-label="Coming in the future">Coming Soon</span>
+          </div>
+          
+          <a 
+            href="https://images.deepvortexai.art/" 
+            className="tool-card tool-card-link" 
+            role="listitem"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <span className="tool-badge-available">✅ Available</span>
+            <span className="tool-icon" aria-hidden="true">🖼️</span>
+            <span className="tool-name">Image Gen</span>
+            <span className="tool-button tool-button-link" aria-label="Open Image Gen">
+              Open Image Gen
+            </span>
+          </a>
           
           <div className="tool-card tool-card-soon" role="listitem">
             <span className="tool-icon" aria-hidden="true">💬</span>
             <span className="tool-name">AI Chat</span>
-            <span className="tool-status" aria-label="Coming in the future">Coming Soon</span>
-          </div>
-          
-          <div className="tool-card tool-card-soon" role="listitem">
-            <span className="tool-icon" aria-hidden="true">🖼️</span>
-            <span className="tool-name">Image Gen</span>
             <span className="tool-status" aria-label="Coming in the future">Coming Soon</span>
           </div>
           
@@ -641,7 +653,7 @@ function AppContent() {
           </p>
           <p className="footer-text">
             Powered by <span className="gradient-text">Deep Vortex</span> ×{' '}
-            <span className="gradient-text">SDXL Emoji</span>
+            <span className="gradient-text">SDXL Emoticon</span>
           </p>
         </footer>
       </div>

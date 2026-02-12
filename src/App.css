@@ -26,7 +26,7 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 1rem 1rem 2rem;
+  padding: 0.5rem 1rem 0.8rem;
   background: var(--bg-primary);
   position: relative;
   z-index: 100;
@@ -37,15 +37,25 @@ body {
   position: absolute;
   top: 1rem;
   left: 1rem;
-  color: rgba(255, 255, 255, 0.4);
+  color: #D4AF37;
   text-decoration: none;
   font-size: 0.9rem;
-  transition: color 0.3s ease;
+  font-family: 'Inter', sans-serif;
+  font-weight: 600;
+  transition: all 0.3s ease;
   z-index: 101;
+  background: rgba(212, 175, 55, 0.1);
+  border: 1px solid rgba(212, 175, 55, 0.5);
+  padding: 0.4rem 1rem;
+  border-radius: 8px;
 }
 
 .back-to-home-link:hover {
-  color: var(--gold-primary);
+  color: #E8C87C;
+  background: rgba(212, 175, 55, 0.2);
+  border-color: #D4AF37;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(212, 175, 55, 0.3);
 }
 
 .back-to-home-text-short {
@@ -67,17 +77,17 @@ body {
 /* Magic Effects Wrapper */
 .magic-effects-wrapper {
   position: relative;
-  width: 300px;
-  height: 300px;
+  width: 180px;
+  height: 180px;
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-bottom: 1.5rem;
+  margin-bottom: 0.5rem;
 }
 
 /* App Logo - Large & Visible */
 .app-logo-large {
-  width: 200px;
+  width: 120px;
   height: auto;
   display: block;
   position: relative;
@@ -97,8 +107,8 @@ body {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 250px;
-  height: 250px;
+  width: 150px;
+  height: 150px;
   background: radial-gradient(circle, rgba(212, 175, 55, 0.3), transparent 70%);
   border-radius: 50%;
   animation: pulse-glow 3s ease-in-out infinite;
@@ -123,8 +133,8 @@ body {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 280px;
-  height: 280px;
+  width: 170px;
+  height: 170px;
   pointer-events: none;
 }
 
@@ -288,12 +298,12 @@ body {
 /* Brand Text - Orbitron with specific styling */
 .brand-text-orbitron {
   font-family: 'Orbitron', sans-serif;
-  font-size: 2rem;
+  font-size: 1.5rem;
   font-weight: 700;
   color: var(--gold-primary);
   letter-spacing: 0.15em;
   text-align: center;
-  margin: 1.5rem 0 0.5rem;
+  margin: 0.3rem 0 0.2rem;
   text-transform: uppercase;
   line-height: 1.2;
   text-shadow: 0 0 20px var(--glow-gold);
@@ -302,7 +312,7 @@ body {
 /* Brand Description */
 .brand-description {
   font-family: 'Inter', sans-serif;
-  font-size: 1.1rem;
+  font-size: 0.95rem;
   color: var(--gold-primary);
   text-align: center;
   margin: 0;
@@ -411,6 +421,60 @@ body {
 
 .tool-card-active .tool-status {
   color: #D4AF37;
+  font-weight: 600;
+}
+
+.tool-card-link {
+  border-color: #D4AF37;
+  background: rgba(212, 175, 55, 0.05);
+  cursor: pointer;
+  text-decoration: none;
+  color: inherit;
+}
+
+.tool-card-link:hover {
+  border-color: #E8C87C;
+  box-shadow: 0 8px 20px rgba(212, 175, 55, 0.4);
+}
+
+.tool-button {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.8rem;
+  padding: 0.4rem 0.8rem;
+  border-radius: 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-weight: 600;
+  transition: all 0.2s ease;
+  border: none;
+  cursor: pointer;
+}
+
+.tool-button-current {
+  color: #D4AF37;
+  background: rgba(212, 175, 55, 0.1);
+  border: 1px solid rgba(212, 175, 55, 0.3);
+}
+
+.tool-button-link {
+  color: #10b981;
+  background: rgba(16, 185, 129, 0.1);
+  border: 1px solid rgba(16, 185, 129, 0.3);
+}
+
+.tool-card-link:hover .tool-button-link {
+  background: rgba(16, 185, 129, 0.2);
+  border-color: rgba(16, 185, 129, 0.5);
+}
+
+.tool-badge-available {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.7rem;
+  padding: 0.2rem 0.6rem;
+  border-radius: 4px;
+  background: rgba(16, 185, 129, 0.2);
+  color: #10b981;
+  border: 1px solid #10b981;
   font-weight: 600;
 }
 
@@ -1403,6 +1467,7 @@ body {
   
   .back-to-home-link {
     font-size: 0.85rem;
+    padding: 0.3rem 0.8rem;
   }
   
   .logo-container-magic {
@@ -1410,16 +1475,16 @@ body {
   }
   
   .magic-effects-wrapper {
-    width: 200px;
-    height: 200px;
+    width: 140px;
+    height: 140px;
   }
   
   .app-logo-large {
-    width: 140px;
+    width: 100px;
   }
   
   .brand-text-orbitron {
-    font-size: 1.4rem;
+    font-size: 1.2rem;
     letter-spacing: 0.1em;
   }
   

@@ -11,6 +11,7 @@ interface AuthContextType {
   signInWithEmail: (email: string) => Promise<{ error: AuthError | null }>
   signOut: () => Promise<void>
   refreshProfile: () => Promise<void>
+  refreshSession: () => Promise<void>
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined)
@@ -88,6 +89,19 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       setProfile(profileData)
     }
   }, [user, fetchProfile])
+
+  const refreshSession = useCallback(async () => {
+    try {
+      const { data, error } = await supabase.auth.refreshSession()
+      if (error) throw error
+      if (data.user) {
+        const profileData = await fetchProfile(data.user.id)
+        if (profileData) setProfile(profileData)
+      }
+    } catch (err) {
+      console.error('Session refresh failed:', err)
+    }
+  }, [fetchProfile])
 
   useEffect(() => {
     // Prevent double initialization in React Strict Mode
@@ -174,6 +188,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       signInWithEmail,
       signOut,
       refreshProfile,
+      refreshSession,
     }}>
       {children}
     </AuthContext.Provider>

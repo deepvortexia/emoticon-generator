@@ -50,10 +50,15 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   try {
     // Verify the auth token with Supabase
     const token = authHeader.replace('Bearer ', '')
-    const { data: { user }, error: authError } = await supabase.auth.getUser(token)
+    let { data: { user }, error: authError } = await supabase.auth.getUser(token)
 
+    // If token expired, the client should refresh - but give a helpful error
     if (authError || !user) {
-      return res.status(401).json({ error: 'Invalid authentication token' })
+      console.error('❌ Authentication failed:', authError?.message)
+      return res.status(401).json({ 
+        error: 'Authentication expired. Please try again.',
+        code: 'TOKEN_EXPIRED'
+      })
     }
 
     // Create Stripe Checkout session
