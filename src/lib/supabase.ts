@@ -12,7 +12,7 @@ export const supabase = createClient(supabaseUrl || '', supabaseAnonKey || '', {
     autoRefreshToken: true,
     persistSession: true,
     detectSessionInUrl: true,
-    storageKey: 'emoticon-generator-auth',
+    storageKey: 'deepvortex-shared-auth',
   }
 })
 

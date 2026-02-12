@@ -33,6 +33,9 @@ export const PricingModal = ({ isOpen, onClose }: PricingModalProps) => {
     setError('')
 
     try {
+      // Refresh session token to prevent "Invalid authentication token" errors
+      await supabase.auth.refreshSession()
+      
       const { data: { session } } = await supabase.auth.getSession()
 
       if (!session) {
