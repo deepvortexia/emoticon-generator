@@ -34,9 +34,10 @@ export const PricingModal = ({ isOpen, onClose }: PricingModalProps) => {
 
     try {
       // Refresh session token to prevent "Invalid authentication token" errors
-      await supabase.auth.refreshSession()
+      const { data: refreshData } = await supabase.auth.refreshSession()
       
-      const { data: { session } } = await supabase.auth.getSession()
+      // Use the refreshed session or fall back to getting current session
+      const session = refreshData?.session || (await supabase.auth.getSession()).data.session
 
       if (!session) {
         setError('Please sign in to purchase credits')
