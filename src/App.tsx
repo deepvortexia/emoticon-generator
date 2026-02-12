@@ -405,9 +405,9 @@ function AppContent() {
             <span className="tool-badge-available">✅ Available</span>
             <span className="tool-icon" aria-hidden="true">😀</span>
             <span className="tool-name">Emoticons</span>
-            <button className="tool-button tool-button-current" aria-label="Current tool">
+            <span className="tool-button tool-button-current" aria-label="Current tool">
               Current Tool
-            </button>
+            </span>
           </div>
           
           <div className="tool-card tool-card-soon" role="listitem">
@@ -426,9 +426,9 @@ function AppContent() {
             <span className="tool-badge-available">✅ Available</span>
             <span className="tool-icon" aria-hidden="true">🖼️</span>
             <span className="tool-name">Image Gen</span>
-            <button className="tool-button tool-button-link" aria-label="Open Image Gen">
+            <span className="tool-button tool-button-link" aria-label="Open Image Gen">
               Open Image Gen
-            </button>
+            </span>
           </a>
           
           <div className="tool-card tool-card-soon" role="listitem">
