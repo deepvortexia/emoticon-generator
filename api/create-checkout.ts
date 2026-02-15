@@ -6,9 +6,11 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || '', {
   apiVersion: '2024-11-20.acacia',
 })
 
+// Use service role key to bypass RLS on server-side
+// Auth verification is still done via getUser(token) from the Authorization header
 const supabase = createClient(
   process.env.SUPABASE_URL || '',
-  process.env.SUPABASE_ANON_KEY || ''
+  process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_ANON_KEY || ''
 )
 
 // Price validation - matches the pricing in PricingModal.tsx
