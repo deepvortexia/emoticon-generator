@@ -81,12 +81,14 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         },
       ],
       mode: 'payment',
-      success_url: `${req.headers.origin || 'http://localhost:3000'}?session_id={CHECKOUT_SESSION_ID}`,
+      // MODIF : Ajout du success=true dans l'URL
+      success_url: `${req.headers.origin || 'http://localhost:3000'}?success=true&session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${req.headers.origin || 'http://localhost:3000'}`,
       metadata: {
         packName,
         credits: credits.toString(),
         userId: user.id, // Store user ID instead of auth token
+        app: 'emoticon-generator', // MODIF : La signature pour ce projet
       },
     })
 
