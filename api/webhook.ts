@@ -58,7 +58,15 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     const session = event.data.object as Stripe.Checkout.Session
 
     try {
-      const { packName, credits, userId } = session.metadata || {}
+      // MODIFICATION 1 : On récupère la variable 'app'
+      const { packName, credits, userId, app } = session.metadata || {}
+
+      // MODIFICATION 2 : LE VIDEUR - On bloque si ça ne vient pas d'Emoticon
+      if (app !== 'emoticon-generator') {
+        console.log(`⚠️ Webhook ignoré : Cet achat provient de '${app || 'inconnu'}', pas du générateur d'émoticônes.`);
+        // On répond 200 à Stripe pour qu'il arrête d'envoyer des notifications, mais on ne touche pas à la base de données.
+        return res.status(200).json({ received: true, ignored: true });
+      }
 
       if (!credits || !userId) {
         throw new Error('Missing metadata in session')
