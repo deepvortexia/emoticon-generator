@@ -1,4 +1,3 @@
-// src/lib/supabase.ts  (Emoticons — Vite/React)
 import { createClient } from '@supabase/supabase-js'
 
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL
@@ -8,12 +7,31 @@ if (!supabaseUrl || !supabaseAnonKey) {
   console.error('Supabase configuration missing.')
 }
 
+// Création de l'adaptateur pour forcer l'utilisation d'un Cookie partagé
+const customCookieStorage = {
+  getItem: (key: string) => {
+    if (typeof document === 'undefined') return null;
+    const match = document.cookie.match(new RegExp('(^| )' + key + '=([^;]+)'));
+    return match ? decodeURIComponent(match[2]) : null;
+  },
+  setItem: (key: string, value: string) => {
+    if (typeof document === 'undefined') return;
+    // LE SECRET EST ICI : domain=.deepvortexai.art (le point devant est crucial)
+    document.cookie = `${key}=${encodeURIComponent(value)}; domain=.deepvortexai.art; path=/; max-age=31536000; secure; samesite=lax`;
+  },
+  removeItem: (key: string) => {
+    if (typeof document === 'undefined') return;
+    document.cookie = `${key}=; domain=.deepvortexai.art; path=/; max-age=0; secure; samesite=lax`;
+  }
+};
+
 export const supabase = createClient(supabaseUrl || '', supabaseAnonKey || '', {
   auth: {
     autoRefreshToken: true,
     persistSession: true,
     detectSessionInUrl: true,
-    storageKey: 'deepvortex-auth',
+    storageKey: 'deepvortex-auth', // Doit être identique sur tous tes sites
+    storage: customCookieStorage,  // On active notre pont magique
   },
 })
 
