@@ -98,12 +98,11 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   }, [fetchProfile])
 
   useEffect(() => {
-    // ✅ INITIAL_SESSION comme seule source de vérité — plus de getSession() séparé
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       async (event, currentSession) => {
-        console.log('Emoticons auth event:', event)
+        console.log('Auth event:', event)
 
-        if (event === 'INITIAL_SESSION') {
+        if (event === 'INITIAL_SESSION' || event === 'SIGNED_IN') {
           if (currentSession?.user) {
             setSession(currentSession)
             setUser(currentSession.user)
@@ -116,13 +115,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
           }
           setLoading(false)
           initialLoadDone.current = true
-
-        } else if (event === 'SIGNED_IN' && currentSession?.user) {
-          setSession(currentSession)
-          setUser(currentSession.user)
-          const profileData = await ensureProfile(currentSession.user)
-          setProfile(profileData)
-          setLoading(false)
 
         } else if (event === 'SIGNED_OUT') {
           setUser(null)
@@ -138,7 +130,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
     const timeout = setTimeout(() => {
       if (!initialLoadDone.current) {
-        console.warn('Auth timeout')
         setLoading(false)
       }
     }, 5000)
@@ -149,12 +140,12 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     }
   }, [ensureProfile])
 
-  // ✅ redirectTo inclut /auth/callback
   const signInWithGoogle = async () => {
     const { error } = await supabase.auth.signInWithOAuth({
       provider: 'google',
       options: {
-        redirectTo: `${window.location.origin}/auth/callback`,
+        // Redirige toujours vers le domaine racine pour stabiliser le cookie
+        redirectTo: `https://deepvortexai.art/auth/callback`,
         queryParams: { prompt: 'select_account' },
       },
     })
@@ -165,16 +156,19 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     return await supabase.auth.signInWithOtp({
       email,
       options: {
-        emailRedirectTo: `${window.location.origin}/auth/callback`,
+        emailRedirectTo: `https://deepvortexai.art/auth/callback`,
       },
     })
   }
 
   const signOut = async () => {
     await supabase.auth.signOut()
+    // Nettoyage manuel au cas où pour forcer le mariage à se terminer proprement
     setUser(null)
     setSession(null)
     setProfile(null)
+    // On redirige vers le hub pour s'assurer que le cookie est supprimé partout
+    window.location.href = 'https://deepvortexai.art'
   }
 
   return (
