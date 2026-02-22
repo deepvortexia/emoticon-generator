@@ -18,9 +18,7 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined)
 
 export const useAuth = () => {
   const context = useContext(AuthContext)
-  if (!context) {
-    throw new Error('useAuth must be used within an AuthProvider')
-  }
+  if (!context) throw new Error('useAuth must be used within an AuthProvider')
   return context
 }
 
@@ -29,7 +27,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [session, setSession] = useState<Session | null>(null)
   const [profile, setProfile] = useState<Profile | null>(null)
   const [loading, setLoading] = useState(true)
-  const initialized = useRef(false)
+  const initialLoadDone = useRef(false)
+  const fetchingProfile = useRef(false)
 
   const fetchProfile = useCallback(async (userId: string): Promise<Profile | null> => {
     try {
@@ -38,11 +37,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         .select('*')
         .eq('id', userId)
         .single()
-
       if (error) {
-        if (error.code === 'PGRST116') {
-          return null
-        }
+        if (error.code === 'PGRST116') return null
         throw error
       }
       return data
@@ -54,20 +50,14 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   const createProfile = useCallback(async (currentUser: User): Promise<Profile | null> => {
     try {
-      const { error } = await supabase
-        .from('profiles')
-        .insert({
-          id: currentUser.id,
-          email: currentUser.email,
-          full_name: currentUser.user_metadata?.full_name || currentUser.email?.split('@')[0],
-          avatar_url: currentUser.user_metadata?.avatar_url,
-          credits: 3,
-        })
-
-      if (error && error.code !== '23505') {
-        throw error
-      }
-      
+      const { error } = await supabase.from('profiles').insert({
+        id: currentUser.id,
+        email: currentUser.email,
+        full_name: currentUser.user_metadata?.full_name || currentUser.email?.split('@')[0],
+        avatar_url: currentUser.user_metadata?.avatar_url,
+        credits: 3,
+      })
+      if (error && error.code !== '23505') throw error
       return await fetchProfile(currentUser.id)
     } catch (error) {
       console.error('Error creating profile:', error)
@@ -76,11 +66,15 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   }, [fetchProfile])
 
   const ensureProfile = useCallback(async (currentUser: User) => {
-    let profileData = await fetchProfile(currentUser.id)
-    if (!profileData) {
-      profileData = await createProfile(currentUser)
+    if (fetchingProfile.current) return null
+    fetchingProfile.current = true
+    try {
+      let profileData = await fetchProfile(currentUser.id)
+      if (!profileData) profileData = await createProfile(currentUser)
+      return profileData
+    } finally {
+      fetchingProfile.current = false
     }
-    return profileData
   }, [fetchProfile, createProfile])
 
   const refreshProfile = useCallback(async () => {
@@ -104,61 +98,64 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   }, [fetchProfile])
 
   useEffect(() => {
-    // Prevent double initialization in React Strict Mode
-    if (initialized.current) return
-    initialized.current = true
-
-    // Set up auth state listener FIRST
+    // ✅ INITIAL_SESSION comme seule source de vérité — plus de getSession() séparé
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       async (event, currentSession) => {
-        console.log('Auth event:', event)
+        console.log('Emoticons auth event:', event)
 
-        if (currentSession?.user) {
-          setSession(currentSession)
-          setUser(currentSession.user)
-          
-          // Use setTimeout to avoid blocking the auth state change
-          setTimeout(async () => {
+        if (event === 'INITIAL_SESSION') {
+          if (currentSession?.user) {
+            setSession(currentSession)
+            setUser(currentSession.user)
             const profileData = await ensureProfile(currentSession.user)
             setProfile(profileData)
-            setLoading(false)
-          }, 0)
-        } else {
-          setSession(null)
+          } else {
+            setUser(null)
+            setSession(null)
+            setProfile(null)
+          }
+          setLoading(false)
+          initialLoadDone.current = true
+
+        } else if (event === 'SIGNED_IN' && currentSession?.user) {
+          setSession(currentSession)
+          setUser(currentSession.user)
+          const profileData = await ensureProfile(currentSession.user)
+          setProfile(profileData)
+          setLoading(false)
+
+        } else if (event === 'SIGNED_OUT') {
           setUser(null)
+          setSession(null)
           setProfile(null)
           setLoading(false)
+
+        } else if (event === 'TOKEN_REFRESHED' && currentSession) {
+          setSession(currentSession)
         }
       }
     )
 
-    // Then check for existing session
-    supabase.auth.getSession().then(async ({ data: { session: initialSession }, error }) => {
-      if (error) {
-        console.error('Error getting session:', error)
+    const timeout = setTimeout(() => {
+      if (!initialLoadDone.current) {
+        console.warn('Auth timeout')
         setLoading(false)
-        return
       }
-
-      if (initialSession?.user) {
-        setSession(initialSession)
-        setUser(initialSession.user)
-        const profileData = await ensureProfile(initialSession.user)
-        setProfile(profileData)
-      }
-      setLoading(false)
-    })
+    }, 5000)
 
     return () => {
       subscription.unsubscribe()
+      clearTimeout(timeout)
     }
   }, [ensureProfile])
 
+  // ✅ redirectTo inclut /auth/callback
   const signInWithGoogle = async () => {
     const { error } = await supabase.auth.signInWithOAuth({
       provider: 'google',
       options: {
-        redirectTo: window.location.origin,
+        redirectTo: `${window.location.origin}/auth/callback`,
+        queryParams: { prompt: 'select_account' },
       },
     })
     if (error) throw error
@@ -168,27 +165,22 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     return await supabase.auth.signInWithOtp({
       email,
       options: {
-        emailRedirectTo: window.location.origin,
+        emailRedirectTo: `${window.location.origin}/auth/callback`,
       },
     })
   }
 
   const signOut = async () => {
     await supabase.auth.signOut()
+    setUser(null)
+    setSession(null)
     setProfile(null)
   }
 
   return (
     <AuthContext.Provider value={{
-      user,
-      session,
-      profile,
-      loading,
-      signInWithGoogle,
-      signInWithEmail,
-      signOut,
-      refreshProfile,
-      refreshSession,
+      user, session, profile, loading,
+      signInWithGoogle, signInWithEmail, signOut, refreshProfile, refreshSession,
     }}>
       {children}
     </AuthContext.Provider>
