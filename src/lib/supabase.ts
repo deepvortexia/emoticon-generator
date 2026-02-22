@@ -1,3 +1,6 @@
+// src/lib/supabase.ts  (App Emoticons — Vite/React)
+// Session partagée via cookies sur .deepvortexai.art
+
 import { createClient } from '@supabase/supabase-js'
 
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL
@@ -7,47 +10,49 @@ if (!supabaseUrl || !supabaseAnonKey) {
   console.error('Supabase configuration missing.')
 }
 
-// Custom storage that uses cookies on parent domain for cross-subdomain sharing
+const DOMAIN = '.deepvortexai.art'
+
+// ✅ FIX: Pas de préfixe custom — Supabase passe déjà la clé complète
+// Ne pas doubler le préfixe avec STORAGE_KEY
 const createCookieStorage = () => {
-  const STORAGE_KEY = 'deepvortex-shared-auth'
-  const DOMAIN = '.deepvortexai.art'
-  
   return {
     getItem: (key: string): string | null => {
       if (typeof document === 'undefined') return null
       const cookies = document.cookie.split(';')
       for (const cookie of cookies) {
         const [name, ...rest] = cookie.trim().split('=')
-        if (name === `${STORAGE_KEY}-${key}`) {
-          return decodeURIComponent(rest.join('='))
+        if (name.trim() === key) {
+          try {
+            return decodeURIComponent(rest.join('='))
+          } catch {
+            return null
+          }
         }
       }
-      // Fallback to localStorage for existing sessions
+      // Fallback localStorage pour les sessions existantes
       try {
         return localStorage.getItem(key)
       } catch {
         return null
       }
     },
+
     setItem: (key: string, value: string): void => {
       if (typeof document === 'undefined') return
       const encodedValue = encodeURIComponent(value)
-      document.cookie = `${STORAGE_KEY}-${key}=${encodedValue}; path=/; domain=${DOMAIN}; max-age=31536000; samesite=lax; secure`
-      // Also set in localStorage as backup
+      // 7 jours (pas 1 an — plus sécuritaire)
+      document.cookie = `${key}=${encodedValue}; path=/; domain=${DOMAIN}; max-age=604800; SameSite=Lax; Secure`
       try {
         localStorage.setItem(key, value)
-      } catch {
-        // Ignore localStorage errors
-      }
+      } catch { /* ignore */ }
     },
+
     removeItem: (key: string): void => {
       if (typeof document === 'undefined') return
-      document.cookie = `${STORAGE_KEY}-${key}=; path=/; domain=${DOMAIN}; max-age=0; samesite=lax; secure`
+      document.cookie = `${key}=; path=/; domain=${DOMAIN}; max-age=0; SameSite=Lax; Secure`
       try {
         localStorage.removeItem(key)
-      } catch {
-        // Ignore localStorage errors
-      }
+      } catch { /* ignore */ }
     },
   }
 }
@@ -57,11 +62,12 @@ export const supabase = createClient(supabaseUrl || '', supabaseAnonKey || '', {
     autoRefreshToken: true,
     persistSession: true,
     detectSessionInUrl: true,
-    storageKey: 'deepvortex-shared-auth',
+    storageKey: 'deepvortex-auth',  // ✅ Même clé que toutes les autres apps
     storage: createCookieStorage(),
-  }
+  },
 })
 
+// Types partagés
 export interface Profile {
   id: string
   email: string | null
