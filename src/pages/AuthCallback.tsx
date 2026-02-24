@@ -3,80 +3,128 @@ import { supabase } from '../lib/supabase'
 
 export function AuthCallback() {
     const [error, setError] = useState<string | null>(null)
+    const [debugInfo, setDebugInfo] = useState<string>('')
 
-  useEffect(() => {
+    useEffect(() => {
         const handleCallback = async () => {
-                const url = new URL(window.location.href)
-                const code = url.searchParams.get('code')
-                const errorParam = url.searchParams.get('error')
+            const url = new URL(window.location.href)
+            const code = url.searchParams.get('code')
+            const errorParam = url.searchParams.get('error')
+            const errorDescription = url.searchParams.get('error_description')
 
-                if (errorParam) {
-                          setError(errorParam)
-                          return
+            console.log('[Emoticon AuthCallback] URL params:', { code: code ? 'present' : 'missing', errorParam })
+
+            if (errorParam) {
+                setError(errorDescription || errorParam)
+                return
+            }
+
+            // PKCE flow: exchange code for session
+            if (code) {
+                console.log('[Emoticon AuthCallback] Exchanging code for session...')
+                
+                const { data, error: exchangeError } = await supabase.auth.exchangeCodeForSession(code)
+                
+                if (exchangeError) {
+                    console.error('[Emoticon AuthCallback] Exchange error:', exchangeError)
+                    
+                    let userFriendlyError = exchangeError.message
+                    
+                    if (exchangeError.message.includes('code verifier')) {
+                        userFriendlyError = 'Session expired. This can happen if you took too long to sign in or used a different browser. Please try signing in again.'
+                        setDebugInfo('The PKCE code verifier was not found. This usually means the cookie was lost between starting sign-in and completing it.')
+                    }
+                    
+                    setError(userFriendlyError)
+                    return
                 }
+                
+                console.log('[Emoticon AuthCallback] Session established:', data.session ? 'success' : 'no session')
+                window.location.href = '/'
+                return
+            }
 
-                // PKCE flow: exchange code for session
-                if (code) {
-                          const { error: exchangeError } = await supabase.auth.exchangeCodeForSession(code)
-                          if (exchangeError) {
-                                      setError(exchangeError.message)
-                                      return
-                          }
-                          window.location.href = '/'
-                          return
+            // Implicit flow fallback: check hash for access_token
+            const hash = window.location.hash
+            if (hash && hash.includes('access_token')) {
+                console.log('[Emoticon AuthCallback] Found access_token in hash, getting session...')
+                await supabase.auth.getSession()
+                window.location.href = '/'
+                return
+            }
+
+            // Fallback: wait for auth state change then redirect
+            console.log('[Emoticon AuthCallback] No code or token found, waiting for auth state change...')
+            const { data: { subscription } } = supabase.auth.onAuthStateChange(
+                (event, session) => {
+                    console.log('[Emoticon AuthCallback] Auth state change:', event)
+                    if (event === 'SIGNED_IN' && session) {
+                        subscription.unsubscribe()
+                        window.location.href = '/'
+                    }
                 }
+            )
 
-                // Implicit flow fallback: check hash for access_token
-                const hash = window.location.hash
-                if (hash && hash.includes('access_token')) {
-                          await supabase.auth.getSession()
-                          window.location.href = '/'
-                          return
-                }
-
-                // Fallback: wait for auth state change then redirect
-                const { data: { subscription } } = supabase.auth.onAuthStateChange(
-                          (event, session) => {
-                                      if (event === 'SIGNED_IN' && session) {
-                                                    subscription.unsubscribe()
-                                                    window.location.href = '/'
-                                      }
-                          }
-                        )
-
-                // Safety timeout
-                setTimeout(() => {
-                          subscription.unsubscribe()
-                          window.location.href = '/'
-                }, 5000)
+            // Safety timeout
+            setTimeout(() => {
+                subscription.unsubscribe()
+                console.log('[Emoticon AuthCallback] Timeout reached, redirecting to home')
+                window.location.href = '/'
+            }, 5000)
         }
 
-                handleCallback()
-  }, [])
+        handleCallback()
+    }, [])
 
-  if (error) {
+    if (error) {
         return (
-                <div style={{
-                          display: 'flex', alignItems: 'center', justifyContent: 'center',
-                          height: '100vh', background: '#0a0a0a', color: '#ff4444',
-                          fontFamily: 'Orbitron, sans-serif', flexDirection: 'column', gap: '1rem'
+            <div style={{
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                height: '100vh', background: '#0a0a0a', color: '#ff4444',
+                fontFamily: 'Orbitron, sans-serif', flexDirection: 'column', gap: '1rem',
+                padding: '2rem', textAlign: 'center'
+            }}>
+                <div style={{ fontSize: '2rem' }}>⚠️</div>
+                <p style={{ maxWidth: '400px' }}>Sign in failed: {error}</p>
+                {debugInfo && (
+                    <p style={{ fontSize: '0.8rem', color: '#888', maxWidth: '400px' }}>
+                        {debugInfo}
+                    </p>
+                )}
+                <a href="/" style={{ 
+                    color: '#D4AF37', 
+                    textDecoration: 'underline',
+                    marginTop: '1rem'
                 }}>
-                          <div style={{ fontSize: '2rem' }}>⚠️</div>div>
-                          <p>Sign in failed: {error}</p>p>
-                        <a href="/" style={{ color: '#D4AF37', textDecoration: 'underline' }}>Return to Home</a>a>
-                </div>div>
-              )
-  }
-  
-    return (
-          <div style={{
-                  display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  height: '100vh', background: '#0a0a0a', color: '#D4AF37',
-                  fontFamily: 'Orbitron, sans-serif', flexDirection: 'column', gap: '1rem'
-          }}>
-                <div style={{ fontSize: '2rem' }}>⚡</div>div>
-                <p>Completing sign in...</p>p>
-          </div>div>
+                    Return to Home
+                </a>
+                <button 
+                    onClick={() => window.location.href = '/'}
+                    style={{
+                        marginTop: '0.5rem',
+                        padding: '0.75rem 1.5rem',
+                        background: 'linear-gradient(135deg, #D4AF37, #B8960C)',
+                        border: 'none',
+                        borderRadius: '8px',
+                        color: '#0a0a0a',
+                        fontWeight: 'bold',
+                        cursor: 'pointer'
+                    }}
+                >
+                    Try Again
+                </button>
+            </div>
         )
+    }
+
+    return (
+        <div style={{
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            height: '100vh', background: '#0a0a0a', color: '#D4AF37',
+            fontFamily: 'Orbitron, sans-serif', flexDirection: 'column', gap: '1rem'
+        }}>
+            <div style={{ fontSize: '2rem' }}>⚡</div>
+            <p>Completing sign in...</p>
+        </div>
+    )
 }
-</p>
