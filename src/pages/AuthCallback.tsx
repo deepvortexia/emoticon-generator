@@ -22,23 +22,29 @@ export function AuthCallback() {
             // PKCE flow: exchange code for session
             if (code) {
                 console.log('[Emoticon AuthCallback] Exchanging code for session...')
-                
+
                 const { data, error: exchangeError } = await supabase.auth.exchangeCodeForSession(code)
-                
+
                 if (exchangeError) {
                     console.error('[Emoticon AuthCallback] Exchange error:', exchangeError)
-                    
-                    let userFriendlyError = exchangeError.message
-                    
+
+                    // If code verifier was lost, check if detectSessionInUrl already handled it
                     if (exchangeError.message.includes('code verifier')) {
-                        userFriendlyError = 'Session expired. This can happen if you took too long to sign in or used a different browser. Please try signing in again.'
+                        const { data: sessionData } = await supabase.auth.getSession()
+                        if (sessionData?.session) {
+                            console.log('[Emoticon AuthCallback] Session already established via detectSessionInUrl')
+                            window.location.href = '/'
+                            return
+                        }
+                        setError('Session expired. Please try signing in again.')
                         setDebugInfo('The PKCE code verifier was not found. This usually means the cookie was lost between starting sign-in and completing it.')
+                        return
                     }
-                    
-                    setError(userFriendlyError)
+
+                    setError(exchangeError.message)
                     return
                 }
-                
+
                 console.log('[Emoticon AuthCallback] Session established:', data.session ? 'success' : 'no session')
                 window.location.href = '/'
                 return
