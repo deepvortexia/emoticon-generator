@@ -6,21 +6,28 @@ interface NotificationProps {
   message: string
   onClose: () => void
   autoClose?: number
+  type?: 'success' | 'error' | 'warning'
 }
 
-export const Notification = ({ title, message, onClose, autoClose = 5000 }: NotificationProps) => {
+const icons: Record<string, string> = {
+  success: '🎉',
+  error: '⚠️',
+  warning: '⏳',
+}
+
+export const Notification = ({ title, message, onClose, autoClose, type = 'success' }: NotificationProps) => {
+  const duration = autoClose ?? (type === 'error' ? 8000 : 5000)
+
   useEffect(() => {
-    if (autoClose) {
-      const timer = setTimeout(() => {
-        onClose()
-      }, autoClose)
+    if (duration) {
+      const timer = setTimeout(onClose, duration)
       return () => clearTimeout(timer)
     }
-  }, [autoClose, onClose])
+  }, [duration, onClose])
 
   return (
-    <div className="notification">
-      <div className="notification-icon">🎉</div>
+    <div className={`notification notification-${type}`}>
+      <div className="notification-icon">{icons[type]}</div>
       <div className="notification-content">
         <div className="notification-title">{title}</div>
         <div className="notification-message">{message}</div>

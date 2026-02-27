@@ -80,6 +80,7 @@ function AppContent() {
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false)
   const [isPricingModalOpen, setIsPricingModalOpen] = useState(false)
   const [showNotification, setShowNotification] = useState(false)
+  const [toast, setToast] = useState<{title:string;message:string;type:'success'|'error'|'warning'}|null>(null)
   const [isGalleryOpen, setIsGalleryOpen] = useState(false)
   
   const { user, session, loading, profile } = useAuth()
@@ -148,20 +149,54 @@ function AppContent() {
     if (!hasCredits) { setError('You have run out of credits. Please purchase more to continue.'); setIsPricingModalOpen(true); return }
     setIsLoading(true)
     setError('')
+    setToast(null)
     setGeneratedImage('')
     setLoadingMessage(loadingMessages[Math.floor(Math.random() * loadingMessages.length)])
     try {
       const token = session?.access_token
-      const response = await fetch('/api/generate', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
-        body: JSON.stringify({ prompt }),
-      })
-      const data = await response.json()
-      if (!response.ok) {
-        if (response.status === 402) setIsPricingModalOpen(true)
-        throw new Error(data.error || 'Failed to generate emoticon')
+      const controller = new AbortController()
+      const timeout = setTimeout(() => controller.abort(), 60000)
+      let response: Response
+      try {
+        response = await fetch('/api/generate', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+          body: JSON.stringify({ prompt }),
+          signal: controller.signal,
+        })
+      } catch (fetchErr: any) {
+        clearTimeout(timeout)
+        if (fetchErr.name === 'AbortError') {
+          setToast({ title: 'Request Timed Out', message: 'The generation took too long. Please try again. No credits were deducted.', type: 'warning' })
+        } else {
+          setToast({ title: 'Network Error', message: 'Could not connect to the server. Please check your connection and try again. No credits were deducted.', type: 'error' })
+        }
+        return
       }
+      clearTimeout(timeout)
+      if (!response.ok) {
+        const data = await response.json().catch(() => ({}))
+        switch (response.status) {
+          case 401:
+            setToast({ title: 'Session Expired', message: 'Your session has expired. Please refresh the page and sign in again. No credits were deducted.', type: 'error' })
+            break
+          case 402:
+            setToast({ title: 'Insufficient Credits', message: "You don't have enough credits. Purchase more to continue generating.", type: 'warning' })
+            setIsPricingModalOpen(true)
+            break
+          case 429:
+            setToast({ title: 'Too Many Requests', message: 'Please wait a moment before generating again. No credits were deducted.', type: 'warning' })
+            break
+          case 503:
+            setToast({ title: 'Service Unavailable', message: 'The emoticon generation service is temporarily unavailable. Please try again in a few minutes. No credits were deducted.', type: 'error' })
+            break
+          default:
+            setToast({ title: 'Generation Failed', message: (data.error || 'An unexpected error occurred') + '. No credits were deducted.', type: 'error' })
+            break
+        }
+        return
+      }
+      const data = await response.json()
       setGeneratedImage(data.image)
       saveToHistory(prompt, data.image)
       const newCount = imagesGenerated + 1
@@ -169,7 +204,7 @@ function AppContent() {
       localStorage.setItem('images-generated', newCount.toString())
       await refreshProfile()
     } catch (err: any) {
-      setError(err.message || 'Something went wrong. Please try again.')
+      setToast({ title: 'Generation Failed', message: (err.message || 'An unexpected error occurred') + '. No credits were deducted.', type: 'error' })
     } finally {
       setIsLoading(false)
     }
@@ -392,6 +427,9 @@ function AppContent() {
       <PricingModal isOpen={isPricingModalOpen} onClose={() => setIsPricingModalOpen(false)} />
       {showNotification && (
         <Notification title="Payment Successful!" message="Your credits have been added to your account." onClose={() => setShowNotification(false)} />
+      )}
+      {toast && (
+        <Notification title={toast.title} message={toast.message} type={toast.type} onClose={() => setToast(null)} />
       )}
     </div>
   )
