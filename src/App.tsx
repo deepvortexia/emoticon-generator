@@ -238,38 +238,35 @@ function AppContent() {
     <div className={`app ${isLoaded ? 'fade-in' : ''}`}>
       <Header />
       
-      <div className="tools-preview-section">
-        <h3 className="tools-preview-title">Complete AI Ecosystem</h3>
-        <div className="tools-preview-grid">
-          <a href="https://emoticons.deepvortexai.art" className="tool-card tool-card-active">
-            <span className="tool-badge-available">✅ Available</span>
-            <span className="tool-icon">😀</span>
-            <span className="tool-name">Emoticons</span>
-            <span className="tool-button tool-button-current">Current Tool</span>
-          </a>
-          <div className="tool-card tool-card-soon">
-            <span className="tool-icon">🎥</span>
-            <span className="tool-name">Video</span>
-            <span className="tool-status">Coming Soon</span>
-          </div>
-          <a href="https://images.deepvortexai.art" className="tool-card">
-            <span className="tool-badge-available">✅ Available</span>
-            <span className="tool-icon">🖼️</span>
-            <span className="tool-name">Image Gen</span>
-            <span className="tool-button tool-button-link">Open Image Gen</span>
-          </a>
-          <div className="tool-card tool-card-soon">
-            <span className="tool-icon">💬</span>
-            <span className="tool-name">AI Chat</span>
-            <span className="tool-status">Coming Soon</span>
-          </div>
-          <div className="tool-card tool-card-soon">
-            <span className="tool-icon">✨</span>
-            <span className="tool-name">More Tools</span>
-            <span className="tool-status">In Development</span>
-          </div>
+      <section className="ecosystem-section">
+        <h2 className="ecosystem-heading">Complete AI Ecosystem</h2>
+        <div className="ecosystem-grid">
+          {[
+            { name: 'Emoticons', icon: '😃', desc: 'Custom emoji creation',          status: 'Available Now',   isActive: true,  href: 'https://emoticons.deepvortexai.art', isCurrent: true  },
+            { name: 'Image Gen',  icon: '🖼️', desc: 'AI artwork',                    status: 'Available Now',   isActive: true,  href: 'https://images.deepvortexai.art',    isCurrent: false },
+            { name: 'Remove Background', icon: '🎨', desc: 'Remove backgrounds instantly', status: 'Coming Soon', isActive: false },
+            { name: 'More Tools', icon: '✨', desc: 'Expanding soon',                status: 'In Development', isActive: false },
+          ].map((tool, idx) => (
+            <div
+              key={idx}
+              className={`ecosystem-card ${tool.isActive ? 'eco-card-active' : 'eco-card-inactive'}${tool.isCurrent ? ' eco-glow' : ''}`}
+              onClick={() => { if (tool.isActive && tool.href) window.location.href = tool.href; }}
+              role={tool.isActive ? 'button' : 'presentation'}
+              style={{ cursor: tool.isActive ? 'pointer' : 'default' }}
+            >
+              <div className="eco-icon">{tool.icon}</div>
+              <h3 className="eco-title">{tool.name}</h3>
+              <p className="eco-desc">{tool.desc}</p>
+              <div className="eco-status-container">
+                <span className={`eco-status-badge ${tool.isActive ? 'eco-badge-active' : 'eco-badge-upcoming'}`}>
+                  {tool.status}
+                </span>
+                {tool.isCurrent && <div className="eco-current-label">CURRENT TOOL</div>}
+              </div>
+            </div>
+          ))}
         </div>
-      </div>
+      </section>
 
       
       <div className="suggestions-compact-section">
