@@ -13,13 +13,12 @@ const supabase = createClient(
   process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_ANON_KEY || ''
 )
 
-// Price validation - matches the pricing in PricingModal.tsx
 const VALID_PACKS = {
-  'Starter': { credits: 10, price: 349 },   // $3.49
-  'Basic': { credits: 30, price: 799 },     // $7.99
-  'Popular': { credits: 75, price: 1699 },  // $16.99
-  'Pro': { credits: 200, price: 3999 },     // $39.99
-  'Ultimate': { credits: 500, price: 8499 }, // $84.99
+  'Starter':  { priceId: 'price_1T2JElPRCOojlkAvUxkIsMaT', credits: 10 },
+  'Basic':    { priceId: 'price_1T2JGJPRCOojlkAvSIuNcbrz', credits: 30 },
+  'Popular':  { priceId: 'price_1T2JHDPRCOojlkAvePY8B1Oa', credits: 75 },
+  'Pro':      { priceId: 'price_1T2JIvPRCOojlkAvGTd0AEWj', credits: 200 },
+  'Ultimate': { priceId: 'price_1T2JKiPRCOojlkAvIOnW4Qkl', credits: 500 },
 }
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
@@ -27,20 +26,15 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     return res.status(405).json({ error: 'Method not allowed' })
   }
 
-  const { packName, credits, amountCents } = req.body
+  const { packName } = req.body
 
-  if (!packName || !credits || !amountCents) {
+  if (!packName) {
     return res.status(400).json({ error: 'Missing required fields' })
   }
 
-  // Validate pack pricing
   const validPack = VALID_PACKS[packName as keyof typeof VALID_PACKS]
   if (!validPack) {
     return res.status(400).json({ error: 'Invalid pack name' })
-  }
-
-  if (validPack.credits !== credits || validPack.price !== amountCents) {
-    return res.status(400).json({ error: 'Invalid pack configuration' })
   }
 
   // Get user from authorization header
@@ -63,32 +57,22 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       })
     }
 
-    // Create Stripe Checkout session
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ['card'],
       line_items: [
         {
-          price_data: {
-            currency: 'usd',
-            product_data: {
-              name: `${packName} Pack - ${credits} Credits`,
-              description: `Purchase ${credits} credits for generating emoticons`,
-              images: ['https://em-content.zobj.net/source/apple/391/artist-palette_1f3a8.png'],
-            },
-            unit_amount: amountCents,
-          },
+          price: validPack.priceId,
           quantity: 1,
         },
       ],
       mode: 'payment',
-      // MODIF : Ajout du success=true dans l'URL
-      success_url: `${req.headers.origin || 'http://localhost:3000'}?success=true&session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `${req.headers.origin || 'http://localhost:3000'}`,
+      success_url: `${req.headers.origin || 'https://emoticons.deepvortexai.art'}?success=true&session_id={CHECKOUT_SESSION_ID}`,
+      cancel_url: `${req.headers.origin || 'https://emoticons.deepvortexai.art'}`,
       metadata: {
         packName,
-        credits: credits.toString(),
-        userId: user.id, // Store user ID instead of auth token
-        app: 'emoticon-generator', // MODIF : La signature pour ce projet
+        credits: validPack.credits.toString(),
+        userId: user.id,
+        app: 'emoticon-generator',
       },
     })
 
