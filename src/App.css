@@ -1402,13 +1402,40 @@ body {
   color: var(--gold-primary);
   font-size: 1rem;
   font-weight: 600;
-  margin-bottom: 0.5rem;
+  margin-bottom: 1rem;
   letter-spacing: 0.02em;
 }
 
-.footer-text {
+.footer-tagline-link {
+  display: block;
+  text-decoration: none;
+  transition: opacity 0.2s ease;
+}
+
+.footer-tagline-link:hover {
+  opacity: 0.8;
+}
+
+.footer-social {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.footer-social-link {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
   color: var(--text-secondary);
-  font-size: 14px;
+  text-decoration: none;
+  font-size: 0.9rem;
+  transition: color 0.2s ease;
+}
+
+.footer-social-link:hover {
+  color: var(--gold-primary);
 }
 
 .gradient-text {

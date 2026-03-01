@@ -356,10 +356,6 @@ function AppContent() {
           </div>
         )}
 
-        <footer className="footer">
-          <p className="footer-tagline">Deep Vortex AI - Building the complete AI creative ecosystem</p>
-          <p className="footer-text">Powered by <span className="gradient-text">Deep Vortex</span> × <span className="gradient-text">SDXL Emoticon</span></p>
-        </footer>
       </div>
 
       <section className="ecosystem-section">
@@ -391,6 +387,19 @@ function AppContent() {
           ))}
         </div>
       </section>
+
+      <footer className="footer">
+        <a href="https://deepvortexai.art" className="footer-tagline footer-tagline-link">Deep Vortex AI - Building the complete AI creative ecosystem</a>
+        <div className="footer-social">
+          <a href="https://www.tiktok.com/@deepvortexai" target="_blank" rel="noopener noreferrer" className="footer-social-link">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
+              <path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 00-.79-.05 6.34 6.34 0 00-6.34 6.34 6.34 6.34 0 006.34 6.34 6.34 6.34 0 006.33-6.34V8.69a8.2 8.2 0 004.79 1.53V6.77a4.85 4.85 0 01-1.02-.08z"/>
+            </svg>
+            TikTok
+          </a>
+          <a href="mailto:admin@deepvortexai.art" className="footer-social-link">admin@deepvortexai.art</a>
+        </div>
+      </footer>
 
       <PlatformGuideModal isOpen={isGuideOpen} onClose={() => setIsGuideOpen(false)} />
       <AuthModal isOpen={isAuthModalOpen} onClose={() => setIsAuthModalOpen(false)} />
