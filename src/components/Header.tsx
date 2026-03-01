@@ -12,6 +12,11 @@ export default function Header() {
   const [showPricingModal, setShowPricingModal] = useState(false)
   const [loadingTimeout, setLoadingTimeout] = useState(false)
   const [showRetry, setShowRetry] = useState(false)
+  const [isEmbedded, setIsEmbedded] = useState(false)
+
+  useEffect(() => {
+    try { setIsEmbedded(window.self !== window.top) } catch { setIsEmbedded(true) }
+  }, [])
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search)
@@ -61,18 +66,14 @@ export default function Header() {
   return (
     <>
       <header className="hub-header" role="banner">
-        <a
-          href="https://deepvortexai.art"
-          className="back-to-hub-link"
-          onClick={(e) => {
-            if (window.parent !== window) {
-              e.preventDefault()
-              window.parent.postMessage({ type: 'deepvortex-navigate', url: 'https://deepvortexai.art' }, 'https://deepvortexai.art')
-            }
-          }}
-        >
-          ← Back to Hub
-        </a>
+        {!isEmbedded && (
+          <a
+            href="https://deepvortexai.art"
+            className="back-to-hub-link"
+          >
+            ← Back to Hub
+          </a>
+        )}
 
         <div className="logo-display-zone">
           <div className="orbit-ring-one" />
