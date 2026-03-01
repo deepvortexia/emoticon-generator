@@ -238,37 +238,6 @@ function AppContent() {
     <div className={`app ${isLoaded ? 'fade-in' : ''}`}>
       <Header />
       
-      <section className="ecosystem-section">
-        <h2 className="ecosystem-heading">Complete AI Ecosystem</h2>
-        <div className="ecosystem-grid">
-          {[
-            { name: 'Emoticons', icon: '😃', desc: 'Custom emoji creation',          status: 'Available Now',   isActive: true,  href: 'https://emoticons.deepvortexai.art', isCurrent: true  },
-            { name: 'Image Gen',  icon: '🖼️', desc: 'AI artwork',                    status: 'Available Now',   isActive: true,  href: 'https://images.deepvortexai.art',    isCurrent: false },
-            { name: 'Remove Background', icon: '🎨', desc: 'Remove backgrounds instantly', status: 'Coming Soon', isActive: false },
-            { name: 'More Tools', icon: '✨', desc: 'Expanding soon',                status: 'In Development', isActive: false },
-          ].map((tool, idx) => (
-            <div
-              key={idx}
-              className={`ecosystem-card ${tool.isActive ? 'eco-card-active' : 'eco-card-inactive'}${tool.isCurrent ? ' eco-glow' : ''}`}
-              onClick={() => { if (tool.isActive && tool.href) window.location.href = tool.href; }}
-              role={tool.isActive ? 'button' : 'presentation'}
-              style={{ cursor: tool.isActive ? 'pointer' : 'default' }}
-            >
-              <div className="eco-icon">{tool.icon}</div>
-              <h3 className="eco-title">{tool.name}</h3>
-              <p className="eco-desc">{tool.desc}</p>
-              <div className="eco-status-container">
-                <span className={`eco-status-badge ${tool.isActive ? 'eco-badge-active' : 'eco-badge-upcoming'}`}>
-                  {tool.status}
-                </span>
-                {tool.isCurrent && <div className="eco-current-label">CURRENT TOOL</div>}
-              </div>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      
       <div className="suggestions-compact-section">
         <div className="suggestion-row suggestion-row-desktop">
           <h4 className="suggestion-row-title">🔥 Popular Styles</h4>
@@ -364,7 +333,37 @@ function AppContent() {
           <p className="footer-text">Powered by <span className="gradient-text">Deep Vortex</span> × <span className="gradient-text">SDXL Emoticon</span></p>
         </footer>
       </div>
-      
+
+      <section className="ecosystem-section">
+        <h2 className="ecosystem-heading">Complete AI Ecosystem</h2>
+        <div className="ecosystem-grid">
+          {[
+            { name: 'Emoticons', icon: '😃', desc: 'Custom emoji creation',          status: 'Available Now',   isActive: true,  href: 'https://emoticons.deepvortexai.art', isCurrent: true  },
+            { name: 'Image Gen',  icon: '🎨', desc: 'AI artwork',                    status: 'Available Now',   isActive: true,  href: 'https://images.deepvortexai.art',    isCurrent: false },
+            { name: 'Remove Background', icon: '🎨', desc: 'Remove backgrounds instantly', status: 'Coming Soon', isActive: false },
+            { name: 'More Tools', icon: '✨', desc: 'Expanding soon',                status: 'In Development', isActive: false },
+          ].map((tool, idx) => (
+            <div
+              key={idx}
+              className={`ecosystem-card ${tool.isActive ? 'eco-card-active' : 'eco-card-inactive'}${tool.isCurrent ? ' eco-glow' : ''}`}
+              onClick={() => { if (tool.isActive && tool.href) window.location.href = tool.href; }}
+              role={tool.isActive ? 'button' : 'presentation'}
+              style={{ cursor: tool.isActive ? 'pointer' : 'default' }}
+            >
+              <div className="eco-icon">{tool.icon}</div>
+              <h3 className="eco-title">{tool.name}</h3>
+              <p className="eco-desc">{tool.desc}</p>
+              <div className="eco-status-container">
+                <span className={`eco-status-badge ${tool.isActive ? 'eco-badge-active' : 'eco-badge-upcoming'}`}>
+                  {tool.status}
+                </span>
+                {tool.isCurrent && <div className="eco-current-label">CURRENT TOOL</div>}
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
       <PlatformGuideModal isOpen={isGuideOpen} onClose={() => setIsGuideOpen(false)} />
       <AuthModal isOpen={isAuthModalOpen} onClose={() => setIsAuthModalOpen(false)} />
       <PricingModal isOpen={isPricingModalOpen} onClose={() => setIsPricingModalOpen(false)} />
