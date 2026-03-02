@@ -90,12 +90,17 @@ export default function Header() {
         <p className="primary-tagline">✨ Turn words into emoticons instantly</p>
 
         <div className="hub-pills-container">
-          <div className="hub-pill credits-pill">
-            <span className="pill-icon">🏆</span>
-            <span className="pill-text">
-              {user ? `${profile?.credits ?? 0} credits` : 'Sign in for credits'}
-            </span>
-          </div>
+          {user ? (
+            <div className="hub-pill credits-pill">
+              <span className="pill-icon">🏆</span>
+              <span className="pill-text">{profile?.credits ?? 0} credits</span>
+            </div>
+          ) : (
+            <button className="hub-pill credits-pill" style={{ cursor: 'pointer' }} onClick={() => setShowAuthModal(true)} title="Sign in to get free credits">
+              <span className="pill-icon">🏆</span>
+              <span className="pill-text">Sign in - Get 2 Free Credits</span>
+            </button>
+          )}
 
           <button
             className="hub-pill buy-credits-pill"
