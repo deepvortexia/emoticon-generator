@@ -203,12 +203,15 @@ function AppContent() {
         headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${session.access_token}` },
         body: JSON.stringify({ imageUrl: generatedImage, prompt }),
       })
+      const data = await response.json().catch(() => ({}))
       if (response.ok) {
         setIsFavorited(true)
       } else {
-        setError('Failed to add to favorites')
+        console.error('[favorites] Save failed:', response.status, data)
+        setError(data.error || 'Failed to add to favorites')
       }
-    } catch {
+    } catch (err: any) {
+      console.error('[favorites] Network error:', err)
       setError('Failed to add to favorites')
     }
   }
