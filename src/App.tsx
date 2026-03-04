@@ -216,18 +216,12 @@ function AppContent() {
     }
   }
 
-  const downloadImage = async () => {
+  const downloadImage = () => {
     if (!generatedImage) return
-    try {
-      const link = document.createElement('a')
-      link.href = `/api/download?url=${encodeURIComponent(generatedImage)}`
-      link.download = `emoticon-${Date.now()}.png`
-      document.body.appendChild(link)
-      link.click()
-      document.body.removeChild(link)
-    } catch (err) {
-      alert('Failed to download image. Please try right-clicking and "Save Image As..."')
-    }
+    const a = document.createElement('a')
+    a.href = generatedImage
+    a.download = 'emoticon.png'
+    a.click()
   }
 
   return (
