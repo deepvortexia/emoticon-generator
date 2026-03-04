@@ -322,9 +322,10 @@ function AppContent() {
         <h2 className="ecosystem-heading">Complete AI Ecosystem</h2>
         <div className="ecosystem-grid">
           {[
-            { name: 'Emoticons',  icon: '😃', desc: 'Custom emoji creation',         status: 'Available Now',  isActive: true,  href: 'https://emoticons.deepvortexai.art', isCurrent: true  },
-            { name: 'Image Gen',  icon: '🎨', desc: 'AI artwork',                   status: 'Available Now',  isActive: true,  href: 'https://images.deepvortexai.art',    isCurrent: false },
-            { name: 'Remove BG',  icon: '✂️', desc: 'Remove backgrounds instantly', status: 'Available Now',  isActive: true,  href: 'https://bgremover.deepvortexai.art', isCurrent: false },
+            { name: 'Emoticons',  icon: '😃', desc: 'Custom emoji creation',          status: 'Available Now',  isActive: true,  href: 'https://emoticons.deepvortexai.art',  isCurrent: true  },
+            { name: 'Image Gen',  icon: '🎨', desc: 'AI artwork',                    status: 'Available Now',  isActive: true,  href: 'https://images.deepvortexai.art',     isCurrent: false },
+            { name: 'Remove BG',  icon: '✂️', desc: 'Remove backgrounds instantly',  status: 'Available Now',  isActive: true,  href: 'https://bgremover.deepvortexai.art',  isCurrent: false },
+            { name: 'Upscaler',   icon: '🔍', desc: 'Upscale images up to 4x',       status: 'Available Now',  isActive: true,  href: 'https://upscaler.deepvortexai.art',   isCurrent: false },
             { name: 'More Tools', icon: '✨', desc: 'Expanding soon',               status: 'In Development', isActive: false },
           ].map((tool, idx) => (
             <div
