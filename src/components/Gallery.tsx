@@ -60,35 +60,30 @@ export function Gallery({ isOpen: externalIsOpen, onClose: externalOnClose }: Ga
   };
 
   const handleDownloadImage = async (imageUrl: string, prompt: string, id: string) => {
+    const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent)
+    const safePrompt = prompt.replace(/[^a-zA-Z0-9-_\s]/g, '').replace(/\s+/g, '-').slice(0, 30)
+    const filename = `emoticon-${safePrompt}-${id.slice(0, 8)}.png`
     try {
-      // Fetch image with proper CORS
-      const response = await fetch(imageUrl, {
-        mode: 'cors',
-        credentials: 'include'
-      });
-      
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+      const response = await fetch(imageUrl, { mode: 'cors' })
+      if (!response.ok) throw new Error(`HTTP ${response.status}`)
+      const blob = await response.blob()
+      if (isMobile) {
+        const file = new File([blob], filename, { type: blob.type })
+        if (navigator.canShare?.({ files: [file] })) {
+          await navigator.share({ files: [file] })
+          return
+        }
+        window.open(imageUrl, '_blank')
+        return
       }
-      
-      const blob = await response.blob();
-      const url = window.URL.createObjectURL(blob);
-      
-      // Create download link
-      const link = document.createElement('a');
-      link.href = url;
-      // Sanitize filename by removing invalid characters
-      const safePrompt = prompt.replace(/[^a-zA-Z0-9-_\s]/g, '').replace(/\s+/g, '-').slice(0, 30);
-      link.download = `emoticon-${safePrompt}-${id.slice(0, 8)}.png`;
-      
-      // Trigger download
-      document.body.appendChild(link);
-      link.click();
-      
-      // Cleanup
-      document.body.removeChild(link);
-      window.URL.revokeObjectURL(url);
-      
+      const url = URL.createObjectURL(blob)
+      const link = document.createElement('a')
+      link.href = url
+      link.download = filename
+      document.body.appendChild(link)
+      link.click()
+      document.body.removeChild(link)
+      URL.revokeObjectURL(url)
     } catch {
       alert('Download failed. Please try right-clicking and "Save Image As..."')
     }
