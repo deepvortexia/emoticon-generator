@@ -11,6 +11,7 @@ import { PricingModal } from './components/PricingModal'
 import { Notification } from './components/Notification'
 import { useCredits } from './hooks/useCredits'
 import { AuthCallback } from './pages/AuthCallback'  // ← NOUVEAU
+import { Gallery } from './components/Gallery'
 
 const loadingMessages = [
   "Creating magic... ✨",
@@ -333,6 +334,8 @@ function AppContent() {
         )}
 
       </div>
+
+      <Gallery />
 
       <section className="ecosystem-section">
         <h2 className="ecosystem-heading">Complete AI Ecosystem</h2>

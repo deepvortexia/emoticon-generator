@@ -8,55 +8,30 @@ interface HistoryItem {
   timestamp: number;
 }
 
-interface GalleryProps {
-  isOpen?: boolean;
-  onClose?: () => void;
-}
-
-export function Gallery({ isOpen: externalIsOpen, onClose: externalOnClose }: GalleryProps = {}) {
+export function Gallery() {
   const [history, setHistory] = useState<HistoryItem[]>([]);
-  const [internalIsOpen, setInternalIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
   const [brokenImages, setBrokenImages] = useState<Set<string>>(new Set());
-  
-  // Use external control if provided, otherwise use internal state
-  const isOpen = externalIsOpen !== undefined ? externalIsOpen : internalIsOpen;
-  const setIsOpen = externalOnClose ? (value: boolean) => {
-    if (!value) externalOnClose();
-  } : setInternalIsOpen;
 
-  useEffect(() => {
-    const loadHistory = () => {
-      try {
-        const saved = localStorage.getItem('emoji-history');
-        if (saved) {
-          setHistory(JSON.parse(saved));
-        }
-      } catch (error) {
-        console.error('Error loading gallery history:', error);
-        localStorage.removeItem('emoji-history');
-      }
-    };
-    
-    if (isOpen) {
-      loadHistory();
+  const loadHistory = () => {
+    try {
+      const saved = localStorage.getItem('emoji-history');
+      setHistory(saved ? JSON.parse(saved) : []);
+    } catch (error) {
+      console.error('Error loading gallery history:', error);
+      localStorage.removeItem('emoji-history');
     }
-  }, [isOpen]);
+  };
+
+  useEffect(() => { loadHistory(); }, []);
+  useEffect(() => { if (isOpen) loadHistory(); }, [isOpen]);
 
   const handleImageError = (id: string) => {
-    setBrokenImages(prev => {
-      const newSet = new Set(prev);
-      newSet.add(id);
-      return newSet;
-    });
+    setBrokenImages(prev => { const s = new Set(prev); s.add(id); return s; });
   };
-  
+
   const handleImageLoad = (id: string) => {
-    // Remove from broken set if it loads successfully
-    setBrokenImages(prev => {
-      const newSet = new Set(prev);
-      newSet.delete(id);
-      return newSet;
-    });
+    setBrokenImages(prev => { const s = new Set(prev); s.delete(id); return s; });
   };
 
   const handleDownloadImage = async (imageUrl: string, prompt: string, id: string) => {
@@ -94,79 +69,63 @@ export function Gallery({ isOpen: externalIsOpen, onClose: externalOnClose }: Ga
     setHistory([]);
   };
 
-  // Don't render toggle button if controlled externally
-  if (!isOpen && externalIsOpen === undefined) {
-    return (
-      <button className="gallery-toggle" onClick={() => setIsOpen(true)}>
-        🖼️ Gallery ({history.length})
-      </button>
-    );
-  }
-  
-  // Don't render anything if closed and controlled externally
-  if (!isOpen) {
-    return null;
-  }
-
   return (
-    <div className="gallery-modal">
-      <div className="gallery-content">
-        <div className="gallery-header">
-          <h2>🖼️ Your Gallery</h2>
-          <button onClick={() => setIsOpen(false)} className="gallery-close">✕</button>
-        </div>
-        
-        <div className="gallery-grid">
-          {history.length === 0 ? (
-            <p className="gallery-empty">No emojis saved yet!</p>
-          ) : (
-            history.map((item) => (
-              <div key={item.id} className="gallery-item">
-                {brokenImages.has(item.id) ? (
-                  <div className="image-placeholder-broken">
-                    <span className="placeholder-icon">😕</span>
-                    <p className="placeholder-text">Image unavailable</p>
-                    <p className="placeholder-prompt">{item.prompt}</p>
-                  </div>
-                ) : (
-                  <img 
-                    src={item.imageUrl} 
-                    alt={item.prompt}
-                    loading="lazy"
-                    decoding="async"
-                    onError={() => handleImageError(item.id)}
-                    onLoad={() => handleImageLoad(item.id)}
-                  />
-                )}
-                <div className="gallery-item-info">
-                  <p className="gallery-prompt">{item.prompt}</p>
-                  <p className="gallery-date">
-                    {new Date(item.timestamp).toLocaleDateString()}
-                  </p>
-                </div>
-                <button 
-                  className="gallery-download-btn"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    handleDownloadImage(item.imageUrl, item.prompt, item.id);
-                  }}
-                  disabled={brokenImages.has(item.id)}
-                  title={brokenImages.has(item.id) ? "Image unavailable" : "Download"}
-                  aria-label={brokenImages.has(item.id) ? "Image unavailable" : "Download image"}
-                >
-                  💾
-                </button>
-              </div>
-            ))
-          )}
-        </div>
-        
-        {history.length > 0 && (
-          <button className="clear-history-btn" onClick={clearHistory}>
-            🗑️ Clear History
-          </button>
-        )}
+    <div className="favorites-wrapper">
+      <div className="favorites-btn-row">
+        <button
+          className={`gallery-toggle${isOpen ? ' gallery-toggle-active' : ''}`}
+          onClick={() => setIsOpen(o => !o)}
+        >
+          ⭐ Gallery{history.length > 0 ? ` (${history.length})` : ''}
+        </button>
       </div>
+      {isOpen && (
+        <section className="favorites-section">
+          <h2 className="favorites-heading">⭐ Your Gallery</h2>
+          {history.length === 0 ? (
+            <p className="favorites-loading">No emoticons saved yet.</p>
+          ) : (
+            <>
+              <div className="gallery-grid">
+                {history.map((item) => (
+                  <div key={item.id} className="gallery-item">
+                    {brokenImages.has(item.id) ? (
+                      <div className="image-placeholder-broken">
+                        <span className="placeholder-icon">😕</span>
+                        <p className="placeholder-text">Image unavailable</p>
+                        <p className="placeholder-prompt">{item.prompt}</p>
+                      </div>
+                    ) : (
+                      <img
+                        src={item.imageUrl}
+                        alt={item.prompt}
+                        loading="lazy"
+                        decoding="async"
+                        onError={() => handleImageError(item.id)}
+                        onLoad={() => handleImageLoad(item.id)}
+                      />
+                    )}
+                    <div className="gallery-item-info">
+                      <p className="gallery-prompt">{item.prompt}</p>
+                      <p className="gallery-date">{new Date(item.timestamp).toLocaleDateString()}</p>
+                    </div>
+                    <button
+                      className="gallery-download-btn"
+                      onClick={(e) => { e.stopPropagation(); handleDownloadImage(item.imageUrl, item.prompt, item.id); }}
+                      disabled={brokenImages.has(item.id)}
+                      title={brokenImages.has(item.id) ? "Image unavailable" : "Download"}
+                      aria-label={brokenImages.has(item.id) ? "Image unavailable" : "Download image"}
+                    >💾</button>
+                  </div>
+                ))}
+              </div>
+              <button className="clear-history-btn" onClick={clearHistory}>
+                🗑️ Clear History
+              </button>
+            </>
+          )}
+        </section>
+      )}
     </div>
   );
 }
