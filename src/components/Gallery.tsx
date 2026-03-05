@@ -89,15 +89,8 @@ export function Gallery({ isOpen: externalIsOpen, onClose: externalOnClose }: Ga
       document.body.removeChild(link);
       window.URL.revokeObjectURL(url);
       
-      console.log('Download successful');
-    } catch (error) {
-      console.error('Download failed:', error);
-      
-      // Fallback: open in new tab
-      const fallbackWindow = window.open(imageUrl, '_blank');
-      if (!fallbackWindow) {
-        alert('Download failed. Please allow popups and try again.');
-      }
+    } catch {
+      alert('Download failed. Please try right-clicking and "Save Image As..."')
     }
   };
 

@@ -216,12 +216,23 @@ function AppContent() {
     }
   }
 
-  const downloadImage = () => {
+  const downloadImage = async () => {
     if (!generatedImage) return
-    const a = document.createElement('a')
-    a.href = generatedImage
-    a.download = 'emoticon.png'
-    a.click()
+    try {
+      const response = await fetch(generatedImage)
+      if (!response.ok) throw new Error(`HTTP ${response.status}`)
+      const blob = await response.blob()
+      const url = URL.createObjectURL(blob)
+      const link = document.createElement('a')
+      link.href = url
+      link.download = `emoticon-${Date.now()}.png`
+      document.body.appendChild(link)
+      link.click()
+      document.body.removeChild(link)
+      URL.revokeObjectURL(url)
+    } catch {
+      alert('Download failed. Please try right-clicking and "Save Image As..."')
+    }
   }
 
   return (
