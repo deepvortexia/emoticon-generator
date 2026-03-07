@@ -217,9 +217,35 @@ function AppContent() {
     }
   }
 
-  const downloadImage = () => {
+  const downloadImage = async () => {
     if (!generatedImage) return
-    fetch(generatedImage).then(r=>r.blob()).then(blob=>{const u=URL.createObjectURL(blob);const a=document.createElement('a');a.href=u;a.download='emoticon.png';a.click();setTimeout(()=>URL.revokeObjectURL(u),1000)})
+    const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent)
+    const filename = `emoticon-${Date.now()}.png`
+    try {
+      const response = await fetch(generatedImage)
+      if (!response.ok) throw new Error(`HTTP ${response.status}`)
+      const blob = await response.blob()
+      if (isMobile) {
+        const file = new File([blob], filename, { type: 'image/png' })
+        if (navigator.canShare?.({ files: [file] })) {
+          await navigator.share({ files: [file] })
+          return
+        }
+        window.open(generatedImage, '_blank')
+        return
+      }
+      const url = URL.createObjectURL(blob)
+      const link = document.createElement('a')
+      link.href = url
+      link.download = filename
+      document.body.appendChild(link)
+      link.click()
+      document.body.removeChild(link)
+      URL.revokeObjectURL(url)
+    } catch (err) {
+      console.error('Download error:', err)
+      alert('Failed to download image. Please try right-clicking and "Save Image As..."')
+    }
   }
 
   return (
