@@ -219,32 +219,13 @@ function AppContent() {
 
   const downloadImage = async () => {
     if (!generatedImage) return
-    const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent)
-    try {
-      const response = await fetch(generatedImage)
-      if (!response.ok) throw new Error(`HTTP ${response.status}`)
-      const blob = await response.blob()
-      if (isMobile) {
-        const filename = `emoticon-${Date.now()}.png`
-        const file = new File([blob], filename, { type: blob.type })
-        if (navigator.canShare?.({ files: [file] })) {
-          await navigator.share({ files: [file] })
-          return
-        }
-        window.open(generatedImage, '_blank')
-        return
-      }
-      const url = URL.createObjectURL(blob)
-      const link = document.createElement('a')
-      link.href = url
-      link.download = `emoticon-${Date.now()}.png`
-      document.body.appendChild(link)
-      link.click()
-      document.body.removeChild(link)
-      URL.revokeObjectURL(url)
-    } catch {
-      alert('Download failed. Please try right-clicking and "Save Image As..."')
-    }
+    const r = await fetch(generatedImage)
+    const blob = await r.blob()
+    const url = URL.createObjectURL(blob)
+    const a = document.createElement('a')
+    a.href = url; a.download = 'emoticon.png'
+    document.body.appendChild(a); a.click()
+    document.body.removeChild(a); URL.revokeObjectURL(url)
   }
 
   return (
