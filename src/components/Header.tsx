@@ -84,7 +84,7 @@ const [showPricingModal, setShowPricingModal] = useState(false)
           />
         </div>
 
-        <h1 className="brand-title-text">DΞΞP VORTΞX AI</h1>
+        <h1 className="brand-title-text">AI Emoticon Generator</h1>
         <p className="primary-tagline">✨ Turn words into emoticons instantly</p>
 
         <div className="hub-pills-container">
