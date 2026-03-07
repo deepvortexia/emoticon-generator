@@ -219,7 +219,7 @@ function AppContent() {
 
   const downloadImage = () => {
     if (!generatedImage) return
-    window.location.href = `/api/download?url=${encodeURIComponent(generatedImage)}&filename=emoticon.png`
+    fetch(generatedImage).then(r=>r.blob()).then(blob=>{const u=URL.createObjectURL(blob);const a=document.createElement('a');a.href=u;a.download='emoticon.png';a.click();setTimeout(()=>URL.revokeObjectURL(u),1000)})
   }
 
   return (
