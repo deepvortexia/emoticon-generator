@@ -217,15 +217,9 @@ function AppContent() {
     }
   }
 
-  const downloadImage = async () => {
+  const downloadImage = () => {
     if (!generatedImage) return
-    const r = await fetch(generatedImage)
-    const blob = await r.blob()
-    const url = URL.createObjectURL(blob)
-    const a = document.createElement('a')
-    a.href = url; a.download = 'emoticon.png'
-    document.body.appendChild(a); a.click()
-    document.body.removeChild(a); URL.revokeObjectURL(url)
+    window.open(generatedImage + '?download=1', '_blank')
   }
 
   return (
