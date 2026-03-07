@@ -219,7 +219,7 @@ function AppContent() {
 
   const downloadImage = () => {
     if (!generatedImage) return
-    window.open(generatedImage + '?download=1', '_blank')
+    window.location.href = `/api/download?url=${encodeURIComponent(generatedImage)}&filename=emoticon.png`
   }
 
   return (
