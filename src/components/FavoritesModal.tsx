@@ -1,0 +1,150 @@
+import { useState, useEffect, useCallback } from 'react'
+import { useAuth } from '../context/AuthContext'
+import './Gallery.css'
+
+interface FavoriteItem {
+  id: string
+  resultUrl: string
+  prompt: string | null
+  createdAt: number
+}
+
+interface FavoritesModalProps {
+  isOpen: boolean
+  onClose: () => void
+}
+
+export function FavoritesModal({ isOpen, onClose }: FavoritesModalProps) {
+  const { session } = useAuth()
+  const token = session?.access_token
+
+  const [favorites, setFavorites] = useState<FavoriteItem[]>([])
+  const [loading, setLoading] = useState(false)
+  const [brokenImages, setBrokenImages] = useState<Set<string>>(new Set())
+
+  const loadFavorites = useCallback(async () => {
+    if (!token) return
+    setLoading(true)
+    try {
+      const res = await fetch('/api/favorites', {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+      if (res.ok) {
+        const data = await res.json()
+        setFavorites((data.favorites || []).map((f: any) => ({
+          id: f.id,
+          resultUrl: f.result_url,
+          prompt: f.prompt || null,
+          createdAt: new Date(f.created_at).getTime(),
+        })))
+      }
+    } catch {}
+    finally {
+      setLoading(false)
+    }
+  }, [token])
+
+  useEffect(() => {
+    if (isOpen) loadFavorites()
+  }, [isOpen, loadFavorites])
+
+  const handleDelete = async (id: string) => {
+    if (!token) return
+    try {
+      await fetch(`/api/favorites?id=${encodeURIComponent(id)}`, {
+        method: 'DELETE',
+        headers: { Authorization: `Bearer ${token}` },
+      })
+      setFavorites(prev => prev.filter(f => f.id !== id))
+    } catch {}
+  }
+
+  const handleDownload = async (resultUrl: string, id: string) => {
+    const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent)
+    const filename = `emoticon-${id.slice(0, 8)}.png`
+    try {
+      const res = await fetch(resultUrl, { mode: 'cors' })
+      if (!res.ok) throw new Error()
+      const blob = await res.blob()
+      if (isMobile) {
+        const file = new File([blob], filename, { type: blob.type })
+        if (navigator.canShare?.({ files: [file] })) {
+          await navigator.share({ files: [file] })
+          return
+        }
+        window.open(resultUrl, '_blank')
+        return
+      }
+      const url = URL.createObjectURL(blob)
+      const link = document.createElement('a')
+      link.href = url
+      link.download = filename
+      document.body.appendChild(link)
+      link.click()
+      document.body.removeChild(link)
+      URL.revokeObjectURL(url)
+    } catch {
+      alert('Download failed. Please try right-clicking and "Save Image As..."')
+    }
+  }
+
+  if (!isOpen) return null
+
+  return (
+    <div className="gallery-modal" onClick={(e) => { if (e.target === e.currentTarget) onClose() }}>
+      <div className="gallery-content">
+        <div className="gallery-header">
+          <h2>⭐ Saved Favorites</h2>
+          <button onClick={onClose} className="gallery-close">✕</button>
+        </div>
+
+        {!token ? (
+          <p className="gallery-empty">Sign in to view your saved favorites.</p>
+        ) : loading ? (
+          <p className="favorites-loading">Loading...</p>
+        ) : favorites.length === 0 ? (
+          <p className="gallery-empty">No favorites saved yet. Generate an emoticon and click ⭐ Save!</p>
+        ) : (
+          <div className="gallery-grid">
+            {favorites.map((item) => (
+              <div key={item.id} className="gallery-item">
+                {brokenImages.has(item.id) ? (
+                  <div className="image-placeholder-broken">
+                    <span className="placeholder-icon">😕</span>
+                    <p className="placeholder-text">Image unavailable</p>
+                  </div>
+                ) : (
+                  <img
+                    src={item.resultUrl}
+                    alt={item.prompt || 'Saved emoticon'}
+                    loading="lazy"
+                    decoding="async"
+                    onError={() => setBrokenImages(prev => new Set(prev).add(item.id))}
+                    onLoad={() => setBrokenImages(prev => { const s = new Set(prev); s.delete(item.id); return s })}
+                  />
+                )}
+                <div className="gallery-item-info">
+                  {item.prompt && <p className="gallery-prompt">{item.prompt}</p>}
+                  <p className="gallery-date">{new Date(item.createdAt).toLocaleDateString()}</p>
+                </div>
+                <button
+                  className="gallery-download-btn"
+                  onClick={(e) => { e.stopPropagation(); handleDownload(item.resultUrl, item.id) }}
+                  disabled={brokenImages.has(item.id)}
+                  title="Download"
+                  aria-label="Download emoticon"
+                >💾</button>
+                <button
+                  className="gallery-delete-btn"
+                  onClick={(e) => { e.stopPropagation(); handleDelete(item.id) }}
+                  title="Remove from favorites"
+                  aria-label="Remove from favorites"
+                >🗑️</button>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+    </div>
+  )
+}
