@@ -12,6 +12,7 @@ import { Notification } from './components/Notification'
 import { useCredits } from './hooks/useCredits'
 import { AuthCallback } from './pages/AuthCallback'  // ← NOUVEAU
 import { Gallery } from './components/Gallery'
+import { SpeedInsights } from '@vercel/speed-insights/react'
 
 const loadingMessages = [
   "Creating magic... ✨",
@@ -405,6 +406,7 @@ function AppContent() {
       {toast && (
         <Notification title={toast.title} message={toast.message} type={toast.type} onClose={() => setToast(null)} />
       )}
+      <SpeedInsights />
     </div>
   )
 }
