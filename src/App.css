@@ -1898,21 +1898,18 @@ html, body {
 
 /* How-to-use hint link */
 .how-to-use-hint {
-  text-align: center;
-  margin-top: 1rem;
   display: block !important;
   visibility: visible !important;
+  text-align: center !important;
+  margin: 40px 0 !important;
+  z-index: 9999 !important;
 }
 
 .how-to-use-hint-link {
-  display: inline-block !important;
-  color: rgba(212, 175, 55, 0.7) !important;
-  font-size: 0.85rem;
-  font-weight: 400;
-  letter-spacing: 0.04em;
-  text-decoration: none !important;
-  transition: color 0.25s ease;
-  visibility: visible !important;
+  color: #ffffff !important;
+  font-size: 1.1rem !important;
+  text-decoration: underline !important;
+  font-weight: bold !important;
 }
 
 .how-to-use-hint-link:hover {
