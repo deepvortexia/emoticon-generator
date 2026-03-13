@@ -281,6 +281,9 @@ function AppContent() {
       <div className="main-content">
         <div className="prompt-section-wrapper">
           <h3 className="prompt-section-title"><span className="title-icon">✨</span>Create Your Emoticon</h3>
+          <div className="tutorial-btn-wrap">
+            <a href="/how-to-use" className="tutorial-pill-btn">Master this tool: View Tutorial →</a>
+          </div>
           <div className="prompt-input-container">
             <input
               ref={promptInputRef}
@@ -407,9 +410,6 @@ function AppContent() {
         <Notification title={toast.title} message={toast.message} type={toast.type} onClose={() => setToast(null)} />
       )}
 
-      <div className="how-to-use-hint">
-        <a href="/how-to-use" className="how-to-use-hint-link">Need help? Learn how to use this tool →</a>
-      </div>
     </div>
   )
 }

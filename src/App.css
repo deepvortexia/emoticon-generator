@@ -1896,22 +1896,28 @@ html, body {
   }
 }
 
-/* How-to-use hint link */
-.how-to-use-hint {
-  display: block !important;
-  visibility: visible !important;
-  text-align: center !important;
-  margin: 40px 0 !important;
-  z-index: 9999 !important;
+/* Tutorial pill button */
+.tutorial-btn-wrap {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 1.25rem;
 }
 
-.how-to-use-hint-link {
-  color: #ffffff !important;
-  font-size: 1.1rem !important;
-  text-decoration: underline !important;
-  font-weight: bold !important;
+.tutorial-pill-btn {
+  display: inline-block;
+  padding: 8px 20px;
+  border-radius: 20px;
+  border: 1px solid #D4AF37;
+  background: transparent;
+  color: #D4AF37;
+  font-size: 0.85rem;
+  font-weight: 500;
+  text-decoration: none;
+  letter-spacing: 0.03em;
+  transition: background 0.2s ease, color 0.2s ease;
 }
 
-.how-to-use-hint-link:hover {
-  color: #D4AF37 !important;
+.tutorial-pill-btn:hover {
+  background: #D4AF37;
+  color: #0a0a0a;
 }
