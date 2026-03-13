@@ -1899,19 +1899,18 @@ html, body {
 /* How-to-use hint link */
 .how-to-use-hint {
   text-align: center;
-  margin-top: 0.75rem;
+  margin-top: 0.85rem;
 }
 
 .how-to-use-hint-link {
-  color: #D4AF37;
-  font-size: 0.85rem;
+  color: rgba(212, 175, 55, 0.55);
+  font-size: 0.82rem;
+  font-weight: 300;
+  letter-spacing: 0.03em;
   text-decoration: none;
-  opacity: 0.8;
-  transition: opacity 0.2s;
+  transition: color 0.25s ease;
 }
 
 .how-to-use-hint-link:hover {
-  opacity: 1;
-  text-decoration: underline;
-  text-underline-offset: 3px;
+  color: #D4AF37;
 }
