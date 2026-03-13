@@ -299,9 +299,10 @@ function AppContent() {
               )}
             </button>
           </div>
-          <div className="how-to-use-hint">
-            <a href="/how-to-use" className="how-to-use-hint-link">Need help? Learn how to use this tool →</a>
-          </div>
+        </div>
+
+        <div className="how-to-use-hint">
+          <a href="/how-to-use" className="how-to-use-hint-link">Need help? Learn how to use this tool →</a>
         </div>
 
         {error && <div className="error-message"><span className="error-icon">⚠️</span>{error}</div>}

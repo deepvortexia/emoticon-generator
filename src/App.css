@@ -1899,18 +1899,22 @@ html, body {
 /* How-to-use hint link */
 .how-to-use-hint {
   text-align: center;
-  margin-top: 0.85rem;
+  margin-top: 1rem;
+  display: block !important;
+  visibility: visible !important;
 }
 
 .how-to-use-hint-link {
-  color: rgba(212, 175, 55, 0.55);
-  font-size: 0.82rem;
-  font-weight: 300;
-  letter-spacing: 0.03em;
-  text-decoration: none;
+  display: inline-block !important;
+  color: rgba(212, 175, 55, 0.7) !important;
+  font-size: 0.85rem;
+  font-weight: 400;
+  letter-spacing: 0.04em;
+  text-decoration: none !important;
   transition: color 0.25s ease;
+  visibility: visible !important;
 }
 
 .how-to-use-hint-link:hover {
-  color: #D4AF37;
+  color: #D4AF37 !important;
 }
