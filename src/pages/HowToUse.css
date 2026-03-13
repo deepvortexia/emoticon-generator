@@ -1,0 +1,209 @@
+/* ============================================================
+   How To Use Page — Deep Vortex AI Emoticon Generator
+   Theme: Black (#0a0a0a) + Gold (#D4AF37)
+   ============================================================ */
+
+.how-to-use-page {
+  min-height: 100vh;
+  background: #0a0a0a;
+  color: #e8e8e8;
+  font-family: 'Inter', sans-serif;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 3rem 1.5rem;
+}
+
+.how-to-use-container {
+  max-width: 760px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0;
+}
+
+/* Logo */
+.how-to-use-logo-zone {
+  margin-bottom: 2rem;
+}
+
+.how-to-use-logo {
+  height: 90px;
+  width: auto;
+  object-fit: contain;
+  filter: drop-shadow(0 0 12px rgba(212, 175, 55, 0.4));
+  transition: filter 0.3s ease;
+}
+
+.how-to-use-logo:hover {
+  filter: drop-shadow(0 0 20px rgba(212, 175, 55, 0.7));
+}
+
+/* Title */
+.how-to-use-title {
+  font-family: 'Orbitron', sans-serif;
+  font-size: clamp(1.4rem, 4vw, 2rem);
+  font-weight: 900;
+  color: #D4AF37;
+  text-align: center;
+  margin: 0 0 0.75rem;
+  line-height: 1.25;
+  text-shadow: 0 0 20px rgba(212, 175, 55, 0.3);
+}
+
+.how-to-use-subtitle {
+  color: #aaa;
+  font-size: 1rem;
+  text-align: center;
+  margin: 0 0 2.5rem;
+}
+
+/* Steps */
+.how-to-use-steps {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  margin-bottom: 2.5rem;
+}
+
+.how-to-use-step {
+  display: flex;
+  align-items: flex-start;
+  gap: 1.25rem;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(212, 175, 55, 0.2);
+  border-radius: 14px;
+  padding: 1.5rem 1.75rem;
+  transition: border-color 0.25s ease, background 0.25s ease;
+}
+
+.how-to-use-step:hover {
+  border-color: rgba(212, 175, 55, 0.5);
+  background: rgba(212, 175, 55, 0.04);
+}
+
+.how-to-use-step--pro {
+  border-color: rgba(212, 175, 55, 0.45);
+  background: rgba(212, 175, 55, 0.06);
+}
+
+.how-to-use-step--pro:hover {
+  border-color: #D4AF37;
+  background: rgba(212, 175, 55, 0.1);
+}
+
+/* Step number badge */
+.step-number {
+  flex-shrink: 0;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #D4AF37, #b8962e);
+  color: #0a0a0a;
+  font-family: 'Orbitron', sans-serif;
+  font-weight: 900;
+  font-size: 1.1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 14px rgba(212, 175, 55, 0.4);
+}
+
+.step-number--pro {
+  background: transparent;
+  border: 2px solid #D4AF37;
+  color: #D4AF37;
+  font-size: 1.3rem;
+  box-shadow: 0 0 14px rgba(212, 175, 55, 0.25);
+}
+
+/* Step text */
+.step-content {
+  flex: 1;
+}
+
+.step-title {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 1rem;
+  font-weight: 700;
+  color: #D4AF37;
+  margin: 0 0 0.5rem;
+  letter-spacing: 0.03em;
+}
+
+.step-desc {
+  font-size: 0.95rem;
+  color: #c8c8c8;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.step-example {
+  color: #D4AF37;
+  font-style: italic;
+}
+
+.step-highlight {
+  color: #D4AF37;
+  font-weight: 600;
+}
+
+.step-link {
+  color: #D4AF37;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  font-weight: 600;
+  transition: color 0.2s;
+}
+
+.step-link:hover {
+  color: #f0c940;
+}
+
+/* Back button */
+.how-to-use-cta {
+  display: flex;
+  justify-content: center;
+}
+
+.how-to-use-back-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: linear-gradient(135deg, #D4AF37, #b8962e);
+  color: #0a0a0a;
+  font-family: 'Orbitron', sans-serif;
+  font-weight: 700;
+  font-size: 0.9rem;
+  letter-spacing: 0.05em;
+  padding: 0.75rem 2rem;
+  border-radius: 50px;
+  text-decoration: none;
+  transition: transform 0.2s, box-shadow 0.2s;
+  box-shadow: 0 4px 20px rgba(212, 175, 55, 0.3);
+}
+
+.how-to-use-back-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 30px rgba(212, 175, 55, 0.5);
+}
+
+/* Mobile */
+@media (max-width: 520px) {
+  .how-to-use-page {
+    padding: 2rem 1rem;
+  }
+
+  .how-to-use-step {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+    padding: 1.25rem;
+  }
+
+  .how-to-use-logo {
+    height: 70px;
+  }
+}

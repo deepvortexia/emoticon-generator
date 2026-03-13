@@ -1895,3 +1895,23 @@ html, body {
     font-size: 1rem;
   }
 }
+
+/* How-to-use hint link */
+.how-to-use-hint {
+  text-align: center;
+  margin-top: 0.75rem;
+}
+
+.how-to-use-hint-link {
+  color: #D4AF37;
+  font-size: 0.85rem;
+  text-decoration: none;
+  opacity: 0.8;
+  transition: opacity 0.2s;
+}
+
+.how-to-use-hint-link:hover {
+  opacity: 1;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}

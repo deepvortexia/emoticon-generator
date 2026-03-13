@@ -11,6 +11,7 @@ import { PricingModal } from './components/PricingModal'
 import { Notification } from './components/Notification'
 import { useCredits } from './hooks/useCredits'
 import { AuthCallback } from './pages/AuthCallback'  // ← NOUVEAU
+import { HowToUse } from './pages/HowToUse'
 import { Gallery } from './components/Gallery'
 
 const loadingMessages = [
@@ -298,6 +299,9 @@ function AppContent() {
               )}
             </button>
           </div>
+          <div className="how-to-use-hint">
+            <a href="/how-to-use" className="how-to-use-hint-link">Need help? Learn how to use this tool →</a>
+          </div>
         </div>
 
         {error && <div className="error-message"><span className="error-icon">⚠️</span>{error}</div>}
@@ -418,6 +422,10 @@ function App() {
         <AuthCallback />
       </AuthProvider>
     )
+  }
+
+  if (path === '/how-to-use') {
+    return <HowToUse />
   }
 
   return (
