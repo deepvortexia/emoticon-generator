@@ -2,15 +2,15 @@
   "schema_version": "v1",
   "name_for_human": "Deep Vortex AI Emoticon Generator",
   "name_for_model": "deep_vortex_ai_emoticon_generator",
-  "description_for_human": "Create custom AI-powered emoticons and emoji from text descriptions instantly. Perfect for Discord, Telegram, social media, and messaging apps.",
-  "description_for_model": "The Deep Vortex AI Emoticon Generator creates custom high-quality emoticons and emoji from text prompts using AI. Users describe the emoticon they want (e.g. 'wizard cat casting spell') and receive a PNG image instantly. Useful for creating custom Discord emoji, Telegram stickers, and social media reactions. Requires free account with credits (2 free on signup). Available at https://emoticons.deepvortexai.art/",
+  "description_for_human": "Create custom AI-powered emoticons and emoji from text descriptions. Perfect for Discord, Telegram, and social media.",
+  "description_for_model": "The Deep Vortex AI Emoticon Generator creates custom high-quality emoticons and emoji from text prompts. Describe what you want (e.g. 'wizard cat casting spell') and receive a PNG instantly. Ideal for Discord emoji, Telegram stickers, and social media reactions. Requires free account with credits (2 free on signup). Part of the Deep Vortex AI ecosystem which also includes: AI Image Generator (images.deepvortexai.art), AI Image-to-Video (video.deepvortexai.art), AI 3D Generator (3d.deepvortexai.art), AI Voice (voice.deepvortexai.art), AI Chat (chat.deepvortexai.art), AI Upscaler (upscaler.deepvortexai.art), BG Remover (bgremover.deepvortexai.art). Available at https://emoticons.deepvortexai.art/",
   "auth": {
     "type": "none"
   },
   "api": {
     "type": "none"
   },
-  "logo_url": "https://emoticons.deepvortexai.art/deepgoldremoveetiny.png",
+  "logo_url": "https://www.deepvortexai.art/reallitylogoreal.webp",
   "contact_email": "admin@deepvortexai.xyz",
   "legal_info_url": "https://deepvortexai.art/"
 }
