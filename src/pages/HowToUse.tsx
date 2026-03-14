@@ -31,7 +31,7 @@ export function HowToUse() {
         <div className="how-to-use-logo-zone">
           <a href="/">
             <img
-              src="https://www.deepvortexai.art/reallitylogoreal.webp"
+              src="https://www.deepvortexai.art/logotinyreal.webp"
               alt="Deep Vortex AI Logo"
               className="how-to-use-logo"
             />

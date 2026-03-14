@@ -76,7 +76,7 @@ const [showPricingModal, setShowPricingModal] = useState(false)
         )}
 
         <div className="logo-display-zone">
-          <img src="/reallitylogoreal.webp" alt="Deep Vortex" className="brand-logo-image" loading="eager" fetchPriority="high" />
+          <img src="/logotinyreal.webp" alt="Deep Vortex" className="brand-logo-image" loading="eager" fetchPriority="high" />
         </div>
 
         <h1 className="brand-title-text">AI Emoticon Generator</h1>
