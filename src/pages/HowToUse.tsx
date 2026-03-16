@@ -96,6 +96,34 @@ export function HowToUse() {
 
         </div>
 
+        {/* Other Tools */}
+        <section style={{ marginBottom: '2.5rem' }}>
+          <h2 style={{ fontFamily: "'Orbitron', sans-serif", fontSize: '1.1rem', fontWeight: 700, color: '#E8C87C', textAlign: 'center', marginBottom: '1.6rem', letterSpacing: '1px' }}>
+            Explore Our Other AI Tools
+          </h2>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(160px, 1fr))', gap: '0.9rem' }}>
+            {[
+              { name: 'Avatar Gen',      icon: '🎭', desc: 'AI portrait styles',           url: 'https://avatar.deepvortexai.art' },
+              { name: 'Image Gen',       icon: '🖼️', desc: 'AI artwork from text',         url: 'https://images.deepvortexai.art' },
+              { name: 'Remove BG',       icon: '✂️', desc: 'Instantly remove backgrounds', url: 'https://bgremover.deepvortexai.art' },
+              { name: 'Upscaler',        icon: '🔍', desc: 'Enhance resolution with AI',   url: 'https://upscaler.deepvortexai.art' },
+              { name: '3D Generator',    icon: '🧊', desc: 'Transform images to 3D',       url: 'https://3d.deepvortexai.art' },
+              { name: 'Voice Gen',       icon: '🎙️', desc: 'AI text-to-speech',            url: 'https://voice.deepvortexai.art' },
+              { name: 'Image → Video',   icon: '🎬', desc: 'Animate images with AI',       url: 'https://video.deepvortexai.art' },
+              { name: 'AI Chat',         icon: '💬', desc: '4 frontier models in one',     url: 'https://chat.deepvortexai.art' },
+              { name: 'Deep Vortex Hub', icon: '🌐', desc: 'All AI tools in one place',    url: 'https://deepvortexai.art' },
+            ].map((tool) => (
+              <a key={tool.url} href={tool.url} target="_blank" rel="noopener noreferrer"
+                style={{ display: 'flex', flexDirection: 'column', gap: '0.3rem', padding: '1rem 1.1rem', background: 'rgba(20,18,10,0.85)', border: '1px solid rgba(212,175,55,0.2)', borderRadius: '12px', textDecoration: 'none', color: 'inherit' }}
+              >
+                <span style={{ fontSize: '1.5rem' }}>{tool.icon}</span>
+                <span style={{ fontFamily: "'Orbitron', sans-serif", fontSize: '0.72rem', fontWeight: 700, color: '#D4AF37' }}>{tool.name}</span>
+                <span style={{ fontSize: '0.75rem', color: 'rgba(255,255,255,0.5)', lineHeight: 1.4 }}>{tool.desc}</span>
+              </a>
+            ))}
+          </div>
+        </section>
+
         {/* CTA */}
         <div className="how-to-use-cta">
           <a href="/" className="how-to-use-back-btn">
