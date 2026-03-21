@@ -10,7 +10,7 @@ export function HowToUse() {
     }
     const canonical = document.querySelector('link[rel="canonical"]')
     if (canonical) {
-      canonical.setAttribute('href', 'https://emoticons.deepvortexai.art/how-to-use')
+      canonical.setAttribute('href', 'https://emoticons.deepvortexai.com/how-to-use')
     }
     return () => {
       document.title = 'AI Emoticon Generator - Deep Vortex AI | Create Custom AI Emoji Instantly'
@@ -18,7 +18,7 @@ export function HowToUse() {
         metaDesc.setAttribute('content', 'Create stunning custom AI emoticons and emoji from text descriptions in seconds. Professional quality, instant results. Part of the Deep Vortex AI creative ecosystem.')
       }
       if (canonical) {
-        canonical.setAttribute('href', 'https://emoticons.deepvortexai.art/')
+        canonical.setAttribute('href', 'https://emoticons.deepvortexai.com/')
       }
     }
   }, [])
@@ -31,7 +31,7 @@ export function HowToUse() {
         <div className="how-to-use-logo-zone">
           <a href="/">
             <img
-              src="https://www.deepvortexai.art/logotinyreal.webp"
+              src="https://www.deepvortexai.com/logotinyreal.webp"
               alt="Deep Vortex AI Logo"
               className="how-to-use-logo"
             />
@@ -81,7 +81,7 @@ export function HowToUse() {
                 Want a perfect transparent background for Discord or Telegram?
                 Use our{' '}
                 <a
-                  href="https://bgremover.deepvortexai.art"
+                  href="https://bgremover.deepvortexai.com"
                   className="step-link"
                   target="_blank"
                   rel="noopener noreferrer"
@@ -103,15 +103,15 @@ export function HowToUse() {
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(160px, 1fr))', gap: '0.9rem' }}>
             {[
-              { name: 'Avatar Gen',      icon: '🎭', desc: 'AI portrait styles',           url: 'https://avatar.deepvortexai.art' },
-              { name: 'Image Gen',       icon: '🖼️', desc: 'AI artwork from text',         url: 'https://images.deepvortexai.art' },
-              { name: 'Remove BG',       icon: '✂️', desc: 'Instantly remove backgrounds', url: 'https://bgremover.deepvortexai.art' },
-              { name: 'Upscaler',        icon: '🔍', desc: 'Enhance resolution with AI',   url: 'https://upscaler.deepvortexai.art' },
-              { name: '3D Generator',    icon: '🧊', desc: 'Transform images to 3D',       url: 'https://3d.deepvortexai.art' },
-              { name: 'Voice Gen',       icon: '🎙️', desc: 'AI text-to-speech',            url: 'https://voice.deepvortexai.art' },
-              { name: 'Image → Video',   icon: '🎬', desc: 'Animate images with AI',       url: 'https://video.deepvortexai.art' },
-              { name: 'AI Chat',         icon: '💬', desc: '4 frontier models in one',     url: 'https://chat.deepvortexai.art' },
-              { name: 'Deep Vortex Hub', icon: '🌐', desc: 'All AI tools in one place',    url: 'https://deepvortexai.art' },
+              { name: 'Avatar Gen',      icon: '🎭', desc: 'AI portrait styles',           url: 'https://avatar.deepvortexai.com' },
+              { name: 'Image Gen',       icon: '🖼️', desc: 'AI artwork from text',         url: 'https://images.deepvortexai.com' },
+              { name: 'Remove BG',       icon: '✂️', desc: 'Instantly remove backgrounds', url: 'https://bgremover.deepvortexai.com' },
+              { name: 'Upscaler',        icon: '🔍', desc: 'Enhance resolution with AI',   url: 'https://upscaler.deepvortexai.com' },
+              { name: '3D Generator',    icon: '🧊', desc: 'Transform images to 3D',       url: 'https://3d.deepvortexai.com' },
+              { name: 'Voice Gen',       icon: '🎙️', desc: 'AI text-to-speech',            url: 'https://voice.deepvortexai.com' },
+              { name: 'Image → Video',   icon: '🎬', desc: 'Animate images with AI',       url: 'https://video.deepvortexai.com' },
+              { name: 'AI Chat',         icon: '💬', desc: '4 frontier models in one',     url: 'https://chat.deepvortexai.com' },
+              { name: 'Deep Vortex Hub', icon: '🌐', desc: 'All AI tools in one place',    url: 'https://deepvortexai.com' },
             ].map((tool) => (
               <a key={tool.url} href={tool.url} target="_blank" rel="noopener noreferrer"
                 style={{ display: 'flex', flexDirection: 'column', gap: '0.3rem', padding: '1rem 1.1rem', background: 'rgba(20,18,10,0.85)', border: '1px solid rgba(212,175,55,0.2)', borderRadius: '12px', textDecoration: 'none', color: 'inherit' }}
