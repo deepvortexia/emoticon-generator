@@ -55,7 +55,12 @@ function AppContent() {
   const [showNotification, setShowNotification] = useState(false)
   const [toast, setToast] = useState<{title:string;message:string;type:'success'|'error'|'warning'}|null>(null)
   const [isFavorited, setIsFavorited] = useState(false)
-  
+  const [loadingStage, setLoadingStage] = useState(0)
+  const [loadingProgress, setLoadingProgress] = useState(0)
+  const [elapsedSeconds, setElapsedSeconds] = useState(0)
+  const progressIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null)
+  const elapsedIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null)
+
   const { user, session, loading } = useAuth()
   const { hasCredits, refreshProfile } = useCredits()
 
@@ -121,12 +126,45 @@ function AppContent() {
     if (!prompt.trim()) { setError('Please enter a description!'); return }
     if (!user) { setError('Please sign in to generate emoticons'); setIsAuthModalOpen(true); return }
     if (!hasCredits) { setError('You have run out of credits. Please purchase more to continue.'); setIsPricingModalOpen(true); return }
+
+    const clearIntervals = () => {
+      if (progressIntervalRef.current) { clearInterval(progressIntervalRef.current); progressIntervalRef.current = null }
+      if (elapsedIntervalRef.current) { clearInterval(elapsedIntervalRef.current); elapsedIntervalRef.current = null }
+    }
+
     setIsLoading(true)
     setError('')
     setToast(null)
     setGeneratedImage('')
     setIsFavorited(false)
-    setLoadingMessage(loadingMessages[Math.floor(Math.random() * loadingMessages.length)])
+    setLoadingStage(1)
+    setLoadingProgress(0)
+    setElapsedSeconds(0)
+
+    elapsedIntervalRef.current = setInterval(() => setElapsedSeconds(s => s + 1), 1000)
+
+    // Stage 1: animate 0→10% over ~600ms
+    await new Promise<void>(resolve => {
+      let val = 0
+      const stage1Interval = setInterval(() => {
+        val += 2
+        setLoadingProgress(val)
+        if (val >= 10) {
+          clearInterval(stage1Interval)
+          resolve()
+        }
+      }, 60)
+    })
+
+    // Stage 2: asymptotic progress toward 85%
+    setLoadingStage(2)
+    progressIntervalRef.current = setInterval(() => {
+      setLoadingProgress(p => {
+        const gap = 85 - p
+        return p + gap * 0.003
+      })
+    }, 100)
+
     try {
       const token = session?.access_token
       const controller = new AbortController()
@@ -141,6 +179,7 @@ function AppContent() {
         })
       } catch (fetchErr: any) {
         clearTimeout(timeout)
+        clearIntervals()
         if (fetchErr.name === 'AbortError') {
           setToast({ title: 'Request Timed Out', message: 'The generation took too long. Please try again. No credits were deducted.', type: 'warning' })
         } else {
@@ -171,6 +210,24 @@ function AppContent() {
         }
         return
       }
+
+      // Fetch succeeded: clear asymptotic interval, move to stage 3, finalize to 100%
+      if (progressIntervalRef.current) { clearInterval(progressIntervalRef.current); progressIntervalRef.current = null }
+      setLoadingStage(3)
+      await new Promise<void>(resolve => {
+        progressIntervalRef.current = setInterval(() => {
+          setLoadingProgress(p => {
+            if (p >= 100) {
+              if (progressIntervalRef.current) { clearInterval(progressIntervalRef.current); progressIntervalRef.current = null }
+              resolve()
+              return 100
+            }
+            return p + 3
+          })
+        }, 40)
+      })
+      clearIntervals()
+
       const data = await response.json()
       setGeneratedImage(data.image)
       saveToHistory(prompt, data.image)
@@ -179,6 +236,7 @@ function AppContent() {
       localStorage.setItem('images-generated', newCount.toString())
       await refreshProfile()
     } catch (err: any) {
+      clearIntervals()
       setToast({ title: 'Generation Failed', message: (err.message || 'An unexpected error occurred') + '. No credits were deducted.', type: 'error' })
     } finally {
       setIsLoading(false)
@@ -308,9 +366,32 @@ function AppContent() {
 
         {isLoading && (
           <div className="loading-section">
-            <div className="loading-spinner-large"></div>
-            <p className="loading-message">{loadingMessage}</p>
-            <p className="loading-hint">This usually takes 3-5 seconds</p>
+            <div className="progress-stages">
+              <div className={`progress-stage${loadingStage===1?' stage-active':loadingStage>1?' stage-done':''}`}>
+                <div className="stage-dot"/>
+                <span>Uploading image...</span>
+              </div>
+              <div className={`progress-stage${loadingStage===2?' stage-active':loadingStage>2?' stage-done':''}`}>
+                <div className="stage-dot"/>
+                <span>AI is animating your image...</span>
+              </div>
+              <div className={`progress-stage${loadingStage===3?' stage-active':''}`}>
+                <div className="stage-dot"/>
+                <span>Finalizing video...</span>
+              </div>
+            </div>
+            <div className="progress-bar-wrapper">
+              <div className="progress-bar-track">
+                <div className="progress-bar-fill" style={{width:`${loadingProgress}%`}}/>
+              </div>
+              {loadingProgress>0&&(
+                <div className="progress-bar-tip" style={{left:`${loadingProgress}%`}}/>
+              )}
+            </div>
+            <div className="progress-footer">
+              <span className="progress-percent">{Math.round(loadingProgress)}%</span>
+              <span className="progress-elapsed">{elapsedSeconds}s...</span>
+            </div>
           </div>
         )}
 
