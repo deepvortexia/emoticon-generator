@@ -47,7 +47,6 @@ function AppContent() {
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState('')
   const [isLoaded, setIsLoaded] = useState(false)
-  const [loadingMessage, setLoadingMessage] = useState(loadingMessages[0])
   const [imagesGenerated, setImagesGenerated] = useState(0)
   const [isGuideOpen, setIsGuideOpen] = useState(false)
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false)
