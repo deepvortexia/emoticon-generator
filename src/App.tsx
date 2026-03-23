@@ -14,15 +14,6 @@ import { AuthCallback } from './pages/AuthCallback'  // ← NOUVEAU
 import { HowToUse } from './pages/HowToUse'
 import { Gallery } from './components/Gallery'
 
-const loadingMessages = [
-  "Creating magic... ✨",
-  "Brewing pixels... 🎨",
-  "Summoning AI spirits... 🌀",
-  "Crafting your emoji... 🔮",
-  "Mixing colors... 🎭",
-  "Generating awesomeness... 🚀"
-];
-
 const quickIdeas = [
   { emoji: '🧙', text: 'Wizard cat casting spell' },
   { emoji: '🤖', text: 'Robot crying rainbow tears' },
